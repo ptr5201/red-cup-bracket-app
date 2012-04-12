@@ -4,9 +4,133 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
+    <RelativeLayout
+        android:id="@+id/createTournament"
+        android:layout_width="match_parent"
+        android:layout_height="54dip"
+        android:layout_marginTop="@dimen/mainMenuButton_topMargin"
+        android:onClick="switchActivityScreen" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/create" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="@string/createTournament" />
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadTournament"
+        android:layout_width="match_parent"
+        android:layout_height="54dip"
+        android:layout_marginTop="@dimen/mainMenuButton_topMargin"
+        android:onClick="switchActivityScreen" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/load" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="@string/loadTournament" />
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/pastTournaments"
+        android:layout_width="match_parent"
+        android:layout_height="54dip"
+        android:layout_marginTop="@dimen/mainMenuButton_topMargin"
+        android:onClick="switchActivityScreen" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/past" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="@string/pastTournaments" />
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/participants"
+        android:layout_width="match_parent"
+        android:layout_height="54dip"
+        android:layout_marginTop="@dimen/mainMenuButton_topMargin"
+        android:onClick="switchActivityScreen" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/participants" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="@string/participants" />
+        
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/help"
+        android:layout_width="match_parent"
+        android:layout_height="54dip"
+        android:layout_marginTop="@dimen/mainMenuButton_topMargin"
+        android:onClick="switchActivityScreen" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/help" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="@string/help" />
+    </RelativeLayout>
 
 </LinearLayout>
