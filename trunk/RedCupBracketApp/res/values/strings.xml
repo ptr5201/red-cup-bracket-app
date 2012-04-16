@@ -3,8 +3,17 @@
     <string name="app_name">Red Cup Bracket App</string>
     <string name="createTournament">Create Tournament</string>
     <string name="loadTournament">Load Tournament</string>
-    <string name="pastTournaments">Past Tournaments</string>
+    <string name="pastTournaments">Past Tournaments</string>    
     <string name="participants">Participants</string>
+    
+    <string name="tournamentNameLabel">Name</string>
+    <string name="bracketTypeLabel">Bracket Type</string>
+    <string name="participantCountLabel">Participant Count</string>
+    <string name="participantCountHint">No Limit</string>
     <string name="help">Help</string>
 
+    <string-array name="bracket_choices">
+        <item>Single Elimination</item>
+        <item>Double Elimination</item>
+    </string-array>
 </resources>
