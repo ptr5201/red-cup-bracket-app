@@ -1,6 +1,7 @@
 package com.redcup.app;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,8 @@ public class BracketAppActivity extends Activity {
 			break;
 		case R.id.participants:
 			Log.v(TAG, getString(R.string.participants));
+			Intent participantManager = new Intent(this, ParticipantManagerActivity.class);
+			startActivity(participantManager);
 			break;
 		case R.id.help:
 			Log.v(TAG, getString(R.string.help));
