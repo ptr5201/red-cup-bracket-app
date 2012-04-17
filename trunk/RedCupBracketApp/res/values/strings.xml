@@ -16,4 +16,6 @@
         <item>Single Elimination</item>
         <item>Double Elimination</item>
     </string-array>
+    <string name="createParticipant">Create Participant</string>
+    <string name="participantManager">Participant Manager</string>
 </resources>
