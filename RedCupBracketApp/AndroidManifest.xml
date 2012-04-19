@@ -9,20 +9,15 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-        <activity
-            android:name=".BracketAppActivity"
-            android:label="@string/app_name" >
+        <activity android:name=".activities.BracketAppActivity" android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
-        
-        <activity
-            android:name=".ParticipantManagerActivity"
-            android:label="@string/app_name" >
-        </activity>
+        <activity android:name=".activities.CreateTournamentActivity" android:label="@string/app_name"></activity>
+        <activity android:name=".activities.ParticipantManagerActivity" android:label="@string/app_name"></activity>
+        <activity android:name=".activities.LoadTournamentActivity" android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

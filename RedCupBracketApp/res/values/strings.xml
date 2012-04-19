@@ -18,4 +18,5 @@
     </string-array>
     <string name="createParticipant">Create Participant</string>
     <string name="participantManager">Participant Manager</string>
+    <string name="ongoingTournaments">Ongoing Tournaments</string>
 </resources>

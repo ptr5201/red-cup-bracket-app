@@ -1,10 +1,16 @@
-package com.redcup.app;
+package com.redcup.app.activities;
+
+import com.redcup.app.R;
+import com.redcup.app.R.id;
+import com.redcup.app.R.layout;
+import com.redcup.app.R.string;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 public class BracketAppActivity extends Activity {
 
@@ -23,10 +29,16 @@ public class BracketAppActivity extends Activity {
 		switch(v.getId()) {
 		case R.id.createTournament:
 			Log.v(TAG, getString(R.string.createTournament));
-			setContentView(R.layout.createtournament);
+			Intent createTournament = new Intent(this, CreateTournamentActivity.class);
+			startActivity(createTournament);
 			break;
 		case R.id.loadTournament:
 			Log.v(TAG, getString(R.string.loadTournament));
+			// TODO: the following code is commented until representation
+			// for ongoing tournaments is determined
+			
+			//Intent loadTournament = new Intent(this, LoadTournamentActivity.class);
+			//startActivity(loadTournament);
 			break;
 		case R.id.pastTournaments:
 			Log.v(TAG, getString(R.string.pastTournaments));

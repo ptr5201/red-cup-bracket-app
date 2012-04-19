@@ -1,4 +1,4 @@
-package com.redcup.app;
+package com.redcup.app.model;
 
 import java.io.Serializable;
 
