@@ -1,7 +1,13 @@
-package com.redcup.app;
+package com.redcup.app.activities;
 
 
 import java.util.ArrayList;
+
+import com.redcup.app.R;
+import com.redcup.app.R.id;
+import com.redcup.app.R.layout;
+import com.redcup.app.R.string;
+import com.redcup.app.model.Participant;
 
 import android.app.Activity;
 import android.os.Bundle;
