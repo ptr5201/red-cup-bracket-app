@@ -15,6 +15,8 @@ import android.widget.ListView;
 
 public class ParticipantSelectorActivity extends Activity{
 	
+	private static final int ACTIVITY_NEW_PARTICIPANT = 1;
+	
 	private static final String TAG = "ParticipantSelectorActivity";
 	
 	private ListView participantList;
@@ -33,16 +35,23 @@ public class ParticipantSelectorActivity extends Activity{
 	}
 
 	public void createParticipant(View v){
-		Log.v(TAG, getString(R.string.createParticipant));
-		switch(v.getId()) {
-		case R.id.selectParticipantButton1:
-			Intent newParticipant = new Intent(this, NewParticipantActivity.class);
-			startActivity(newParticipant);
-		}
+		Log.v(TAG, getString(R.string.createParticipant) + " button clicked");
+		Intent newParticipant = new Intent(this, NewParticipantActivity.class);
+		startActivityForResult(newParticipant, ACTIVITY_NEW_PARTICIPANT);
 	}
-
-	public void updateList(){
-
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACTIVITY_NEW_PARTICIPANT) {
+			if (resultCode == RESULT_OK) {
+				Participant p = (Participant) data.getSerializableExtra(
+						NewParticipantActivity.NEW_PARTICIPANT_CREATED);
+				participants.add(p);
+				participantAdapter.notifyDataSetChanged();
+				// TODO: list is updated; however, we need to persist the list
+				// so that when the user leaves and returns to this screen,
+				// the list will still exist
+			}
+		}
 	}
 
 }
