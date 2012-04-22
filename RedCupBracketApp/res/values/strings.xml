@@ -22,4 +22,6 @@
     <string name="selectParticipant">Select a Participant</string>
     <string name="confirm">Confirm</string>
     <string name="participantNameHint">Participant name</string>
+    <string name="tournamentParticipants_Add">Add</string>
+    <string name="tournamentParticipants_Start">Start</string>
 </resources>

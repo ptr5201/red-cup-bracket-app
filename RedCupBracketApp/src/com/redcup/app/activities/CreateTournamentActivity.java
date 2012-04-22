@@ -1,11 +1,15 @@
 package com.redcup.app.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -28,6 +32,31 @@ public class CreateTournamentActivity extends Activity {
 				this, R.array.bracket_choices, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		bracketType.setAdapter(adapter);
+		
+		EditText nameField = (EditText) findViewById(R.id.nameField);
+		nameField.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				Button createTournamentButton = (Button) findViewById(R.id.createTournamentButton);
+				if (s == null || s.length() == 0) {
+					createTournamentButton.setEnabled(false);
+				} else {
+					createTournamentButton.setEnabled(true);
+				}
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+			}
+			
+		});
 	}
 	
 	public void createTournament(View v) {
@@ -35,21 +64,22 @@ public class CreateTournamentActivity extends Activity {
 		Spinner bracketType = (Spinner) findViewById(R.id.bracketType);
 		EditText participantCountField = (EditText) findViewById(R.id.participantCountField);
 		
-		// TODO: enable the "Create Tournament" button iff the 
-		// name field AND bracket type are not empty
+		// Disallow empty tournament names
 		if (nameField.getText() == null || 
 				nameField.getText().toString().equals("")) {
-			Log.e(TAG, "Tournament Name must have a non-empty value");
 			return;
 		}
 		
+		// Disallow empty bracket types
 		if (bracketType.getSelectedItemId() == AdapterView.INVALID_ROW_ID) {
-			Log.e(TAG, "Bracket Type must have a non-empty value");
 			return;
 		}
+		
+		// Determine the bracket type that was selected
 		BracketTypeEnum bracketTypes[] = BracketTypeEnum.values();
 		BracketTypeEnum tournamentBracketType = bracketTypes[(int) bracketType.getSelectedItemId()];
 		
+		// Start to set up a new tournament
 		Tournament t = new Tournament();
 		t.setName(nameField.getText().toString());
 		
@@ -73,6 +103,9 @@ public class CreateTournamentActivity extends Activity {
 		
 		// TODO: we have the tournament set up, now we need to persist it
 		Log.v(TAG, "Tournament created. Persist tournament and proceed to Tournament View");
+		
+		Intent tournamentParticipants = new Intent(this, TournamentParticipantsActivity.class);
+		startActivity(tournamentParticipants);
 	}
 
 }

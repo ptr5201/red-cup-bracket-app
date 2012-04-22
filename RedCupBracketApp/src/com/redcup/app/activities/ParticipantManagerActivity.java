@@ -18,6 +18,8 @@ import android.widget.ListView;
 
 public class ParticipantManagerActivity extends Activity {
 	
+	// TODO: duplicate code in this class with ParticipantSelectorActivity
+	
 	private static final String TAG = "ParticipantManagerActivity";
 	
 	private ListView participantList;
@@ -38,9 +40,5 @@ public class ParticipantManagerActivity extends Activity {
 	public void createParticipant(View v){
 		Log.v(TAG, getString(R.string.createParticipant));
 	}
-	
-	public void updateList(){
-
-    }
 	
 }
