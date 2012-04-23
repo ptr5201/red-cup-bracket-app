@@ -5,6 +5,9 @@ package com.redcup.app.model;
  *
  */
 public interface BracketStrategy {
+	public enum BracketEvent {
+		RelocateUp, RelocateDown, Win, UnWin, DQ
+	}
 	/**
 	 * Is the passed participant in this tournament?
 	 * @param participant
