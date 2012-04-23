@@ -6,8 +6,9 @@ package com.redcup.app.model;
  */
 public class Bracket {
 	private Participant participant = null;
-	private Bracket left = null;
-	private Bracket right = null;
+	private final Bracket left;
+	private final Bracket right;
+	// Make bidirectional
 	
 	Bracket(Bracket left, Bracket right) {
 		this.left = left;
@@ -26,21 +27,14 @@ public class Bracket {
 
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
+		// TODO send up event indicating change
 	}
 
 	public Bracket getLeft() {
 		return left;
 	}
 
-	public void setLeft(Bracket left) {
-		this.left = left;
-	}
-
 	public Bracket getRight() {
 		return right;
-	}
-
-	public void setRight(Bracket right) {
-		this.right = right;
 	}
 }
