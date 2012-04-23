@@ -12,7 +12,7 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 	}
 	
 	public SingleEliminationBracketStrategy(List<Participant> participants) {
-		this.head = BracketFactory.createBracketStructure(participants);
+		this.head = SingleEliminationBracketFactory.createBracketStructure(participants);
 	}
 
 	@Override
@@ -44,29 +44,21 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 		int rDepth = maxDepth(node.getRight());
 		return(Math.max(lDepth, rDepth) +1);
 	}
-	
-	@Override
-	public boolean occur(BracketEvent event, Participant participant)
-			throws InvalidStateException {
-		// TODO Auto-generated method stub
-		System.out.println("Event occured!");
-		return false;
-	}
-	
+
 	/**
 	 * Returns a list of participants by round
 	 * Also an example of how to use roundStructure (should I encapsulate in a RoundStructure class?)
 	 */
 	public String toString() {
-		List<List<Participant>> structure = getRoundStructure();
-		ListIterator<List<Participant>> li = structure.listIterator(structure.size());
+		List<List<Bracket>> structure = getRoundStructure();
+		ListIterator<List<Bracket>> li = structure.listIterator(structure.size());
 		
 		String ret = "";
 		int roundNum = 1;
 		while (li.hasPrevious()) {
 			ret += String.format("-----Round Number %i-----", roundNum);
-			for (Participant participant : (li.previous())) {
-				ret += String.format("%s \t", participant.getName());
+			for (Bracket bracket : (li.previous())) {
+				ret += String.format("%s \t", bracket.getParticipant().getName());
 			}
 			ret += "\n";
 			roundNum ++;
@@ -74,10 +66,41 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 		return ret;
 	}
 	
-	public List<List<Participant>> getRoundStructure() {
-		List<List<Participant>> roundStructure = new ArrayList<List<Participant>>();
+	@Override
+	public List<List<Bracket>> getRoundStructure() {
+		List<List<Bracket>> roundStructure = new ArrayList<List<Bracket>>();
 		// TODO build list2 from tree
 		return roundStructure;
+	}
+
+	@Override
+	public boolean relocateUp(Participant participant)
+			throws InvalidStateException {
+		// TODO Auto-generated method stub
+		System.out.println("Event occured!");
+		return false;
+	}
+
+	@Override
+	public boolean relocateDown(Participant participant)
+			throws InvalidStateException {
+		// TODO Auto-generated method stub
+		System.out.println("Event occured!");
+		return false;
+	}
+
+	@Override
+	public boolean unWin(Participant participant) throws InvalidStateException {
+		// TODO Auto-generated method stub
+		System.out.println("Event occured!");
+		return false;
+	}
+
+	@Override
+	public boolean win(Participant participant) throws InvalidStateException {
+		// TODO Auto-generated method stub
+		System.out.println("Event occured!");
+		return false;
 	}
 
 }

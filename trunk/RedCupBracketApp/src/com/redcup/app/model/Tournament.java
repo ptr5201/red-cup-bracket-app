@@ -25,4 +25,13 @@ public class Tournament {
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
+	
+	// TODO
+	
+	// add(Participant)
+	// replace(Participant, index)
+	// remove(Participant)
+	// remove(index)
+	
+	// handle / throw fwd events
 }

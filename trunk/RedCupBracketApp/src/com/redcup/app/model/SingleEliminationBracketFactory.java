@@ -9,8 +9,8 @@ import java.util.Stack;
  *
  * "You want your bitshifts? I got 'em right here."
  */
-public class BracketFactory {
-	private BracketFactory() {};
+public class SingleEliminationBracketFactory {
+	private SingleEliminationBracketFactory() {};
 	private static Stack<Participant> participantStack;
 
 	/**

@@ -1,13 +1,12 @@
 package com.redcup.app.model;
 
+import java.util.List;
+
 /**
  * Essentially a tree interface w/ added methods for tourneys
  *
  */
 public interface BracketStrategy {
-	public enum BracketEvent {
-		RelocateUp, RelocateDown, Win, UnWin, DQ
-	}
 	/**
 	 * Is the passed participant in this tournament?
 	 * @param participant
@@ -23,14 +22,10 @@ public interface BracketStrategy {
 	 */
 	public void add(Participant participant);
 	
-	/**
-	 * Indicate to the BracketStrategy that an event has occured
-	 * @param event
-	 * @param participant
-	 * @return boolean indicating success of event
-	 * @throws InvalidStateException when the event cannot occur
-	 */
-	public boolean occur(BracketEvent event, Participant participant) throws InvalidStateException;
+	public boolean relocateUp(Participant participant) throws InvalidStateException;
+	public boolean relocateDown(Participant participant) throws InvalidStateException;
+	public boolean unWin(Participant participant) throws InvalidStateException;
+	public boolean win(Participant participant) throws InvalidStateException;
 
 	
 	/**
@@ -38,4 +33,5 @@ public interface BracketStrategy {
 	 */
 	public int numRounds();
 	
+	public List<List<Bracket>> getRoundStructure();
 }
