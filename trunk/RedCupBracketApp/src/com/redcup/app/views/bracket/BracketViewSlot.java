@@ -19,7 +19,5 @@ public abstract class BracketViewSlot extends View {
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-	}
+	protected abstract void onDraw(Canvas canvas);
 }
