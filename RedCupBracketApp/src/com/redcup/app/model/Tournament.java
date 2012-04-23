@@ -25,5 +25,4 @@ public class Tournament {
 	public void setParticipants(List<Participant> participants) {
 		this.participants = participants;
 	}
-
 }
