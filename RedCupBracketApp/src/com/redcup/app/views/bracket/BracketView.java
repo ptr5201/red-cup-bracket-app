@@ -31,6 +31,9 @@ public class BracketView extends ViewGroup {
 	 *            this {@code BracketView}.
 	 */
 	public void setLayoutAlgorithm(BracketViewLayout layout) {
+		if (this.layout != null) {
+			this.layout.setContext(null);
+		}
 		this.layout = layout;
 		this.layout.setContext(this);
 		this.invalidate();
@@ -56,8 +59,12 @@ public class BracketView extends ViewGroup {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		// Ensure that a layout manager is assigned
 		if (this.layout != null) {
-			
+			// Obtain the amount of space required by the layout manager
+			this.layout.onMeasure(widthMeasureSpec, heightMeasureSpec);
+			this.setMeasuredDimension(this.layout.getMeasuredWidth(),
+					this.layout.getMeasuredHeight());
 		}
 	}
 }

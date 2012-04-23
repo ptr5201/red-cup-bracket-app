@@ -25,9 +25,12 @@ public final class R {
         public static final int past=0x7f020005;
     }
     public static final class id {
+        public static final int addParticipantButton=0x7f070012;
         public static final int bracketType=0x7f070003;
-        public static final int button1=0x7f070005;
+        public static final int button1=0x7f07000e;
+        public static final int confirmButton1=0x7f07000d;
         public static final int createTournament=0x7f070007;
+        public static final int createTournamentButton=0x7f070005;
         public static final int help=0x7f07000c;
         public static final int imageView1=0x7f070008;
         public static final int listView1=0x7f070006;
@@ -36,6 +39,10 @@ public final class R {
         public static final int participantCountField=0x7f070004;
         public static final int participants=0x7f07000b;
         public static final int pastTournaments=0x7f07000a;
+        public static final int selectParticipantButton1=0x7f070010;
+        public static final int selectParticipantListView=0x7f070011;
+        public static final int selectParticipantTextView=0x7f07000f;
+        public static final int startTournamentButton=0x7f070013;
         public static final int textView1=0x7f070000;
         public static final int textView2=0x7f070002;
     }
@@ -43,11 +50,15 @@ public final class R {
         public static final int createtournament=0x7f030000;
         public static final int loadtournament=0x7f030001;
         public static final int main=0x7f030002;
-        public static final int participantmanager=0x7f030003;
+        public static final int newparticipant=0x7f030003;
+        public static final int participantmanager=0x7f030004;
+        public static final int participantselector=0x7f030005;
+        public static final int tournamentparticipants=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
         public static final int bracketTypeLabel=0x7f050006;
+        public static final int confirm=0x7f05000e;
         public static final int createParticipant=0x7f05000a;
         public static final int createTournament=0x7f050001;
         public static final int help=0x7f050009;
@@ -56,8 +67,12 @@ public final class R {
         public static final int participantCountHint=0x7f050008;
         public static final int participantCountLabel=0x7f050007;
         public static final int participantManager=0x7f05000b;
+        public static final int participantNameHint=0x7f05000f;
         public static final int participants=0x7f050004;
         public static final int pastTournaments=0x7f050003;
+        public static final int selectParticipant=0x7f05000d;
         public static final int tournamentNameLabel=0x7f050005;
+        public static final int tournamentParticipants_Add=0x7f050010;
+        public static final int tournamentParticipants_Start=0x7f050011;
     }
 }

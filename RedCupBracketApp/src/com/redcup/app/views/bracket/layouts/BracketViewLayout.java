@@ -17,6 +17,11 @@ public abstract class BracketViewLayout {
 	private int spacing_horizontal = 10;
 	private int sizing_horizontal = 10;
 
+	// Measured width and height; used to communicate measurements with
+	// BracketView.
+	private int measuredHeight;
+	private int measuredWidth;
+
 	/**
 	 * The frozen/thawed status of this {@code BracketViewLayout}. If
 	 * {@code true}, the layout will not be updated until this
@@ -141,6 +146,37 @@ public abstract class BracketViewLayout {
 	 */
 	public BracketView getContext() {
 		return this.context;
+	}
+
+	/**
+	 * Set the amount of space requested by this layout.
+	 * 
+	 * @param measuredWidth
+	 *            the amount of horizontal space requested by this layout.
+	 * @param measuredHeight
+	 *            the amount of vertical space requested by this layout.
+	 */
+	protected void setMeasuredDimension(int measuredWidth, int measuredHeight) {
+		this.measuredWidth = measuredWidth;
+		this.measuredHeight = measuredHeight;
+	}
+
+	/**
+	 * Returns the amount of horizontal space requested by this layout.
+	 * 
+	 * @return the amount of horizontal space requested by this layout.
+	 */
+	public int getMeasuredWidth() {
+		return this.measuredWidth;
+	}
+
+	/**
+	 * Returns the amount of vertical space requested by this layout.
+	 * 
+	 * @return the amount of vertical space requested by this layout.
+	 */
+	public int getMeasuredHeight() {
+		return this.measuredHeight;
 	}
 
 	/**
