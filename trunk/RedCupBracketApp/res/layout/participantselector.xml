@@ -12,33 +12,36 @@
             android:text="@string/selectParticipant"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#ffffff00" />
-
-        <Button
-            android:id="@+id/selectParticipantButton1"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="28dp"
-            android:text="@string/createParticipant" 
-            android:onClick="createParticipant" />
-
+
         <ListView
             android:id="@+id/selectParticipantListView"
             android:layout_width="match_parent"
             android:layout_height="350dp"
+            android:layout_above="@+id/selectParticipantButton1"
             android:layout_below="@+id/selectParticipantTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp" >
-        </ListView>
 
+        </ListView>
+
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/selectParticipantTextView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:onClick="done"
-            android:text="Done" />
+            android:text="@string/participantSelectorDone" />
+
+        <Button
+            android:id="@+id/selectParticipantButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button1"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:onClick="createParticipant"
+            android:text="@string/createParticipant" />
 
     </RelativeLayout>

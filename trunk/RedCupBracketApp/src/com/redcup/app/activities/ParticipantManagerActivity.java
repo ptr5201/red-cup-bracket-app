@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -27,7 +29,6 @@ import android.widget.TextView;
 public class ParticipantManagerActivity extends Activity {
 	
 	private static final String TAG = "ParticipantManagerActivity";
-	
 	private ListView participantList;	
 	
 	RedCupDB db;
@@ -53,6 +54,13 @@ public class ParticipantManagerActivity extends Activity {
 		    }
 		});
 		
+		participantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		    @Override
+		    public void onItemClick(AdapterView<?> av, View v, int pos, long id) {
+		    	onListItemClick(v,pos,id);
+		    }
+		});
+		
 		db.close();
 	}
 	
@@ -64,6 +72,14 @@ public class ParticipantManagerActivity extends Activity {
 	    participantAdapter.notifyDataSetChanged();
 	    db.close();
 	    return true;
+	}
+	
+	protected void onListItemClick(View v, int pos, long id) {
+	    Log.i(TAG, "onListItemClick id=" + pos);
+	    String name = participantAdapter.participants.get(pos).getName();
+	    Intent editParticipant = new Intent(this, EditParticipantActivity.class);
+	    editParticipant.putExtra("name",name);
+		startActivity(editParticipant);
 	}
 
 	
