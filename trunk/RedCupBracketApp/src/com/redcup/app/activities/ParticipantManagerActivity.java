@@ -78,7 +78,7 @@ public class ParticipantManagerActivity extends Activity {
 		input.setText("");
 		builder.setView(input);
 
-		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int id) {
 				
 			if(!input.getText().toString().equals("")){
@@ -150,7 +150,7 @@ public class ParticipantManagerActivity extends Activity {
 			
 			if((v == null) || (v.getTag() == null)){
 				v = inflater.inflate(R.layout.participantlistitem, null);
-				holder = new ViewHolder();
+				holder = new ViewHolder();				
 				holder.name = (TextView)v.findViewById(R.id.textView1);
 				v.setTag(holder);
 			}
