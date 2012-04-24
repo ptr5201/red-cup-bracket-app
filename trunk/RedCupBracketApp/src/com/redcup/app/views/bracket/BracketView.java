@@ -1,25 +1,53 @@
 package com.redcup.app.views.bracket;
 
-import com.redcup.app.views.bracket.layouts.BracketViewLayout;
-
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
+import com.redcup.app.views.bracket.layouts.BracketViewLayout;
+import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
+
 public class BracketView extends ViewGroup {
-	// The layout algorithm to use
+
+	/**
+	 * The layout algorithm to use
+	 */
 	private BracketViewLayout layout = null;
 
 	public BracketView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		this.initialize();
 	}
 
 	public BracketView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.initialize();
 	}
 
 	public BracketView(Context context) {
 		super(context);
+		this.initialize();
+	}
+
+	private void initialize() {
+		this.setBackgroundColor(Color.WHITE);
+
+		// Testing code
+		// List<Participant> entrants = new ArrayList<Participant>();
+		// entrants.add(new Participant("P1"));
+		// entrants.add(new Participant("P2"));
+		// entrants.add(new Participant("P3"));
+		// entrants.add(new Participant("P4"));
+		// entrants.add(new Participant("P5"));
+		// entrants.add(new Participant("P6"));
+		// SingleEliminationBracketStrategy model = new
+		// SingleEliminationBracketStrategy(entrants);
+		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
+		// model);
+		// this.setLayoutAlgorithm(layout);
+		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
+		this.setLayoutAlgorithm(layout);
 	}
 
 	/**
@@ -32,10 +60,11 @@ public class BracketView extends ViewGroup {
 	 */
 	public void setLayoutAlgorithm(BracketViewLayout layout) {
 		if (this.layout != null) {
-			this.layout.setContext(null);
+			this.layout.setBracketView(null);
 		}
 		this.layout = layout;
-		this.layout.setContext(this);
+		this.layout.setBracketView(this);
+		this.removeAllViews();
 		this.invalidate();
 	}
 
@@ -59,12 +88,15 @@ public class BracketView extends ViewGroup {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// Ensure that a layout manager is assigned
-		if (this.layout != null) {
-			// Obtain the amount of space required by the layout manager
-			this.layout.onMeasure(widthMeasureSpec, heightMeasureSpec);
-			this.setMeasuredDimension(this.layout.getMeasuredWidth(),
-					this.layout.getMeasuredHeight());
-		}
+		// // Ensure that a layout manager is assigned
+		// if (this.layout != null) {
+		// // Obtain the amount of space required by the layout manager
+		// this.layout.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		// this.setMeasuredDimension(this.layout.getMeasuredWidth(),
+		// this.layout.getMeasuredHeight());
+		// } else {
+		// super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		// }
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 }

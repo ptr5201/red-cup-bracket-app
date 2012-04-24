@@ -10,12 +10,12 @@ public abstract class BracketViewLayout {
 	private int margin_right = 10;
 
 	// Vertical spacing and sizing allocation
-	private int spacing_vertical = 10;
-	private int sizing_vertical = 10;
+	private int spacing_vertical = 20;
+	private int sizing_vertical = 120;
 
 	// Horizontal spacing and sizing allocation
-	private int spacing_horizontal = 10;
-	private int sizing_horizontal = 10;
+	private int spacing_horizontal = 40;
+	private int sizing_horizontal = 240;
 
 	// Measured width and height; used to communicate measurements with
 	// BracketView.
@@ -38,16 +38,16 @@ public abstract class BracketViewLayout {
 	/**
 	 * The {@code BracketView} that this {@code BracketViewLayout} manages.
 	 */
-	private BracketView context = null;
+	private BracketView bracketView = null;
 
 	/**
 	 * Creates a {@code BracketViewLayout}.
 	 * 
-	 * @param context
+	 * @param bracketView
 	 *            the {@code BracketView} to manage.
 	 */
-	public BracketViewLayout(BracketView context) {
-		this.context = context;
+	public BracketViewLayout(BracketView bracketView) {
+		this.bracketView = bracketView;
 	}
 
 	/**
@@ -119,8 +119,8 @@ public abstract class BracketViewLayout {
 			this.hasChangedInternally = true;
 
 			// Notify the context (if any)
-			if (this.context != null) {
-				this.context.invalidate();
+			if (this.bracketView != null) {
+				this.bracketView.invalidate();
 			}
 		}
 	}
@@ -128,12 +128,12 @@ public abstract class BracketViewLayout {
 	/**
 	 * Sets the {@code BracketView} that this {@code BracketViewLayout} manages.
 	 * 
-	 * @param context
+	 * @param bracketView
 	 *            the {@code BracketView} that this {@code BracketViewLayout}
 	 *            manages.
 	 */
-	public void setContext(BracketView context) {
-		this.context = context;
+	public void setBracketView(BracketView bracketView) {
+		this.bracketView = bracketView;
 		this.refresh();
 	}
 
@@ -144,8 +144,8 @@ public abstract class BracketViewLayout {
 	 * @return the {@code BracketView} that this {@code BracketViewLayout}
 	 *         manages.
 	 */
-	public BracketView getContext() {
-		return this.context;
+	public BracketView getBracketView() {
+		return this.bracketView;
 	}
 
 	/**

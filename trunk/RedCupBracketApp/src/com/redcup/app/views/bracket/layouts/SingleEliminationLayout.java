@@ -1,12 +1,31 @@
 package com.redcup.app.views.bracket.layouts;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import android.view.View.MeasureSpec;
+
+import com.redcup.app.model.Bracket;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.BracketView;
+import com.redcup.app.views.bracket.BracketViewSlot;
 
 public class SingleEliminationLayout extends BracketViewLayout {
 
-	private SingleEliminationBracketStrategy model;
+	private final SingleEliminationBracketStrategy model;
+	private final Map<Bracket, BracketViewSlot> views = new HashMap<Bracket, BracketViewSlot>();
 
+	/**
+	 * Creates a new {@code SingleEliminationLayout}.
+	 * 
+	 * @param context
+	 *            the {@code BracketView} that this object manages.
+	 * @param model
+	 *            the {@code SingleEliminationBracketStrategy} that acts as this
+	 *            object's internal model.
+	 */
 	public SingleEliminationLayout(BracketView context,
 			SingleEliminationBracketStrategy model) {
 		super(context);
@@ -16,26 +35,119 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	@Override
 	public void onLayout(boolean changed, int l, int t, int r, int b) {
 		// Check to make sure that we need to actually update anything
-		if ((changed || this.hasChangedInternally()) && !this.isFrozen()) {
-			// TODO: Implement
-			int availableWidth = r - l;
-			int availableHeigth = b - t;
+		if ((changed || this.hasChangedInternally()) && !this.isFrozen()
+				&& model != null) {
+			// Used to keep track of the bracket objects that have been used;
+			// after brackets have been added to the system, they are removed if
+			// they are not on this list
+			final Set<Bracket> usedBrackets = new HashSet<Bracket>();
 
 			// First column will be evenly spaced according to the given sizing
 			// and spacing constraints; remaining columns will be spaced based
 			// on the matchups in the previous column
+			int vPos = this.getTopMargin();
+			int hPos = this.getLeftMargin();
+
+			for (final Bracket bracket : this.model.getRoundStructure().get(0)) {
+				// Get the view corresponding to this bracket, creating it if
+				// necessary
+				BracketViewSlot slot = this.views.get(bracket);
+				if (slot != null) {
+					slot = new BracketViewSlot(this.getBracketView()
+							.getContext());
+					this.views.put(bracket, slot);
+					this.getBracketView().addView(slot);
+				}
+
+				// Update the positioning and sizing of this component
+				slot.layout(hPos, vPos, hPos + this.getHorizontalSizing(), vPos
+						+ this.getVerticalSizing());
+
+				// Update the vertical positioning variable
+				vPos += this.getVerticalSizing() + this.getVerticalSpacing();
+			}
+
+			// After all the bracket controls have been added, eliminate any
+			// extra controls
+			for (final Bracket bracket : this.views.keySet()) {
+				if (!usedBrackets.contains(bracket)) {
+					BracketViewSlot slot = this.views.remove(bracket);
+					if (slot != null) {
+						this.getBracketView().removeView(slot);
+					}
+				}
+			}
+		}
+
+		// TODO: Remove test
+		if (this.getBracketView().getChildCount() == 0) {
+			int vPos = this.getTopMargin();
+			int hPos = this.getLeftMargin();
+
+			for (int i = 0; i < 8; i++) {
+				// Create slot
+				BracketViewSlot slot = new BracketViewSlot(this
+						.getBracketView().getContext());
+
+				// Update the positioning and sizing of this component
+				slot.layout(hPos, vPos, hPos + slot.getExpandedWidth(), vPos
+						+ slot.getExpandedHeight());
+
+				// Update the vertical positioning variable
+				vPos += slot.getExpandedHeight() + this.getVerticalSpacing();
+
+				// Add to BracketView
+				this.getBracketView().addView(slot);
+			}
 		}
 	}
 
 	@Override
 	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// TODO: Implement
-		// Width = NumRounds * HorizontalSizing +
-		// (NumRounds - 1) * HorizontalSpacing +
-		// LeftMargin + RightMargin
-		// Height = NumEntrants * VerticalSizing +
-		// (NumEntrants - 1) * VerticalSpacing +
-		// TopMargin + BottomMargin
+		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+		int widthAvailable = MeasureSpec.getSize(widthMeasureSpec);
+		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+		int heightAvailable = MeasureSpec.getSize(heightMeasureSpec);
+
+		int width = widthAvailable;
+		int height = heightAvailable;
+
+		// The number of entrants and rounds in the model
+		int numEntrants = 0;
+		int numRounds = 0;
+
+		// Ensure model is valid, then get its metrics
+		if (this.model != null) {
+			numEntrants = this.model.getRoundStructure().get(0).size();
+			numRounds = this.model.numRounds();
+		}
+
+		// Calculate the amount of horizontal space required for the layout
+		if (widthMode != MeasureSpec.EXACTLY) {
+			width = numRounds * this.getHorizontalSizing() + (numRounds - 1)
+					* this.getHorizontalSpacing() + this.getRightMargin()
+					+ this.getLeftMargin();
+		}
+
+		// Limit if in AT_MOST mode
+		if (widthMode == MeasureSpec.AT_MOST) {
+			width = Math.min(width, widthAvailable);
+		}
+
+		// Calculate the amount of vertical space required for the layout
+		if (heightMode != MeasureSpec.EXACTLY) {
+			height = numEntrants * this.getVerticalSizing() + (numEntrants - 1)
+					* this.getVerticalSpacing() + this.getTopMargin()
+					+ this.getBottomMargin();
+		}
+
+		// Limit if in AT_MOST mode
+		if (heightMode == MeasureSpec.AT_MOST) {
+			height = Math.min(height, heightAvailable);
+		}
+
+		// Request the measured space
+		this.setMeasuredDimension(width, height);
 	}
 
 }
