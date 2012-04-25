@@ -38,28 +38,12 @@ public class BracketView extends ViewGroup {
 
 	private void initialize() {
 		this.setBackgroundColor(Color.WHITE);
-
-		// Testing code
-		// List<Participant> entrants = new ArrayList<Participant>();
-		// entrants.add(new Participant("P1"));
-		// entrants.add(new Participant("P2"));
-		// entrants.add(new Participant("P3"));
-		// entrants.add(new Participant("P4"));
-		// entrants.add(new Participant("P5"));
-		// entrants.add(new Participant("P6"));
-		// SingleEliminationBracketStrategy model = new
-		// SingleEliminationBracketStrategy(
-		// entrants);
-		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
-		// model);
-		// this.setLayoutAlgorithm(layout);
-		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
-		this.setLayoutAlgorithm(layout);
-
 		this.setScrollContainer(true);
 
 		gestures = new GestureDetector(this.getContext(),
 				new OnGestureListener() {
+
+					private final static float FLING_ANIMATION_TIME_SEC = 1.0f;
 
 					@Override
 					public boolean onSingleTapUp(MotionEvent e) {
@@ -84,10 +68,18 @@ public class BracketView extends ViewGroup {
 							float distanceX, float distanceY) {
 						// Scroll, taking into account display boundaries
 						awakenScrollBars();
+
+						// Compute the position we want to move to
 						int x = (int) Math.round(getScrollX() + distanceX);
 						int y = (int) Math.round(getScrollY() + distanceY);
+
+						// Apply movement bounds
+						x = Math.min(x, getViewportWidth() - getWidth());
 						x = Math.max(x, 0);
+						y = Math.min(y, getViewportHeight() - getHeight());
 						y = Math.max(y, 0);
+
+						// Move and return
 						scrollTo(x, y);
 						return true;
 					}
@@ -109,6 +101,25 @@ public class BracketView extends ViewGroup {
 						return true;
 					}
 				});
+
+		// TESTING CODE BEYOND THIS POINT
+
+		// List<Participant> entrants = new ArrayList<Participant>();
+		// entrants.add(new Participant("P1"));
+		// entrants.add(new Participant("P2"));
+		// entrants.add(new Participant("P3"));
+		// entrants.add(new Participant("P4"));
+		// entrants.add(new Participant("P5"));
+		// entrants.add(new Participant("P6"));
+		// SingleEliminationBracketStrategy model = new
+		// SingleEliminationBracketStrategy(
+		// entrants);
+		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
+		// model);
+		// this.setLayoutAlgorithm(layout);
+		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
+		this.setLayoutAlgorithm(layout);
+
 	}
 
 	@Override
@@ -145,6 +156,34 @@ public class BracketView extends ViewGroup {
 		return this.layout;
 	}
 
+	/**
+	 * Returns the height of the internal "viewport" of this scrollable
+	 * component.
+	 * 
+	 * @return the height of the internal "viewport" of this scrollable
+	 *         component.
+	 */
+	protected int getViewportHeight() {
+		if (this.layout != null) {
+			return this.layout.getMeasuredHeight();
+		}
+		return 0;
+	}
+
+	/**
+	 * Returns the width of the internal "viewport" of this scrollable
+	 * component.
+	 * 
+	 * @return the width of the internal "viewport" of this scrollable
+	 *         component.
+	 */
+	protected int getViewportWidth() {
+		if (this.layout != null) {
+			return this.layout.getMeasuredWidth();
+		}
+		return 0;
+	}
+
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		if (this.layout != null) {
@@ -154,15 +193,12 @@ public class BracketView extends ViewGroup {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// // Ensure that a layout manager is assigned
-		// if (this.layout != null) {
-		// // Obtain the amount of space required by the layout manager
-		// this.layout.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		// this.setMeasuredDimension(this.layout.getMeasuredWidth(),
-		// this.layout.getMeasuredHeight());
-		// } else {
-		// super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		// }
+		// Although the layout does not affect the amount of measured space
+		// required for this view, we do need to update its internal
+		// measurements
+		if (this.layout != null) {
+			this.layout.updateSizeRequirements();
+		}
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 }
