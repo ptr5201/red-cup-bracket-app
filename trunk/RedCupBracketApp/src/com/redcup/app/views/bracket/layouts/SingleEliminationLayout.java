@@ -15,8 +15,6 @@ import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
 
 public class SingleEliminationLayout extends BracketViewLayout {
-	
-	private int l_prev, r_prev, t_prev, b_prev;
 
 	private final SingleEliminationBracketStrategy model;
 	private final Map<Bracket, BracketViewSlot> views = new HashMap<Bracket, BracketViewSlot>();
@@ -37,28 +35,9 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		super(context);
 		this.model = model;
 	}
-	
-	public void updatePositions() {
-		// Position slots
-		int vPos = this.getTopMargin() - this.getScrollOffsetY();
-		int hPos = this.getLeftMargin();
-		for (BracketViewSlot slot : this.testViews) {
-			// Update the positioning and sizing of this component
-			slot.layout(hPos, vPos, hPos + slot.getExpandedWidth(),
-					vPos + slot.getExpandedHeight());
-
-			// Update the vertical positioning variable
-			vPos += slot.getExpandedHeight() + this.getVerticalSpacing();
-		}
-	}
 
 	@Override
 	public void onLayout(boolean changed, int l, int t, int r, int b) {
-		this.l_prev = l;
-		this.t_prev = t;
-		this.r_prev = r;
-		this.b_prev = b;
-		
 		// Check to make sure that we need to actually update anything
 		if ((changed || this.hasChangedInternally()) && !this.isFrozen()
 				&& model != null) {
@@ -120,7 +99,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		}
 
 		// Position slots
-		int vPos = this.getTopMargin() - this.getScrollOffsetY();
+		int vPos = this.getTopMargin();
 		int hPos = this.getLeftMargin();
 		for (BracketViewSlot slot : this.testViews) {
 			// Update the positioning and sizing of this component
