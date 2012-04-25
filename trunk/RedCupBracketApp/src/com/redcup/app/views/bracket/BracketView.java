@@ -3,12 +3,21 @@ package com.redcup.app.views.bracket;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 public class BracketView extends ViewGroup {
+
+	private int scrollY;
+
+	private GestureDetector gestures;
 
 	/**
 	 * The layout algorithm to use
@@ -42,12 +51,71 @@ public class BracketView extends ViewGroup {
 		// entrants.add(new Participant("P5"));
 		// entrants.add(new Participant("P6"));
 		// SingleEliminationBracketStrategy model = new
-		// SingleEliminationBracketStrategy(entrants);
+		// SingleEliminationBracketStrategy(
+		// entrants);
 		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
 		// model);
 		// this.setLayoutAlgorithm(layout);
 		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
 		this.setLayoutAlgorithm(layout);
+
+		this.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				for (int i = 0; i < BracketView.this.getChildCount(); i++) {
+					View child = BracketView.this.getChildAt(i);
+					if (child instanceof BracketViewSlot) {
+						BracketViewSlot slot = (BracketViewSlot) child;
+						slot.reset();
+					}
+				}
+			}
+		});
+
+		gestures = new GestureDetector(this.getContext(),
+				new OnGestureListener() {
+
+					@Override
+					public boolean onSingleTapUp(MotionEvent e) {
+						return false;
+					}
+
+					@Override
+					public void onShowPress(MotionEvent e) {
+					}
+
+					@Override
+					public boolean onScroll(MotionEvent e1, MotionEvent e2,
+							float distanceX, float distanceY) {
+						int positionY = (int) Math.round(getScrollOffsetY()
+								+ distanceY);
+						setScrollOffsetY(positionY);
+						return true;
+					}
+
+					@Override
+					public void onLongPress(MotionEvent e) {
+					}
+
+					@Override
+					public boolean onFling(MotionEvent e1, MotionEvent e2,
+							float velocityX, float velocityY) {
+						return false;
+					}
+
+					@Override
+					public boolean onDown(MotionEvent e) {
+						// We have to "handle" this event to get other events to
+						// work
+						return true;
+					}
+				});
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return this.gestures.onTouchEvent(event);
 	}
 
 	/**
@@ -77,6 +145,19 @@ public class BracketView extends ViewGroup {
 	 */
 	public BracketViewLayout getLayoutAlgorithm() {
 		return this.layout;
+	}
+
+	private void setScrollOffsetY(int scrollY) {
+		this.scrollY = scrollY;
+		if (this.layout != null) {
+			this.layout.setScrollOffsetY(scrollY);
+			this.layout.updatePositions();
+			this.invalidate();
+		}
+	}
+
+	private int getScrollOffsetY() {
+		return this.scrollY;
 	}
 
 	@Override

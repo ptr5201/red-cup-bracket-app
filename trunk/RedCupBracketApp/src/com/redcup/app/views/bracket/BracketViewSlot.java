@@ -19,6 +19,7 @@ public class BracketViewSlot extends View {
 	int r = 255;
 	int b = 0;
 	int g = 0;
+	boolean hasFocus = false;
 
 	public BracketViewSlot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -58,6 +59,22 @@ public class BracketViewSlot extends View {
 				return true;
 			}
 		});
+
+		this.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				BracketViewSlot.this.hasFocus = hasFocus;
+				BracketViewSlot.this.invalidate();
+			}
+		});
+	}
+	
+	public void reset() {
+		r = 255;
+		g = 0;
+		b = 0;
+		invalidate();
 	}
 
 	public void setCollapsedWidth(int width) {
@@ -105,11 +122,12 @@ public class BracketViewSlot extends View {
 		// Draw expanded area
 		paint.setARGB(127, r, g, b);
 		paint.setStyle(Style.FILL);
-		canvas.drawRoundRect(new RectF(4, 4, this.expandedWidth - 4,
-				this.expandedHeight - 4), 16, 16, paint);
+		canvas.drawRoundRect(new RectF(0, 0, this.expandedWidth,
+				this.expandedHeight), 20, 20, paint);
 
 		// Draw border
-		paint.setARGB(255, 0, 0, 0);
+		int borderShade = this.hasFocus ? 255 : 0;
+		paint.setARGB(255, borderShade, borderShade, 0);
 		paint.setStyle(Style.FILL);
 		canvas.drawRoundRect(new RectF(0, 0, this.collapsedWidth,
 				this.collapsedHeight), 20, 20, paint);
