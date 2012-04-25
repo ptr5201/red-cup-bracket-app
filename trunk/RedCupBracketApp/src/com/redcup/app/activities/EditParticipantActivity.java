@@ -14,16 +14,18 @@ public class EditParticipantActivity extends Activity{
 	
 	private static final String TAG = "EditParticipantActivity";
 	private RedCupDB db;
+	private EditText nameField;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.editparticipantmenu);
-		EditText nameField = (EditText) findViewById(R.id.editNameEditText);
+		nameField = (EditText) findViewById(R.id.editNameEditText);
 		nameField.setText(this.getIntent().getStringExtra("name"));
+		db = new RedCupDB(this);
 	}
 	
 	public void editParticipant(View v){
-		EditText nameField = (EditText) findViewById(R.id.editNameEditText);
+		//EditText nameField = (EditText) findViewById(R.id.editNameEditText);
 		
 		if (nameField.getText() == null || 
 				nameField.getText().toString().equals("")) {
@@ -33,7 +35,11 @@ public class EditParticipantActivity extends Activity{
 		else{
 			String oldName = this.getIntent().getStringExtra("name");
 			String newName = nameField.getText().toString();
-			// TODO: make this change in DB
+			// TODO: change to a result activity
+			
+			db.open();
+			db.editParticipant(newName, oldName);
+			db.close();
 			
 			Log.v(TAG, getString(R.string.participants));
 			Intent participantManager = new Intent(this, ParticipantManagerActivity.class);
