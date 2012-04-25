@@ -59,26 +59,19 @@ public class BracketView extends ViewGroup {
 		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
 		this.setLayoutAlgorithm(layout);
 
-		this.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				for (int i = 0; i < BracketView.this.getChildCount(); i++) {
-					View child = BracketView.this.getChildAt(i);
-					if (child instanceof BracketViewSlot) {
-						BracketViewSlot slot = (BracketViewSlot) child;
-						slot.reset();
-					}
-				}
-			}
-		});
-
 		gestures = new GestureDetector(this.getContext(),
 				new OnGestureListener() {
 
 					@Override
 					public boolean onSingleTapUp(MotionEvent e) {
-						return false;
+						for (int i = 0; i < BracketView.this.getChildCount(); i++) {
+							View child = BracketView.this.getChildAt(i);
+							if (child instanceof BracketViewSlot) {
+								BracketViewSlot slot = (BracketViewSlot) child;
+								slot.reset();
+							}
+						}
+						return true;
 					}
 
 					@Override
