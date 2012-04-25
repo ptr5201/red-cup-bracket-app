@@ -3,7 +3,6 @@ package com.redcup.app.views.bracket;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -14,8 +13,6 @@ import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 public class BracketView extends ViewGroup {
-
-	private int scrollY;
 
 	private GestureDetector gestures;
 
@@ -59,11 +56,14 @@ public class BracketView extends ViewGroup {
 		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
 		this.setLayoutAlgorithm(layout);
 
+		this.setScrollContainer(true);
+
 		gestures = new GestureDetector(this.getContext(),
 				new OnGestureListener() {
 
 					@Override
 					public boolean onSingleTapUp(MotionEvent e) {
+						// Reset selection
 						for (int i = 0; i < BracketView.this.getChildCount(); i++) {
 							View child = BracketView.this.getChildAt(i);
 							if (child instanceof BracketViewSlot) {
@@ -71,6 +71,7 @@ public class BracketView extends ViewGroup {
 								slot.reset();
 							}
 						}
+						invalidate();
 						return true;
 					}
 
@@ -81,9 +82,13 @@ public class BracketView extends ViewGroup {
 					@Override
 					public boolean onScroll(MotionEvent e1, MotionEvent e2,
 							float distanceX, float distanceY) {
-						int positionY = (int) Math.round(getScrollOffsetY()
-								+ distanceY);
-						setScrollOffsetY(positionY);
+						// Scroll, taking into account display boundaries
+						awakenScrollBars();
+						int x = (int) Math.round(getScrollX() + distanceX);
+						int y = (int) Math.round(getScrollY() + distanceY);
+						x = Math.max(x, 0);
+						y = Math.max(y, 0);
+						scrollTo(x, y);
 						return true;
 					}
 
@@ -138,19 +143,6 @@ public class BracketView extends ViewGroup {
 	 */
 	public BracketViewLayout getLayoutAlgorithm() {
 		return this.layout;
-	}
-
-	private void setScrollOffsetY(int scrollY) {
-		this.scrollY = scrollY;
-		if (this.layout != null) {
-			this.layout.setScrollOffsetY(scrollY);
-			this.layout.updatePositions();
-			this.invalidate();
-		}
-	}
-
-	private int getScrollOffsetY() {
-		return this.scrollY;
 	}
 
 	@Override

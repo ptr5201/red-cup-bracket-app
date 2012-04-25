@@ -22,9 +22,6 @@ public abstract class BracketViewLayout {
 	private int measuredHeight;
 	private int measuredWidth;
 
-	// Scroll offset
-	private int scrollY = 0;
-
 	/**
 	 * The frozen/thawed status of this {@code BracketViewLayout}. If
 	 * {@code true}, the layout will not be updated until this
@@ -318,14 +315,6 @@ public abstract class BracketViewLayout {
 		return this.sizing_horizontal;
 	}
 
-	public void setScrollOffsetY(int scrollY) {
-		this.scrollY = scrollY;
-	}
-	
-	public int getScrollOffsetY() {
-		return this.scrollY;
-	}
-
 	/**
 	 * Performs the layout for the bracket.
 	 * 
@@ -352,6 +341,4 @@ public abstract class BracketViewLayout {
 	 *            the height available for this layout.
 	 */
 	public abstract void onMeasure(int widthMeasureSpec, int heightMeasureSpec);
-	
-	public abstract void updatePositions();
 }

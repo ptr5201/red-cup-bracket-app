@@ -69,12 +69,11 @@ public class BracketViewSlot extends View {
 			}
 		});
 	}
-	
+
 	public void reset() {
 		r = 255;
 		g = 0;
 		b = 0;
-		invalidate();
 	}
 
 	public void setCollapsedWidth(int width) {
