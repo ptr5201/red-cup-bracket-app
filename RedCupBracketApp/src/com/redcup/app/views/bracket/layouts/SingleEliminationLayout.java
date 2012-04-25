@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.view.View.MeasureSpec;
-
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.BracketView;
@@ -111,19 +109,59 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		}
 	}
 
+	// @Override
+	// public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	// int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+	// int widthAvailable = MeasureSpec.getSize(widthMeasureSpec);
+	// int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+	// int heightAvailable = MeasureSpec.getSize(heightMeasureSpec);
+	//
+	// int width = widthAvailable;
+	// int height = heightAvailable;
+	//
+	// // The number of entrants and rounds in the model
+	// int numEntrants = 0;
+	// int numRounds = 0;
+	//
+	// // Ensure model is valid, then get its metrics
+	// if (this.model != null) {
+	// numEntrants = this.model.getRoundStructure().get(0).size();
+	// numRounds = this.model.numRounds();
+	// }
+	//
+	// // Calculate the amount of horizontal space required for the layout
+	// if (widthMode != MeasureSpec.EXACTLY) {
+	// width = numRounds * this.getHorizontalSizing() + (numRounds - 1)
+	// * this.getHorizontalSpacing() + this.getRightMargin()
+	// + this.getLeftMargin();
+	// }
+	//
+	// // Limit if in AT_MOST mode
+	// if (widthMode == MeasureSpec.AT_MOST) {
+	// width = Math.min(width, widthAvailable);
+	// }
+	//
+	// // Calculate the amount of vertical space required for the layout
+	// if (heightMode != MeasureSpec.EXACTLY) {
+	// height = numEntrants * this.getVerticalSizing() + (numEntrants - 1)
+	// * this.getVerticalSpacing() + this.getTopMargin()
+	// + this.getBottomMargin();
+	// }
+	//
+	// // Limit if in AT_MOST mode
+	// if (heightMode == MeasureSpec.AT_MOST) {
+	// height = Math.min(height, heightAvailable);
+	// }
+	//
+	// // Request the measured space
+	// this.setMeasuredDimension(width, height);
+	// }
+
 	@Override
-	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-		int widthAvailable = MeasureSpec.getSize(widthMeasureSpec);
-		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-		int heightAvailable = MeasureSpec.getSize(heightMeasureSpec);
-
-		int width = widthAvailable;
-		int height = heightAvailable;
-
+	public void updateSizeRequirements() {
 		// The number of entrants and rounds in the model
-		int numEntrants = 0;
-		int numRounds = 0;
+		int numEntrants = 8;
+		int numRounds = 3;
 
 		// Ensure model is valid, then get its metrics
 		if (this.model != null) {
@@ -132,28 +170,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		}
 
 		// Calculate the amount of horizontal space required for the layout
-		if (widthMode != MeasureSpec.EXACTLY) {
-			width = numRounds * this.getHorizontalSizing() + (numRounds - 1)
-					* this.getHorizontalSpacing() + this.getRightMargin()
-					+ this.getLeftMargin();
-		}
+		int width = numRounds * this.getHorizontalSizing() + (numRounds - 1)
+				* this.getHorizontalSpacing() + this.getRightMargin()
+				+ this.getLeftMargin();
 
-		// Limit if in AT_MOST mode
-		if (widthMode == MeasureSpec.AT_MOST) {
-			width = Math.min(width, widthAvailable);
-		}
-
-		// Calculate the amount of vertical space required for the layout
-		if (heightMode != MeasureSpec.EXACTLY) {
-			height = numEntrants * this.getVerticalSizing() + (numEntrants - 1)
-					* this.getVerticalSpacing() + this.getTopMargin()
-					+ this.getBottomMargin();
-		}
-
-		// Limit if in AT_MOST mode
-		if (heightMode == MeasureSpec.AT_MOST) {
-			height = Math.min(height, heightAvailable);
-		}
+		int height = numEntrants * this.getVerticalSizing() + (numEntrants - 1)
+				* this.getVerticalSpacing() + this.getTopMargin()
+				+ this.getBottomMargin();
 
 		// Request the measured space
 		this.setMeasuredDimension(width, height);

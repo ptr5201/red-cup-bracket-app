@@ -334,11 +334,6 @@ public abstract class BracketViewLayout {
 
 	/**
 	 * Measures the amount of space required for this layout.
-	 * 
-	 * @param widthMeasureSpec
-	 *            the width available for this layout.
-	 * @param heightMeasureSpec
-	 *            the height available for this layout.
 	 */
-	public abstract void onMeasure(int widthMeasureSpec, int heightMeasureSpec);
+	public abstract void updateSizeRequirements();
 }
