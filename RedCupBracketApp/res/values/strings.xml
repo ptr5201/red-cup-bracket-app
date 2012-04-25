@@ -25,7 +25,7 @@
     <string name="tournamentParticipants_Add">Add</string>
     <string name="tournamentParticipants_Start">Start</string>
     <string name="participantSelectorDone">Done</string>
-    <string name="name">Name</string>
+    <string name="participantName">Participant Name</string>
     <string name="history">History</string>
     <string name="save">Save</string>
 </resources>
