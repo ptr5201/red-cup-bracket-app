@@ -2,19 +2,18 @@ package com.redcup.app.views.bracket;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.redcup.app.views.themes.FlatButtonTheme;
-
 public class BracketViewSlot extends ViewGroup {
 
 	private BracketSlotButton slotButton;
 	private Button removeButton;
+	private Button demoteButton;
+	private Button promoteButton;
 	private PaintDrawable background = new PaintDrawable(Color.LTGRAY);
 
 	private int collapsedHeight = 60;
@@ -47,6 +46,8 @@ public class BracketViewSlot extends ViewGroup {
 			public void onClick(View v) {
 				v.setSelected(true);
 				BracketViewSlot.this.removeButton.setVisibility(VISIBLE);
+//				BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
+//				BracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
 				BracketViewSlot.this.background.setAlpha(255);
 				BracketViewSlot.this.invalidate();
 			}
@@ -58,6 +59,19 @@ public class BracketViewSlot extends ViewGroup {
 		this.removeButton.setText("X");
 		this.removeButton.setVisibility(INVISIBLE);
 		this.addView(this.removeButton);
+
+		// Create the "demote" button
+		this.demoteButton = new Button(context);
+		this.demoteButton.setText("<-");
+		this.demoteButton.setEnabled(false);
+		this.demoteButton.setVisibility(INVISIBLE);
+		this.addView(this.demoteButton);
+
+		// Create the "promote" button
+		this.promoteButton = new Button(context);
+		this.promoteButton.setText("---->");
+		this.promoteButton.setVisibility(INVISIBLE);
+		this.addView(this.promoteButton);
 
 		// Background drawable
 		this.background.setBounds(0, 0, this.expandedWidth,
@@ -73,6 +87,8 @@ public class BracketViewSlot extends ViewGroup {
 		}
 		if (this.removeButton != null) {
 			this.removeButton.setVisibility(INVISIBLE);
+			this.demoteButton.setVisibility(INVISIBLE);
+			this.promoteButton.setVisibility(INVISIBLE);
 			this.background.setAlpha(0);
 		}
 	}
@@ -118,5 +134,10 @@ public class BracketViewSlot extends ViewGroup {
 		this.slotButton.layout(0, 0, this.collapsedWidth, this.collapsedHeight);
 		this.removeButton.layout(this.collapsedWidth + 5, 5,
 				this.expandedWidth - 5, this.collapsedHeight - 5);
+		this.demoteButton.layout(5, this.collapsedHeight + 5, this.expandedHeight
+				- this.collapsedHeight - 5, this.expandedHeight
+				- this.collapsedHeight - 5);
+		this.promoteButton.layout(this.expandedHeight - this.collapsedHeight,
+				this.collapsedHeight + 5, this.collapsedWidth, this.expandedHeight);
 	}
 }
