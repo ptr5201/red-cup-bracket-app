@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,49 @@ import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 public class BracketView extends ViewGroup {
+
+	private class GestureListener extends SimpleOnGestureListener {
+		@Override
+		public boolean onSingleTapUp(MotionEvent e) {
+			// Reset selection
+			for (int i = 0; i < BracketView.this.getChildCount(); i++) {
+				View child = BracketView.this.getChildAt(i);
+				if (child instanceof BracketViewSlot) {
+					BracketViewSlot slot = (BracketViewSlot) child;
+					slot.reset();
+				}
+			}
+			invalidate();
+			return true;
+		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2,
+				float distanceX, float distanceY) {
+			// Scroll, taking into account display boundaries
+			awakenScrollBars();
+
+			// Compute the position we want to move to
+			int x = (int) Math.round(getScrollX() + distanceX);
+			int y = (int) Math.round(getScrollY() + distanceY);
+
+			// Apply movement bounds
+			x = Math.min(x, getViewportWidth() - getWidth());
+			x = Math.max(x, 0);
+			y = Math.min(y, getViewportHeight() - getHeight());
+			y = Math.max(y, 0);
+
+			// Move and return
+			scrollTo(x, y);
+			return true;
+		}
+
+		@Override
+		public boolean onDown(MotionEvent e) {
+			// We have to return 'true' or advanced gestures won't work
+			return true;
+		}
+	}
 
 	private GestureDetector gestures;
 
@@ -40,67 +83,7 @@ public class BracketView extends ViewGroup {
 		this.setBackgroundColor(Color.WHITE);
 		this.setScrollContainer(true);
 
-		gestures = new GestureDetector(this.getContext(),
-				new OnGestureListener() {
-
-					private final static float FLING_ANIMATION_TIME_SEC = 1.0f;
-
-					@Override
-					public boolean onSingleTapUp(MotionEvent e) {
-						// Reset selection
-						for (int i = 0; i < BracketView.this.getChildCount(); i++) {
-							View child = BracketView.this.getChildAt(i);
-							if (child instanceof BracketViewSlot) {
-								BracketViewSlot slot = (BracketViewSlot) child;
-								slot.reset();
-							}
-						}
-						invalidate();
-						return true;
-					}
-
-					@Override
-					public void onShowPress(MotionEvent e) {
-					}
-
-					@Override
-					public boolean onScroll(MotionEvent e1, MotionEvent e2,
-							float distanceX, float distanceY) {
-						// Scroll, taking into account display boundaries
-						awakenScrollBars();
-
-						// Compute the position we want to move to
-						int x = (int) Math.round(getScrollX() + distanceX);
-						int y = (int) Math.round(getScrollY() + distanceY);
-
-						// Apply movement bounds
-						x = Math.min(x, getViewportWidth() - getWidth());
-						x = Math.max(x, 0);
-						y = Math.min(y, getViewportHeight() - getHeight());
-						y = Math.max(y, 0);
-
-						// Move and return
-						scrollTo(x, y);
-						return true;
-					}
-
-					@Override
-					public void onLongPress(MotionEvent e) {
-					}
-
-					@Override
-					public boolean onFling(MotionEvent e1, MotionEvent e2,
-							float velocityX, float velocityY) {
-						return false;
-					}
-
-					@Override
-					public boolean onDown(MotionEvent e) {
-						// We have to "handle" this event to get other events to
-						// work
-						return true;
-					}
-				});
+		gestures = new GestureDetector(this.getContext(), new GestureListener());
 
 		// TESTING CODE BEYOND THIS POINT
 
