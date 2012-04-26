@@ -24,7 +24,7 @@ public class NewParticipantActivity extends Activity {
 	}
 	
 	public void newParticipant(View v) {
-		EditText nameField = (EditText) findViewById(R.id.nameField);
+		EditText nameField = (EditText) findViewById(R.id.newParticipantNameEditField);
 		
 		if (nameField.getText() == null || 
 				nameField.getText().toString().equals("")) {

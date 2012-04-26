@@ -3,36 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+
+    <TextView
+        android:id="@+id/tournamentParticipantsName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/bracketViewSlot"
+        android:layout_alignParentTop="true"
+        android:text="@string/tournamentSetup"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff00" />
+
     <com.redcup.app.views.bracket.BracketView
-        android:id="@+id/bracketVeiwSlot"
+        android:id="@+id/bracketViewSlot"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tournamentParticipantsName"
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp" />
-
+        android:layout_marginRight="5dp" />
+
     <Button
         android:id="@+id/addParticipantButton"
-        android:layout_width="125dp"
+        android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="14dp"
-        android:layout_marginLeft="20dp"
         android:onClick="addParticipant"
         android:text="@string/tournamentParticipants_Add" />
-
+
     <Button
         android:id="@+id/startTournamentButton"
-        android:layout_width="125dp"
+        android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/addParticipantButton"
         android:layout_alignBottom="@+id/addParticipantButton"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
         android:onClick="startTournament"
         android:text="@string/tournamentParticipants_Start" />
 

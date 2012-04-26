@@ -27,13 +27,13 @@ public class CreateTournamentActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.createtournament);
 		
-		Spinner bracketType = (Spinner) findViewById(R.id.bracketType);
+		Spinner bracketType = (Spinner) findViewById(R.id.bracketTypeSpinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
 				this, R.array.bracket_choices, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		bracketType.setAdapter(adapter);
 		
-		EditText nameField = (EditText) findViewById(R.id.nameField);
+		EditText nameField = (EditText) findViewById(R.id.tournamentNameEditField);
 		nameField.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -60,9 +60,9 @@ public class CreateTournamentActivity extends Activity {
 	}
 	
 	public void createTournament(View v) {
-		EditText nameField = (EditText) findViewById(R.id.nameField);
-		Spinner bracketType = (Spinner) findViewById(R.id.bracketType);
-		EditText participantCountField = (EditText) findViewById(R.id.participantCountField);
+		EditText nameField = (EditText) findViewById(R.id.tournamentNameEditField);
+		Spinner bracketType = (Spinner) findViewById(R.id.bracketTypeSpinner);
+		EditText participantCountField = (EditText) findViewById(R.id.participantCountEditField);
 		
 		// Disallow empty tournament names
 		if (nameField.getText() == null || 
