@@ -25,33 +25,37 @@ public final class R {
         public static final int past=0x7f020005;
     }
     public static final class id {
-        public static final int addParticipantButton=0x7f070019;
-        public static final int bracketType=0x7f070003;
-        public static final int bracketVeiwSlot=0x7f070018;
-        public static final int button1=0x7f070013;
-        public static final int checkBox1=0x7f070017;
-        public static final int confirmButton1=0x7f070012;
-        public static final int createTournament=0x7f07000c;
-        public static final int createTournamentButton=0x7f070005;
-        public static final int editNameEditText=0x7f070007;
-        public static final int help=0x7f070011;
-        public static final int historyListView=0x7f070009;
-        public static final int historyTextView=0x7f070008;
-        public static final int imageView1=0x7f07000d;
-        public static final int listView1=0x7f07000b;
-        public static final int loadTournament=0x7f07000e;
-        public static final int nameField=0x7f070001;
-        public static final int nameTextView=0x7f070006;
-        public static final int participantCountField=0x7f070004;
-        public static final int participants=0x7f070010;
-        public static final int pastTournaments=0x7f07000f;
-        public static final int saveButton=0x7f07000a;
-        public static final int selectParticipantButton1=0x7f070016;
-        public static final int selectParticipantListView=0x7f070015;
-        public static final int selectParticipantTextView=0x7f070014;
-        public static final int startTournamentButton=0x7f07001a;
-        public static final int textView1=0x7f070000;
-        public static final int textView2=0x7f070002;
+        public static final int addParticipantButton=0x7f07001d;
+        public static final int bracketTypeLabel=0x7f070002;
+        public static final int bracketTypeSpinner=0x7f070003;
+        public static final int bracketViewSlot=0x7f07001c;
+        public static final int button1=0x7f070016;
+        public static final int checkBox1=0x7f07001a;
+        public static final int confirmButton1=0x7f070015;
+        public static final int createTournament=0x7f07000e;
+        public static final int createTournamentButton=0x7f070006;
+        public static final int editNameEditText=0x7f070008;
+        public static final int help=0x7f070013;
+        public static final int historyListView=0x7f07000a;
+        public static final int historyTextView=0x7f070009;
+        public static final int imageView1=0x7f07000f;
+        public static final int listView1=0x7f07000d;
+        public static final int loadTournament=0x7f070010;
+        public static final int nameTextView=0x7f070007;
+        public static final int newParticipantNameEditField=0x7f070014;
+        public static final int participantCountEditField=0x7f070005;
+        public static final int participantCountLabel=0x7f070004;
+        public static final int participants=0x7f070012;
+        public static final int pastTournaments=0x7f070011;
+        public static final int saveButton=0x7f07000b;
+        public static final int selectParticipantButton1=0x7f070019;
+        public static final int selectParticipantListView=0x7f070018;
+        public static final int selectParticipantTextView=0x7f070017;
+        public static final int startTournamentButton=0x7f07001e;
+        public static final int textView1=0x7f07000c;
+        public static final int tournamentNameEditField=0x7f070001;
+        public static final int tournamentNameLabel=0x7f070000;
+        public static final int tournamentParticipantsName=0x7f07001b;
     }
     public static final class layout {
         public static final int createtournament=0x7f030000;
@@ -74,11 +78,11 @@ public final class R {
         public static final int help=0x7f050009;
         public static final int history=0x7f050014;
         public static final int loadTournament=0x7f050002;
-        public static final int name=0x7f050013;
         public static final int ongoingTournaments=0x7f05000c;
         public static final int participantCountHint=0x7f050008;
         public static final int participantCountLabel=0x7f050007;
         public static final int participantManager=0x7f05000b;
+        public static final int participantName=0x7f050013;
         public static final int participantNameHint=0x7f05000f;
         public static final int participantSelectorDone=0x7f050012;
         public static final int participants=0x7f050004;
@@ -88,5 +92,6 @@ public final class R {
         public static final int tournamentNameLabel=0x7f050005;
         public static final int tournamentParticipants_Add=0x7f050010;
         public static final int tournamentParticipants_Start=0x7f050011;
+        public static final int tournamentSetup=0x7f050016;
     }
 }

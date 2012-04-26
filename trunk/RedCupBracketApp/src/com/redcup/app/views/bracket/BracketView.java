@@ -18,14 +18,7 @@ public class BracketView extends ViewGroup {
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			// Reset selection
-			for (int i = 0; i < BracketView.this.getChildCount(); i++) {
-				View child = BracketView.this.getChildAt(i);
-				if (child instanceof BracketViewSlot) {
-					BracketViewSlot slot = (BracketViewSlot) child;
-					slot.reset();
-				}
-			}
-			invalidate();
+			BracketView.this.clearSelection();
 			return true;
 		}
 
@@ -103,6 +96,17 @@ public class BracketView extends ViewGroup {
 		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
 		this.setLayoutAlgorithm(layout);
 
+	}
+
+	public void clearSelection() {
+		for (int i = 0; i < this.getChildCount(); i++) {
+			View child = this.getChildAt(i);
+			if (child instanceof BracketViewSlot) {
+				BracketViewSlot slot = (BracketViewSlot) child;
+				slot.reset();
+			}
+		}
+		this.invalidate();
 	}
 
 	@Override
