@@ -21,7 +21,8 @@ public class SingleEliminationBracketFactory {
 	public static Bracket createBracketStructure(List<Participant> participants) {
 		// Find number of rounds in tournament
 		int roundCount = 0;
-		while ((participants.size() >> 1) > 0) {
+		int participantSize = participants.size(); 
+		while ((participantSize >>= 1) > 0) {
 			roundCount++;
 		}
 
