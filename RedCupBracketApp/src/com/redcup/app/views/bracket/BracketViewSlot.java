@@ -10,6 +10,29 @@ import android.widget.Button;
 
 public class BracketViewSlot extends ViewGroup {
 
+	public class OnExpandedStateChangedEvent {
+		private final BracketViewSlot view;
+		private final boolean isExpanding;
+
+		public OnExpandedStateChangedEvent(BracketViewSlot view,
+				boolean isExpanding) {
+			this.view = view;
+			this.isExpanding = isExpanding;
+		}
+
+		public BracketViewSlot getView() {
+			return this.view;
+		}
+
+		public boolean isExpanding() {
+			return this.isExpanding;
+		}
+	}
+
+	public interface OnExpandedStateChangedListener {
+		public void onExpandedStateChanged(OnExpandedStateChangedEvent evt);
+	}
+
 	private BracketSlotButton slotButton;
 	private Button removeButton;
 	private Button demoteButton;
@@ -21,6 +44,8 @@ public class BracketViewSlot extends ViewGroup {
 
 	private int expandedHeight = 120;
 	private int expandedWidth = 320;
+
+	private OnExpandedStateChangedListener onExpandedStateChangedListener = null;
 
 	public BracketViewSlot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -44,10 +69,13 @@ public class BracketViewSlot extends ViewGroup {
 
 			@Override
 			public void onClick(View v) {
+				BracketViewSlot.this
+						.raiseOnExpandedStateChangedEvent(new OnExpandedStateChangedEvent(
+								BracketViewSlot.this, true));
 				v.setSelected(true);
 				BracketViewSlot.this.removeButton.setVisibility(VISIBLE);
-//				BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
-//				BracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
+				BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
+				BracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
 				BracketViewSlot.this.background.setAlpha(255);
 				BracketViewSlot.this.invalidate();
 			}
@@ -79,6 +107,22 @@ public class BracketViewSlot extends ViewGroup {
 		this.background.setCornerRadius(20);
 		this.background.setAlpha(0);
 		this.setBackgroundDrawable(this.background);
+	}
+
+	public void setOnExpandedStateChangedListener(
+			OnExpandedStateChangedListener listener) {
+		this.onExpandedStateChangedListener = listener;
+	}
+
+	public OnExpandedStateChangedListener getOnExpandedStateChangedListener() {
+		return this.onExpandedStateChangedListener;
+	}
+
+	protected void raiseOnExpandedStateChangedEvent(
+			OnExpandedStateChangedEvent evt) {
+		if (this.onExpandedStateChangedListener != null) {
+			this.onExpandedStateChangedListener.onExpandedStateChanged(evt);
+		}
 	}
 
 	public void reset() {
@@ -134,10 +178,11 @@ public class BracketViewSlot extends ViewGroup {
 		this.slotButton.layout(0, 0, this.collapsedWidth, this.collapsedHeight);
 		this.removeButton.layout(this.collapsedWidth + 5, 5,
 				this.expandedWidth - 5, this.collapsedHeight - 5);
-		this.demoteButton.layout(5, this.collapsedHeight + 5, this.expandedHeight
-				- this.collapsedHeight - 5, this.expandedHeight
-				- this.collapsedHeight - 5);
+		this.demoteButton.layout(5, this.collapsedHeight + 5,
+				this.expandedHeight - this.collapsedHeight,
+				this.expandedHeight - 5);
 		this.promoteButton.layout(this.expandedHeight - this.collapsedHeight,
-				this.collapsedHeight + 5, this.collapsedWidth, this.expandedHeight);
+				this.collapsedHeight + 5, this.collapsedWidth - 5,
+				this.expandedHeight - 5);
 	}
 }

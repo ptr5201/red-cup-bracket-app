@@ -11,6 +11,8 @@ import com.redcup.app.model.Bracket;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
+import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
+import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListener;
 
 public class SingleEliminationLayout extends BracketViewLayout {
 
@@ -81,7 +83,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			}
 		}
 
-		// TODO: Remove test
+		// TODO: Remove test code
 		// Create slots if necessary
 		if (this.getBracketView().getChildCount() == 0) {
 
@@ -89,6 +91,14 @@ public class SingleEliminationLayout extends BracketViewLayout {
 				// Create slot
 				BracketViewSlot slot = new BracketViewSlot(this
 						.getBracketView().getContext());
+				slot.setOnExpandedStateChangedListener(new OnExpandedStateChangedListener() {
+					@Override
+					public void onExpandedStateChanged(
+							OnExpandedStateChangedEvent evt) {
+						SingleEliminationLayout.this.getBracketView()
+								.clearSelection();
+					}
+				});
 				this.testViews.add(slot);
 
 				// Add to BracketView
@@ -161,7 +171,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	public void updateSizeRequirements() {
 		// The number of entrants and rounds in the model
 		int numEntrants = 8;
-		int numRounds = 3;
+		int numRounds = 1;
 
 		// Ensure model is valid, then get its metrics
 		if (this.model != null) {

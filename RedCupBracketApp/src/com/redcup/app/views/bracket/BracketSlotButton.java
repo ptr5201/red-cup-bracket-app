@@ -30,6 +30,7 @@ public class BracketSlotButton extends View {
 	}
 
 	private void initialize() {
+		this.setClickable(true);
 	}
 
 	public void reset() {
@@ -62,7 +63,7 @@ public class BracketSlotButton extends View {
 				this.getHeight() - 4));
 		paint.setColor(Color.BLACK);
 		paint.setTextSize(32);
-		paint.setUnderlineText(true);
+		paint.setUnderlineText(this.isSelected());
 		canvas.drawText("Text Goes Here and Stuff", 10, 40, paint);
 		canvas.restore();
 	}
