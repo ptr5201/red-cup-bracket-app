@@ -41,7 +41,8 @@ public class EditParticipantActivity extends Activity{
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 					int arg3) {
-				if (nameField.getText().toString().equals(getIntent().getStringExtra("name"))){
+				if (nameField.getText().toString().equals(getIntent().getStringExtra("name")) 
+						|| nameField.getText().toString().equals("")){
 					saveButton.setEnabled(false);
 				}
 				else{

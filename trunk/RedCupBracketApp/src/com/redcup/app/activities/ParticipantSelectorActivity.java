@@ -1,6 +1,8 @@
 package com.redcup.app.activities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.redcup.app.R;
 import com.redcup.app.data.Constants;
@@ -154,7 +156,15 @@ public class ParticipantSelectorActivity extends Activity{
 				    else 
 				    { 
 				    	participantList.remove(holder.participant); 
-				    } 
+				    }
+					
+					Collections.sort(participantList, new Comparator<Participant>() {
+
+						@Override
+						public int compare(Participant lhs, Participant rhs) {
+							return lhs.getName().compareToIgnoreCase(rhs.getName());
+						}
+					});
 				} 
 			  });
 			
