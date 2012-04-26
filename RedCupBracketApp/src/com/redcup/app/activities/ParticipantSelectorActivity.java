@@ -108,6 +108,14 @@ public class ParticipantSelectorActivity extends Activity{
 				participants.add(0, temp);
 			}
 			db.close();
+			
+			Collections.sort(participants, new Comparator<Participant>() {
+
+				@Override
+				public int compare(Participant lhs, Participant rhs) {
+					return lhs.getName().compareToIgnoreCase(rhs.getName());
+				}
+			});
 		}
 		
 		@Override
@@ -157,14 +165,6 @@ public class ParticipantSelectorActivity extends Activity{
 				    { 
 				    	participantList.remove(holder.participant); 
 				    }
-					
-					Collections.sort(participantList, new Comparator<Participant>() {
-
-						@Override
-						public int compare(Participant lhs, Participant rhs) {
-							return lhs.getName().compareToIgnoreCase(rhs.getName());
-						}
-					});
 				} 
 			  });
 			
