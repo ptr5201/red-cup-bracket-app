@@ -17,7 +17,7 @@ public abstract class BracketViewLayout {
 	private int margin_right = 10;
 
 	// Vertical spacing and sizing allocation
-	private int spacing_vertical = 20;
+	private int spacing_vertical = 10;
 	private int sizing_vertical = 120;
 
 	// Horizontal spacing and sizing allocation

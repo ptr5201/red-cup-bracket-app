@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.redcup.app.model.Bracket;
+
 /**
  * Handles the layout of the individual bracket components. Contains a central
  * button that expands this control or opens up a dialog when pressed.
@@ -78,13 +80,15 @@ public class BracketViewSlot extends ViewGroup {
 	private Button promoteButton;
 	private PaintDrawable background = new PaintDrawable(Color.LTGRAY);
 
-	private int collapsedHeight = 60;
+	private int collapsedHeight = 70;
 	private int collapsedWidth = 240;
 
-	private int expandedHeight = 120;
-	private int expandedWidth = 320;
+	private int expandedHeight = 140;
+	private int expandedWidth = 330;
 
 	private OnExpandedStateChangedListener onExpandedStateChangedListener = null;
+
+	private Bracket bracket = null;
 
 	/**
 	 * Creates a new {@code BracketViewSlot}.
@@ -310,6 +314,30 @@ public class BracketViewSlot extends ViewGroup {
 	 */
 	public int getExpandedHeight() {
 		return this.expandedHeight;
+	}
+
+	/**
+	 * Sets the {@code Bracket} that acts as the model for this
+	 * {@code BracketViewSlot}.
+	 * 
+	 * @param bracket
+	 *            the {@code Bracket} that acts as the model for this
+	 *            {@code BracketViewSlot}.
+	 */
+	public void setBracket(Bracket bracket) {
+		this.bracket = bracket;
+		this.slotButton.setText(this.bracket.getParticipant().getName());
+	}
+
+	/**
+	 * Returns the {@code Bracket} that acts as the model for this
+	 * {@code BracketViewSlot}.
+	 * 
+	 * @return the {@code Bracket} that acts as the model for this
+	 *         {@code BracketViewSlot}.
+	 */
+	public Bracket getBracket() {
+		return this.bracket;
 	}
 
 	@Override
