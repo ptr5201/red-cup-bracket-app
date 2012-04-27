@@ -25,9 +25,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ParticipantSelectorActivity extends Activity{
-	
-	private static final int ACTIVITY_NEW_PARTICIPANT = 1;
+public class ParticipantSelectorActivity extends Activity {
 	
 	private static final String TAG = "ParticipantSelectorActivity";
 	
@@ -55,11 +53,11 @@ public class ParticipantSelectorActivity extends Activity{
 	public void createParticipant(View v){
 		Log.v(TAG, getString(R.string.createParticipant) + " button clicked");
 		Intent newParticipant = new Intent(this, NewParticipantActivity.class);
-		startActivityForResult(newParticipant, ACTIVITY_NEW_PARTICIPANT);
+		startActivityForResult(newParticipant, NewParticipantActivity.ACTIVITY_NEW_PARTICIPANT);
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == ACTIVITY_NEW_PARTICIPANT) {
+		if (requestCode == NewParticipantActivity.ACTIVITY_NEW_PARTICIPANT) {
 			if (resultCode == RESULT_OK) {
 				Participant p = (Participant) data.getSerializableExtra(
 						NewParticipantActivity.NEW_PARTICIPANT_CREATED);

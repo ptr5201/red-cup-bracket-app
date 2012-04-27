@@ -87,35 +87,25 @@ public class ParticipantManagerActivity extends Activity {
 	
 	public void createParticipant(View v){
 		Log.v(TAG, getString(R.string.createParticipant));
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Enter Name");
 
-		final EditText input = new EditText(this);
-
-		input.setText("");
-		builder.setView(input);
-
-		builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int id) {
-				
-			if(!input.getText().toString().equals("")){
-				db.open();
-				db.insertParticipant(input.getText().toString());
-				participantAdapter.getdata();
-				participantAdapter.notifyDataSetChanged();
-				db.close();
-			}			
-		}
-		});
-
-		builder.create();
-		builder.show();
+		Intent newParticipant = new Intent(this, NewParticipantActivity.class);
+		startActivityForResult(newParticipant, NewParticipantActivity.ACTIVITY_NEW_PARTICIPANT);
 	}
 	
-	public void updateList(){
-
-    }
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == NewParticipantActivity.ACTIVITY_NEW_PARTICIPANT) {
+			if (resultCode == RESULT_OK) {
+				Participant p = (Participant) data.getSerializableExtra(
+						NewParticipantActivity.NEW_PARTICIPANT_CREATED);
+				
+				db.open();
+				db.insertParticipant(p.getName());
+				participantAdapter.getdata();
+				db.close();
+				participantAdapter.notifyDataSetChanged();
+			}
+		}
+	}
 	
 	private class ParticipantAdapter extends BaseAdapter{
 		private LayoutInflater inflater;

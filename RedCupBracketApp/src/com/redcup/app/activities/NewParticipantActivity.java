@@ -15,12 +15,12 @@ public class NewParticipantActivity extends Activity {
 
 	private static final String TAG = "NewParticipantActivity";
 	public static final String NEW_PARTICIPANT_CREATED = "New Participant Created";
+	public static final int ACTIVITY_NEW_PARTICIPANT = 1;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.newparticipant);
-		
 	}
 	
 	public void newParticipant(View v) {
