@@ -12,7 +12,8 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 	}
 
 	public SingleEliminationBracketStrategy(List<Participant> participants) {
-		this.head = SingleEliminationBracketFactory.createBracketStructure(participants);
+		this.head = SingleEliminationBracketFactory
+				.createBracketStructure(participants);
 	}
 
 	@Override
@@ -73,35 +74,60 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 		return ret;
 	}
 
-	private void getEntrantRound_Recuse(List<Bracket> entrants, Bracket bracket) {
+	/**
+	 * Recursive helper function used to compose the generic bracket structure.
+	 * 
+	 * @param structure
+	 *            the structure being modified. The outer list represents the
+	 *            rounds while the inner list contains the rounds.
+	 * @param bracket
+	 *            the {@code Bracket} being handled on an individual iteration.
+	 * @return the next round number to be computed.
+	 */
+	private int getRoundStructure_Recurse(List<List<Bracket>> structure,
+			Bracket bracket) {
+		int level = 0;
+
 		// Check termination condition
 		if (bracket.getRight() == null && bracket.getLeft() == null) {
-			entrants.add(bracket);
-			return;
+			// Ensure that the level in question exists in the structure
+			while (structure.size() <= level) {
+				structure.add(new ArrayList<Bracket>());
+			}
+
+			// Add the current bracket and return
+			structure.get(level).add(bracket);
+			return level + 1;
 		}
 
+		// Go down the right branch
 		if (bracket.getRight() != null) {
-			getEntrantRound_Recuse(entrants, bracket.getRight());
+			int levelRight = getRoundStructure_Recurse(structure,
+					bracket.getRight());
+			level = Math.max(levelRight, level);
 		}
 
+		// Go down the left branch
 		if (bracket.getLeft() != null) {
-			getEntrantRound_Recuse(entrants, bracket.getLeft());
+			int levelLeft = getRoundStructure_Recurse(structure,
+					bracket.getLeft());
+			level = Math.max(levelLeft, level);
 		}
-	}
 
-	public List<Bracket> getEntrantRound() {
-		List<Bracket> entrantRound = null;
-		if (this.head != null) {
-			entrantRound = new ArrayList<Bracket>();
-			getEntrantRound_Recuse(entrantRound, this.head);
+		// Ensure that the level in question exists in the structure
+		while (structure.size() <= level) {
+			structure.add(new ArrayList<Bracket>());
 		}
-		return entrantRound;
+
+		// Add the current bracket and return
+		structure.get(level).add(bracket);
+		return level + 1;
 	}
 
 	@Override
 	public List<List<Bracket>> getRoundStructure() {
 		List<List<Bracket>> roundStructure = new ArrayList<List<Bracket>>();
-		// TODO build list2 from tree
+		this.getRoundStructure_Recurse(roundStructure, this.head);
 		return roundStructure;
 	}
 

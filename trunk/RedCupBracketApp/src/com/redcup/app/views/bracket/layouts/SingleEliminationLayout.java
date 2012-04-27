@@ -1,6 +1,5 @@
 package com.redcup.app.views.bracket.layouts;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,9 +25,6 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	private final SingleEliminationBracketStrategy model;
 	private final Map<Bracket, BracketViewSlot> views = new HashMap<Bracket, BracketViewSlot>();
 
-	// TODO: Used for testing only, delete in future
-	private final List<BracketViewSlot> testViews = new ArrayList<BracketViewSlot>();
-
 	/**
 	 * Creates a new {@code SingleEliminationLayout}.
 	 * 
@@ -45,10 +41,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	}
 
 	@Override
-	public void onLayout(boolean changed, int l, int t, int r, int b) {
+	public void onLayout(boolean changed) {
 		// Check to make sure that we need to actually update anything
 		if ((changed || this.hasChangedInternally()) && !this.isFrozen()
 				&& model != null) {
+			int requiredHeight = 0;
+			int requiredWidth = 0;
+
 			// Used to keep track of the bracket objects that have been used;
 			// after brackets have been added to the system, they are removed if
 			// they are not on this list
@@ -60,9 +59,10 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			int vPos = this.getTopMargin();
 			int hPos = this.getLeftMargin();
 
-			List<Bracket> entrantRound = ((SingleEliminationBracketStrategy) this.model)
-					.getEntrantRound();
-			if (entrantRound != null && !entrantRound.isEmpty()) {
+			List<List<Bracket>> roundStructure = this.model.getRoundStructure();
+			if (!roundStructure.isEmpty()) {
+				List<Bracket> entrantRound = roundStructure.get(0);
+
 				for (final Bracket bracket : entrantRound) {
 					// Get the view corresponding to this bracket, creating it
 					// if necessary
@@ -97,10 +97,16 @@ public class SingleEliminationLayout extends BracketViewLayout {
 					// Update the vertical positioning variable
 					vPos += slot.getExpandedHeight()
 							+ this.getVerticalSpacing();
+					requiredHeight = Math.max(vPos, requiredHeight);
 
 					// Update usedBrackets
 					usedBrackets.add(bracket);
 				}
+
+				// Update measurements
+				requiredHeight += this.getBottomMargin()
+						- this.getVerticalSpacing();
+				this.setMeasuredDimension(requiredWidth, requiredHeight);
 			}
 
 			// After all the bracket controls have been added, eliminate any
@@ -116,70 +122,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 					iter.remove();
 				}
 			}
-			// for (final Bracket bracket : this.views.keySet()) {
-			// if (!usedBrackets.contains(bracket)) {
-			// BracketViewSlot slot = this.views.remove(bracket);
-			// if (slot != null) {
-			// this.getBracketView().removeView(slot);
-			// }
-			// }
-			// }
 		}
-
-		// TODO: Remove test code
-		// // Create slots if necessary
-		// if (this.getBracketView().getChildCount() == 0) {
-		// for (int i = 0; i < 8; i++) {
-		// // Create slot
-		// BracketViewSlot slot = new BracketViewSlot(this
-		// .getBracketView().getContext());
-		// slot.setOnExpandedStateChangedListener(new
-		// OnExpandedStateChangedListener() {
-		// @Override
-		// public void onExpandedStateChanged(
-		// OnExpandedStateChangedEvent evt) {
-		// SingleEliminationLayout.this.getBracketView()
-		// .clearSelection();
-		// }
-		// });
-		// this.testViews.add(slot);
-		//
-		// // Add to BracketView
-		// this.getBracketView().addView(slot);
-		// }
-		// }
-		//
-		// // Position slots
-		// int vPos = this.getTopMargin();
-		// int hPos = this.getLeftMargin();
-		// for (BracketViewSlot slot : this.testViews) {
-		// // Update the positioning and sizing of this component
-		// slot.layout(hPos, vPos, hPos + slot.getExpandedWidth(),
-		// vPos + slot.getExpandedHeight());
-		//
-		// // Update the vertical positioning variable
-		// vPos += slot.getExpandedHeight() + this.getVerticalSpacing();
-		// }
-	}
-
-	// TODO: Replace with more flexible design
-	@Override
-	public void updateSizeRequirements() {
-		// The number of entrants and rounds in the model
-		int numEntrants = 2;
-		int numRounds = 1;
-
-		// Calculate the amount of horizontal space required for the layout
-		int width = numRounds * this.getHorizontalSizing() + (numRounds - 1)
-				* this.getHorizontalSpacing() + this.getRightMargin()
-				+ this.getLeftMargin();
-
-		int height = numEntrants * this.getVerticalSizing() + (numEntrants - 1)
-				* this.getVerticalSpacing() + this.getTopMargin()
-				+ this.getBottomMargin();
-
-		// Request the measured space
-		this.setMeasuredDimension(width, height);
 	}
 
 }
