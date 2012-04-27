@@ -24,6 +24,8 @@ public class EditParticipantActivity extends Activity{
 		setContentView(R.layout.editparticipantmenu);
 		saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setEnabled(false);
+		
+		
 		nameField = (EditText) findViewById(R.id.editNameEditText);
 		nameField.setText(this.getIntent().getStringExtra("name"));
 		nameField.addTextChangedListener(new TextWatcher(){

@@ -34,6 +34,7 @@ public class TournamentParticipantsActivity extends Activity {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == ACTIVITY_ADD_PARTICIPANT) {
 			if (resultCode == RESULT_OK) {

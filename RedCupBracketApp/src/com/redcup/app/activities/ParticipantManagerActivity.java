@@ -1,6 +1,7 @@
 package com.redcup.app.activities;
 
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -79,7 +80,16 @@ public class ParticipantManagerActivity extends Activity {
 	    editParticipant.putExtra("name",name);
 		startActivity(editParticipant);
 	}
-
+	
+	
+	@Override
+	public void onResume() {  
+		super.onResume();
+		db.open();
+		participantAdapter.getdata();
+	    participantAdapter.notifyDataSetChanged();
+	    db.close();
+	}
 	
 	public void createParticipant(View v){
 		Log.v(TAG, getString(R.string.createParticipant));
@@ -103,7 +113,7 @@ public class ParticipantManagerActivity extends Activity {
 		}
 	}
 	
-	private class ParticipantAdapter extends BaseAdapter{
+	private class ParticipantAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		public ArrayList<Participant> participants;
 		
@@ -175,7 +185,7 @@ public class ParticipantManagerActivity extends Activity {
 			
 			return v;
 		}
-		
+
 	}
 	
 	public class ViewHolder{
