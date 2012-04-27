@@ -1,12 +1,12 @@
 package com.redcup.app.activities;
 
-import com.redcup.app.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+
+import com.redcup.app.R;
 
 public class LoadTournamentActivity extends Activity {
 

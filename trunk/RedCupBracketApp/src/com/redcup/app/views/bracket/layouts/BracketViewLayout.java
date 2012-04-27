@@ -2,6 +2,13 @@ package com.redcup.app.views.bracket.layouts;
 
 import com.redcup.app.views.bracket.BracketView;
 
+/**
+ * Abstract class defining the interfaces required to implement a custom layout
+ * based on a bracket tree. Subclasses define methods used to compute the size
+ * and position of elements in the parent control.
+ * 
+ * @author Jackson Lamp
+ */
 public abstract class BracketViewLayout {
 	// Margin settings
 	private int margin_top = 10;

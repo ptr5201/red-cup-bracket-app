@@ -14,6 +14,12 @@ import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListener;
 
+/**
+ * Implementation of {@code BracketViewLayout} that is used to visually
+ * represent a single elimination tournament.
+ * 
+ * @author Jackson Lamp
+ */
 public class SingleEliminationLayout extends BracketViewLayout {
 
 	private final SingleEliminationBracketStrategy model;
@@ -52,23 +58,27 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			int vPos = this.getTopMargin();
 			int hPos = this.getLeftMargin();
 
-			for (final Bracket bracket : this.model.getRoundStructure().get(0)) {
-				// Get the view corresponding to this bracket, creating it if
-				// necessary
-				BracketViewSlot slot = this.views.get(bracket);
-				if (slot != null) {
-					slot = new BracketViewSlot(this.getBracketView()
-							.getContext());
-					this.views.put(bracket, slot);
-					this.getBracketView().addView(slot);
+			if (!this.model.getRoundStructure().isEmpty()) {
+				for (final Bracket bracket : this.model.getRoundStructure()
+						.get(0)) {
+					// Get the view corresponding to this bracket, creating it
+					// if necessary
+					BracketViewSlot slot = this.views.get(bracket);
+					if (slot != null) {
+						slot = new BracketViewSlot(this.getBracketView()
+								.getContext());
+						this.views.put(bracket, slot);
+						this.getBracketView().addView(slot);
+					}
+
+					// Update the positioning and sizing of this component
+					slot.layout(hPos, vPos, hPos + this.getHorizontalSizing(),
+							vPos + this.getVerticalSizing());
+
+					// Update the vertical positioning variable
+					vPos += this.getVerticalSizing()
+							+ this.getVerticalSpacing();
 				}
-
-				// Update the positioning and sizing of this component
-				slot.layout(hPos, vPos, hPos + this.getHorizontalSizing(), vPos
-						+ this.getVerticalSizing());
-
-				// Update the vertical positioning variable
-				vPos += this.getVerticalSizing() + this.getVerticalSpacing();
 			}
 
 			// After all the bracket controls have been added, eliminate any
@@ -86,7 +96,6 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		// TODO: Remove test code
 		// Create slots if necessary
 		if (this.getBracketView().getChildCount() == 0) {
-
 			for (int i = 0; i < 8; i++) {
 				// Create slot
 				BracketViewSlot slot = new BracketViewSlot(this
@@ -171,10 +180,10 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	public void updateSizeRequirements() {
 		// The number of entrants and rounds in the model
 		int numEntrants = 8;
-		int numRounds = 1;
+		int numRounds = 0;
 
 		// Ensure model is valid, then get its metrics
-		if (this.model != null) {
+		if (this.model != null && !this.model.getRoundStructure().isEmpty()) {
 			numEntrants = this.model.getRoundStructure().get(0).size();
 			numRounds = this.model.numRounds();
 		}

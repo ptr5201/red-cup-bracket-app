@@ -1,5 +1,8 @@
 package com.redcup.app.views.bracket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -9,11 +12,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.redcup.app.model.Participant;
+import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
+/**
+ * The control used for viewing and editing a bracket.
+ * 
+ * @author Jackson Lamp
+ */
 public class BracketView extends ViewGroup {
 
+	/**
+	 * Used to handle gesture events that are received by this {@code View}.
+	 * 
+	 * @author Jackson Lamp
+	 */
 	private class GestureListener extends SimpleOnGestureListener {
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
@@ -57,21 +72,49 @@ public class BracketView extends ViewGroup {
 	 */
 	private BracketViewLayout layout = null;
 
+	/**
+	 * Creates a new {@code BracketView}.
+	 * 
+	 * @param context
+	 *            the {@code Context} that this {@code View} exists within.
+	 * @param attrs
+	 *            the attributes assigned to this {@code View}.
+	 * @param defStyle
+	 *            the default style to use for this {@code View}.
+	 */
 	public BracketView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.initialize();
 	}
 
+	/**
+	 * Creates a new {@code BracketView}.
+	 * 
+	 * @param context
+	 *            the {@code Context} that this {@code View} exists within.
+	 * @param attrs
+	 *            the attributes assigned to this {@code View}.
+	 */
 	public BracketView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.initialize();
 	}
 
+	/**
+	 * Creates a new {@code BracketView}.
+	 * 
+	 * @param context
+	 *            the {@code Context} that this {@code View} exists within.
+	 */
 	public BracketView(Context context) {
 		super(context);
 		this.initialize();
 	}
 
+	/**
+	 * Performs general initialization services. Should be called by all
+	 * constructors.
+	 */
 	private void initialize() {
 		this.setBackgroundColor(Color.WHITE);
 		this.setScrollContainer(true);
@@ -80,24 +123,28 @@ public class BracketView extends ViewGroup {
 
 		// TESTING CODE BEYOND THIS POINT
 
-		// List<Participant> entrants = new ArrayList<Participant>();
-		// entrants.add(new Participant("P1"));
-		// entrants.add(new Participant("P2"));
-		// entrants.add(new Participant("P3"));
-		// entrants.add(new Participant("P4"));
-		// entrants.add(new Participant("P5"));
-		// entrants.add(new Participant("P6"));
-		// SingleEliminationBracketStrategy model = new
-		// SingleEliminationBracketStrategy(
-		// entrants);
-		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
-		// model);
-		// this.setLayoutAlgorithm(layout);
-		SingleEliminationLayout layout = new SingleEliminationLayout(this, null);
+		List<Participant> entrants = new ArrayList<Participant>();
+		entrants.add(new Participant("P1"));
+		entrants.add(new Participant("P2"));
+		entrants.add(new Participant("P3"));
+		entrants.add(new Participant("P4"));
+		entrants.add(new Participant("P5"));
+		entrants.add(new Participant("P6"));
+		SingleEliminationBracketStrategy model = new SingleEliminationBracketStrategy(
+				entrants);
+		SingleEliminationLayout layout = new SingleEliminationLayout(this,
+				model);
 		this.setLayoutAlgorithm(layout);
+		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
+		// null);
+		// this.setLayoutAlgorithm(layout);
 
 	}
 
+	/**
+	 * De-selects and collapses all {@code BracketViewSlot}s associated with
+	 * this {@code BracketView}.
+	 */
 	public void clearSelection() {
 		for (int i = 0; i < this.getChildCount(); i++) {
 			View child = this.getChildAt(i);
@@ -107,11 +154,6 @@ public class BracketView extends ViewGroup {
 			}
 		}
 		this.invalidate();
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return this.gestures.onTouchEvent(event);
 	}
 
 	/**
@@ -169,6 +211,11 @@ public class BracketView extends ViewGroup {
 			return this.layout.getMeasuredWidth();
 		}
 		return 0;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return this.gestures.onTouchEvent(event);
 	}
 
 	@Override
