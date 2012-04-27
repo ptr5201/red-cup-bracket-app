@@ -37,4 +37,11 @@ public class Bracket {
 	public Bracket getRight() {
 		return right;
 	}
+	
+	public String toString() {
+		String ret = "{ Participant: " + this.participant;
+		ret += "\n\tLeft: " + this.left;
+		ret += "\n\tRight: " + this.right + "}";
+		return ret;
+	}
 }

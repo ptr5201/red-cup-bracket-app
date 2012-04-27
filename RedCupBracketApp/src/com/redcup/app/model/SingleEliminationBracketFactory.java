@@ -1,13 +1,12 @@
 package com.redcup.app.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 /**
  * Factory class; encapsulates logic of creating a bracket
  * @author Matt
- *
- * "You want your bitshifts? I got 'em right here."
  */
 public class SingleEliminationBracketFactory {
 	private SingleEliminationBracketFactory() {};
@@ -20,7 +19,7 @@ public class SingleEliminationBracketFactory {
 	 */
 	public static Bracket createBracketStructure(List<Participant> participants) {
 		// Find number of rounds in tournament
-		int roundCount = 0;
+		int roundCount = 1;
 		int participantSize = participants.size(); 
 		while ((participantSize >>= 1) > 0) {
 			roundCount++;
@@ -31,6 +30,7 @@ public class SingleEliminationBracketFactory {
 			participantStack.push(participant);
 		}
 
+		System.out.println("Roundcount: " + roundCount);
 		Bracket head = buildTree(new Bracket(null, null, null), roundCount);
 		participantStack = null;
 		return head;
@@ -52,5 +52,18 @@ public class SingleEliminationBracketFactory {
 				null
 		);
 		return node;
+	}
+	
+	public static void main(String args[]) {
+		List<Participant> entrants = new ArrayList<Participant>();
+		entrants.add(new Participant("P1"));
+		entrants.add(new Participant("P2"));
+		entrants.add(new Participant("P3"));
+		entrants.add(new Participant("P4"));
+//		entrants.add(new Participant("P5"));
+//		entrants.add(new Participant("P6"));
+		
+		Bracket head = createBracketStructure(entrants);
+		System.out.println(head);
 	}
 }
