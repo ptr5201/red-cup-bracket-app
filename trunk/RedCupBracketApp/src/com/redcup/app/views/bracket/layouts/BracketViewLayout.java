@@ -16,13 +16,9 @@ public abstract class BracketViewLayout {
 	private int margin_left = 10;
 	private int margin_right = 10;
 
-	// Vertical spacing and sizing allocation
+	// Spacing settings
 	private int spacing_vertical = 10;
-	private int sizing_vertical = 120;
-
-	// Horizontal spacing and sizing allocation
 	private int spacing_horizontal = 40;
-	private int sizing_horizontal = 240;
 
 	// Measured width and height; used to communicate measurements with
 	// BracketView.
@@ -263,26 +259,6 @@ public abstract class BracketViewLayout {
 	}
 
 	/**
-	 * Sets the amount of vertical space allocated to each element.
-	 * 
-	 * @param vSizing
-	 *            the amount of vertical space allocated to each element.
-	 */
-	public void setVerticalSizing(int vSizing) {
-		this.sizing_vertical = vSizing;
-		this.refresh();
-	}
-
-	/**
-	 * Returns the amount of vertical space allocated to each element.
-	 * 
-	 * @return the amount of vertical space allocated to each element.
-	 */
-	public int getVerticalSizing() {
-		return this.sizing_vertical;
-	}
-
-	/**
 	 * Sets the horizontal spacing between columns.
 	 * 
 	 * @param hSpacing
@@ -300,26 +276,6 @@ public abstract class BracketViewLayout {
 	 */
 	public int getHorizontalSpacing() {
 		return this.spacing_horizontal;
-	}
-
-	/**
-	 * Sets the amount of horizontal space allocated to each element.
-	 * 
-	 * @param hSizing
-	 *            the amount of horizontal space allocated to each element.
-	 */
-	public void setHorizontalSizing(int hSizing) {
-		this.sizing_horizontal = hSizing;
-		this.refresh();
-	}
-
-	/**
-	 * Returns the amount of horizontal space allocated to each element.
-	 * 
-	 * @return the amount of horizontal space allocated to each element.
-	 */
-	public int getHorizontalSizing() {
-		return this.sizing_horizontal;
 	}
 
 	/**
