@@ -5,15 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.redcup.app.R;
-import com.redcup.app.data.Constants;
-import com.redcup.app.data.RedCupDB;
-import com.redcup.app.model.Participant;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,11 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.redcup.app.R;
+import com.redcup.app.data.Constants;
+import com.redcup.app.data.RedCupDB;
+import com.redcup.app.model.Participant;
 
 public class ParticipantManagerActivity extends Activity {
 	

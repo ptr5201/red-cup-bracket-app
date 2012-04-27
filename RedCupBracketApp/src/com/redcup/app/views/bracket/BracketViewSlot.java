@@ -8,27 +8,66 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+/**
+ * Handles the layout of the individual bracket components. Contains a central
+ * button that expands this control or opens up a dialog when pressed.
+ * 
+ * @author Jackson Lamp
+ */
 public class BracketViewSlot extends ViewGroup {
 
+	public enum ExpandedState {
+		COLLAPSED, EXPANDED_HORIZONTAL, EXPANDED_VERTICAL, EXPANDED_BOTH
+	}
+
+	/**
+	 * Event that is sent to a listener when the expanded state of this control
+	 * changes.
+	 * 
+	 * @author Jackson Lamp
+	 */
 	public class OnExpandedStateChangedEvent {
 		private final BracketViewSlot view;
-		private final boolean isExpanding;
+		private final ExpandedState newState;
 
+		/**
+		 * Creates a new {@code OnExpandedStateChangedEvent}.
+		 * 
+		 * @param view
+		 *            the {@code BracketViewSlot} that generated this event.
+		 * @param newState
+		 *            the new state of the control.
+		 */
 		public OnExpandedStateChangedEvent(BracketViewSlot view,
-				boolean isExpanding) {
+				ExpandedState newState) {
 			this.view = view;
-			this.isExpanding = isExpanding;
+			this.newState = newState;
 		}
 
+		/**
+		 * Returns the {@code BracketViewSlot} that generated this event.
+		 * 
+		 * @return the {@code BracketViewSlot} that generated this event.
+		 */
 		public BracketViewSlot getView() {
 			return this.view;
 		}
 
-		public boolean isExpanding() {
-			return this.isExpanding;
+		/**
+		 * Returns the new state of the control.
+		 * 
+		 * @return the new state of the control.
+		 */
+		public ExpandedState getNewState() {
+			return this.newState;
 		}
 	}
 
+	/**
+	 * Interface used to receive {@code OnExpandedStateChangedEvent}s.
+	 * 
+	 * @author Jackson Lamp
+	 */
 	public interface OnExpandedStateChangedListener {
 		public void onExpandedStateChanged(OnExpandedStateChangedEvent evt);
 	}
@@ -47,22 +86,52 @@ public class BracketViewSlot extends ViewGroup {
 
 	private OnExpandedStateChangedListener onExpandedStateChangedListener = null;
 
+	/**
+	 * Creates a new {@code BracketViewSlot}.
+	 * 
+	 * @param context
+	 *            the {@code Context} that this {@code View} exists within.
+	 * @param attrs
+	 *            the attributes assigned to this {@code View}.
+	 * @param defStyle
+	 *            the default style to use for this {@code View}.
+	 */
 	public BracketViewSlot(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		this.initialize(context);
+		this.initialize();
 	}
 
+	/**
+	 * Creates a new {@code BracketViewSlot}.
+	 * 
+	 * @param context
+	 *            the {@code Context} that this {@code View} exists within.
+	 * @param attrs
+	 *            the attributes assigned to this {@code View}.
+	 */
 	public BracketViewSlot(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.initialize(context);
+		this.initialize();
 	}
 
+	/**
+	 * Creates a new {@code BracketViewSlot}.
+	 * 
+	 * @param context
+	 *            the {@code Context} that this {@code View} exists within.
+	 */
 	public BracketViewSlot(Context context) {
 		super(context);
-		this.initialize(context);
+		this.initialize();
 	}
 
-	private void initialize(Context context) {
+	/**
+	 * Performs general initialization services. Should be called by all
+	 * constructors.
+	 */
+	private void initialize() {
+		Context context = this.getContext();
+
 		// Create the slot expansion/editing button
 		this.slotButton = new BracketSlotButton(context);
 		this.slotButton.setOnClickListener(new OnClickListener() {
@@ -71,7 +140,8 @@ public class BracketViewSlot extends ViewGroup {
 			public void onClick(View v) {
 				BracketViewSlot.this
 						.raiseOnExpandedStateChangedEvent(new OnExpandedStateChangedEvent(
-								BracketViewSlot.this, true));
+								BracketViewSlot.this,
+								ExpandedState.EXPANDED_BOTH));
 				v.setSelected(true);
 				BracketViewSlot.this.removeButton.setVisibility(VISIBLE);
 				BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
@@ -80,6 +150,7 @@ public class BracketViewSlot extends ViewGroup {
 				BracketViewSlot.this.invalidate();
 			}
 		});
+		this.slotButton.setText("abcdefghijklmnopqrstuvwxyz");
 		this.addView(slotButton);
 
 		// Create the "remove" button
@@ -109,15 +180,34 @@ public class BracketViewSlot extends ViewGroup {
 		this.setBackgroundDrawable(this.background);
 	}
 
+	/**
+	 * Assigns a listener for {@code OnExpandedStateChangedEvent}s.
+	 * 
+	 * @param listener
+	 *            the listener to register.
+	 */
 	public void setOnExpandedStateChangedListener(
 			OnExpandedStateChangedListener listener) {
 		this.onExpandedStateChangedListener = listener;
 	}
 
+	/**
+	 * Returns the currently registered {@code OnExpandedStateChangedListener}.
+	 * 
+	 * @return the currently registered {@code OnExpandedStateChangedListener}.
+	 */
 	public OnExpandedStateChangedListener getOnExpandedStateChangedListener() {
 		return this.onExpandedStateChangedListener;
 	}
 
+	/**
+	 * Helper method used to dispatch {@code OnExpandedStateChangedEvent}s
+	 * generated locally to the registered
+	 * {@code OnExpandedStateChangedListener}
+	 * 
+	 * @param evt
+	 *            the {@code OnExpandedStateChangedEvent} to dispatch.
+	 */
 	protected void raiseOnExpandedStateChangedEvent(
 			OnExpandedStateChangedEvent evt) {
 		if (this.onExpandedStateChangedListener != null) {
@@ -125,9 +215,12 @@ public class BracketViewSlot extends ViewGroup {
 		}
 	}
 
+	/**
+	 * Returns this control to its default state (collapsed, deselected).
+	 */
 	public void reset() {
 		if (this.slotButton != null) {
-			this.slotButton.reset();
+			this.slotButton.setSelected(false);
 		}
 		if (this.removeButton != null) {
 			this.removeButton.setVisibility(INVISIBLE);
@@ -137,38 +230,84 @@ public class BracketViewSlot extends ViewGroup {
 		}
 	}
 
+	/**
+	 * Sets the amount of horizontal space this control uses when collapsed.
+	 * 
+	 * @param width
+	 *            the amount of horizontal space this control uses when
+	 *            collapsed.
+	 */
 	public void setCollapsedWidth(int width) {
 		this.collapsedWidth = width;
 		this.invalidate();
 	}
 
+	/**
+	 * Returns the amount of horizontal space this control uses when collapsed.
+	 * 
+	 * @return the amount of horizontal space this control uses when collapsed.
+	 */
 	public int getCollapsedWidth() {
 		return this.collapsedWidth;
 	}
 
+	/**
+	 * Sets the amount of vertical space this control uses when collapsed.
+	 * 
+	 * @param height
+	 *            the amount of vertical space this control uses when collapsed.
+	 */
 	public void setCollapsedHeight(int height) {
 		this.collapsedHeight = height;
 		this.invalidate();
 	}
 
+	/**
+	 * Returns the amount of vertical space this control uses when collapsed.
+	 * 
+	 * @return the amount of vertical space this control uses when collapsed.
+	 */
 	public int getCollapsedHeight() {
 		return this.collapsedHeight;
 	}
 
+	/**
+	 * Sets the amount of horizontal space this control uses when expanded.
+	 * 
+	 * @param width
+	 *            the amount of horizontal space this control uses when
+	 *            expanded.
+	 */
 	public void setExpandedWidth(int width) {
 		this.expandedWidth = width;
 		this.invalidate();
 	}
 
+	/**
+	 * Returns the amount of horizontal space this control uses when expanded.
+	 * 
+	 * @return the amount of horizontal space this control uses when expanded.
+	 */
 	public int getExpandedWidth() {
 		return this.expandedWidth;
 	}
 
+	/**
+	 * Sets the amount of vertical space this control uses when expanded.
+	 * 
+	 * @param height
+	 *            the amount of vertical space this control uses when expanded.
+	 */
 	public void setExpandedHeight(int height) {
 		this.expandedHeight = height;
 		this.invalidate();
 	}
 
+	/**
+	 * Returns the amount of vertical space this control uses when expanded.
+	 * 
+	 * @return the amount of vertical space this control uses when expanded.
+	 */
 	public int getExpandedHeight() {
 		return this.expandedHeight;
 	}

@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.redcup.app.R;
-import com.redcup.app.data.Constants;
-import com.redcup.app.data.RedCupDB;
-import com.redcup.app.model.Participant;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +19,11 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.redcup.app.R;
+import com.redcup.app.data.Constants;
+import com.redcup.app.data.RedCupDB;
+import com.redcup.app.model.Participant;
 
 public class ParticipantSelectorActivity extends Activity {
 	

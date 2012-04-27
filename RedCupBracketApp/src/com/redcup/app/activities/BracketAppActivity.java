@@ -1,16 +1,12 @@
 package com.redcup.app.activities;
 
-import com.redcup.app.R;
-import com.redcup.app.R.id;
-import com.redcup.app.R.layout;
-import com.redcup.app.R.string;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
+
+import com.redcup.app.R;
 
 public class BracketAppActivity extends Activity {
 

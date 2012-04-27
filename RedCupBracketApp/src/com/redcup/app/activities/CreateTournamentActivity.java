@@ -15,7 +15,6 @@ import android.widget.Spinner;
 
 import com.redcup.app.R;
 import com.redcup.app.model.BracketTypeEnum;
-import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.model.Tournament;
 
 public class CreateTournamentActivity extends Activity {
