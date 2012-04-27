@@ -328,19 +328,6 @@ public abstract class BracketViewLayout {
 	 * @param changed
 	 *            {@code true} if available size or position of this component
 	 *            in question has changed.
-	 * @param l
-	 *            left position, relative to the parent.
-	 * @param t
-	 *            top position, relative to the parent.
-	 * @param r
-	 *            right position, relative to the parent.
-	 * @param b
-	 *            bottom position, relative to the parent.
 	 */
-	public abstract void onLayout(boolean changed, int l, int t, int r, int b);
-
-	/**
-	 * Measures the amount of space required for this layout.
-	 */
-	public abstract void updateSizeRequirements();
+	public abstract void onLayout(boolean changed);
 }

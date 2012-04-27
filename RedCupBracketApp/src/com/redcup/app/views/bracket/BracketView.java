@@ -118,18 +118,24 @@ public class BracketView extends ViewGroup {
 	private void initialize() {
 		this.setBackgroundColor(Color.WHITE);
 		this.setScrollContainer(true);
+		this.setScrollbarFadingEnabled(true);
+		this.setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
+
+		// TODO: Figure out why enabling scroll bars results in crash
+		// this.setVerticalScrollBarEnabled(true);
+		// this.setHorizontalScrollBarEnabled(true);
 
 		gestures = new GestureDetector(this.getContext(), new GestureListener());
 
 		// TESTING CODE BEYOND THIS POINT
 
 		List<Participant> entrants = new ArrayList<Participant>();
-		entrants.add(new Participant("P1"));
-		entrants.add(new Participant("P2"));
-		entrants.add(new Participant("P3"));
-		entrants.add(new Participant("P4"));
-		entrants.add(new Participant("P5"));
-		entrants.add(new Participant("P6"));
+		entrants.add(new Participant("Player 1"));
+		entrants.add(new Participant("Player 2"));
+		entrants.add(new Participant("Player 3"));
+		entrants.add(new Participant("Player 4"));
+		entrants.add(new Participant("Player 5"));
+		entrants.add(new Participant("Player 6"));
 		SingleEliminationBracketStrategy model = new SingleEliminationBracketStrategy(
 				entrants);
 		SingleEliminationLayout layout = new SingleEliminationLayout(this,
@@ -221,18 +227,7 @@ public class BracketView extends ViewGroup {
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		if (this.layout != null) {
-			this.layout.onLayout(changed, l, t, r, b);
+			this.layout.onLayout(changed);
 		}
-	}
-
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// Although the layout does not affect the amount of measured space
-		// required for this view, we do need to update its internal
-		// measurements
-		if (this.layout != null) {
-			this.layout.updateSizeRequirements();
-		}
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 }
