@@ -116,7 +116,7 @@ public class BracketSlotButton extends View {
 			paint.setColor(Color.BLACK);
 			paint.setTextSize(32);
 			paint.setUnderlineText(this.isSelected());
-			canvas.drawText(this.text, 10, 40, paint);
+			canvas.drawText(this.text, 10, 45, paint);
 			canvas.restore();
 		}
 	}
