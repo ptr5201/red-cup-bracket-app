@@ -26,6 +26,7 @@ public class BracketAppActivity extends Activity {
 
 	public void switchActivityScreen(View v) {
 		Log.v(TAG, "something clicked: " + v.getId());
+		
 		switch(v.getId()) {
 		case R.id.createTournament:
 			Log.v(TAG, getString(R.string.createTournament));
