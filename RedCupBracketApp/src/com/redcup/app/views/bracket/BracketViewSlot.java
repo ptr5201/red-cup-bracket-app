@@ -326,7 +326,11 @@ public class BracketViewSlot extends ViewGroup {
 	 */
 	public void setBracket(Bracket bracket) {
 		this.bracket = bracket;
-		this.slotButton.setText(this.bracket.getParticipant().getName());
+		if (this.bracket != null && this.bracket.getParticipant() != null) {
+			this.slotButton.setText(this.bracket.getParticipant().getName());
+		} else {
+			this.slotButton.setText(null);
+		}
 	}
 
 	/**
