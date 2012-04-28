@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="40dp"
-            android:src="@drawable/create" />
+            android:src="@drawable/create_tournament" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="42dp"
-            android:src="@drawable/load" />
+            android:src="@drawable/load_tournament" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="40dp"
-            android:src="@drawable/past" />
+            android:src="@drawable/view_history" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="40dp"
-            android:src="@drawable/participants" />
+            android:src="@drawable/participant_manager" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -155,7 +155,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="40dp"
-            android:src="@drawable/help" />
+            android:src="@drawable/help_menu" />
 
         <TextView
             android:layout_width="wrap_content"

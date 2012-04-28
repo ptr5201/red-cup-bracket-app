@@ -17,12 +17,12 @@ public final class R {
         public static final int mainMenuButton_topMargin=0x7f040000;
     }
     public static final class drawable {
-        public static final int create=0x7f020000;
-        public static final int help=0x7f020001;
+        public static final int create_tournament=0x7f020000;
+        public static final int help_menu=0x7f020001;
         public static final int ic_launcher=0x7f020002;
-        public static final int load=0x7f020003;
-        public static final int participants=0x7f020004;
-        public static final int past=0x7f020005;
+        public static final int load_tournament=0x7f020003;
+        public static final int participant_manager=0x7f020004;
+        public static final int view_history=0x7f020005;
     }
     public static final class id {
         public static final int addParticipantButton=0x7f070021;
