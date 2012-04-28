@@ -2,7 +2,6 @@ package com.redcup.app.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * Factory class; encapsulates logic of creating a bracket
@@ -10,7 +9,6 @@ import java.util.Stack;
  */
 public class SingleEliminationBracketFactory {
 	private SingleEliminationBracketFactory() {};
-	private static Stack<Participant> participantStack;
 
 	/**
 	 * Factory method which creates bracket structures
@@ -22,14 +20,16 @@ public class SingleEliminationBracketFactory {
 	public static Bracket createBracketStructure(List<Participant> participants) {
 		Bracket head = null;
 		
-		// Prepare the entry round brackets
-		List<Bracket> entryBrackets = new ArrayList<Bracket>();
-		for(Participant p : participants) {
-			entryBrackets.add(new Bracket(null, null, p));
+		if(participants != null && !participants.isEmpty()) {
+			// Prepare the entry round brackets
+			List<Bracket> entryBrackets = new ArrayList<Bracket>();
+			for(Participant p : participants) {
+				entryBrackets.add(new Bracket(null, null, p));
+			}
+			
+			// Build the bracket structure by recursively forming matchups
+			head = createBracketStructure_Recurse_BiasRight(entryBrackets);
 		}
-		
-		// Build the bracket structure by recursively forming matchups
-		head = createBracketStructure_Recurse_BiasRight(entryBrackets);
 		
 		return head;
 	}
