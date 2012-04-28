@@ -279,6 +279,20 @@ public abstract class BracketViewLayout {
 	}
 
 	/**
+	 * Method used to determine whether the layout needs to be updated. Called
+	 * by subclasses' {@code onLayout()} methods to determine if they need to
+	 * update their layout.
+	 * 
+	 * @param changed
+	 *            whether an external change has occurred.
+	 * @return {@code true} if the layout needs to be updated, {@code false}
+	 *         otherwise.
+	 */
+	protected boolean isLayoutRequired(boolean changed) {
+		return (changed || this.hasChangedInternally()) && !this.isFrozen();
+	}
+
+	/**
 	 * Performs the layout for the bracket.
 	 * 
 	 * @param changed
