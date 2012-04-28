@@ -1,6 +1,8 @@
 package com.redcup.app.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +14,7 @@ import android.widget.EditText;
 import com.redcup.app.R;
 import com.redcup.app.data.RedCupDB;
 
-public class EditParticipantActivity extends Activity{
+public class EditParticipantActivity extends Activity {
 	
 	private static final String TAG = "EditParticipantActivity";
 	private RedCupDB db;
@@ -61,15 +63,27 @@ public class EditParticipantActivity extends Activity{
 			Log.e(TAG, "Participant must have a name");
 			return;
 		}
-		else{
-			String oldName = this.getIntent().getStringExtra("name");
-			String newName = nameField.getText().toString();
-			
-			db.open();
-			db.editParticipant(newName, oldName);
-			db.close();
-		}
 		
+		String oldName = this.getIntent().getStringExtra("name");
+		String newName = nameField.getText().toString();
+		
+		db.open();
+		db.editParticipant(newName, oldName);
+		db.close();
+		
+		getIntent().putExtra("name", newName);
+		
+		AlertDialog.Builder adBuilder = new AlertDialog.Builder(this);
+		adBuilder.setMessage("Name change successful")
+			.setCancelable(false)
+			.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					saveButton.setEnabled(false);
+				}
+			});
+		AlertDialog alert = adBuilder.create();
+		alert.show();
 		
 	}
 
