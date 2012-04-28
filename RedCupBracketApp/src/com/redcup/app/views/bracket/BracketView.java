@@ -59,6 +59,22 @@ public class BracketView extends ViewGroup {
 		}
 
 		@Override
+		public boolean onDoubleTap(MotionEvent e) {
+			// TODO: Implement zooming using pinch mechanism
+			if (layout != null) {
+				if (layout.getScale() > 1.1f) {
+					layout.setScale(0.75f);
+				} else if (layout.getScale() < 0.9f) {
+					layout.setScale(1.0f);
+				} else {
+					layout.setScale(1.5f);
+				}
+				onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+			}
+			return true;
+		}
+
+		@Override
 		public boolean onDown(MotionEvent e) {
 			// We have to return 'true' or advanced gestures won't work
 			return true;

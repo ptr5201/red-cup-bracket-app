@@ -23,7 +23,7 @@ import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListen
 public class SingleEliminationLayout extends BracketViewLayout {
 
 	private final SingleEliminationBracketStrategy model;
-	private final Map<Bracket, BracketViewSlot> views = new HashMap<Bracket, BracketViewSlot>();
+	private final Map<Bracket, BracketViewSlot> bracketViewSlots = new HashMap<Bracket, BracketViewSlot>();
 	private final Collection<Bracket> usedBrackets = new HashSet<Bracket>();
 
 	private final OnExpandedStateChangedListener expandedStateChangedListener = new OnExpandedStateChangedListener() {
@@ -60,7 +60,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	 *         {@code Bracket}.
 	 */
 	private BracketViewSlot getBracketViewSlot(Bracket bracket) {
-		BracketViewSlot slot = this.views.get(bracket);
+		BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 		if (slot == null) {
 			// Create the BracketSlot
 			slot = new BracketViewSlot(this.getBracketView().getContext());
@@ -73,7 +73,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 
 			// Add the BracketSlot to the map and
 			// BracketView
-			this.views.put(bracket, slot);
+			this.bracketViewSlots.put(bracket, slot);
 			this.getBracketView().addView(slot);
 		}
 
@@ -90,11 +90,11 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	 *            {@code BracketViewSlot} objects which need to be kept.
 	 */
 	private void postLayoutCleanup(Collection<Bracket> usedBrackets) {
-		Iterator<Bracket> iter = this.views.keySet().iterator();
+		Iterator<Bracket> iter = this.bracketViewSlots.keySet().iterator();
 		while (iter.hasNext()) {
 			Bracket bracket = iter.next();
 			if (!usedBrackets.contains(bracket)) {
-				BracketViewSlot slot = this.views.get(bracket);
+				BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 				if (slot != null) {
 					this.getBracketView().removeView(slot);
 				}
@@ -116,8 +116,8 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	 */
 	private void layoutOpeningRound(BracketViewSlot slot, int vPos, int hPos) {
 		// Opening round; space evenly
-		slot.layout(hPos, vPos, hPos + slot.getExpandedWidth(),
-				vPos + slot.getExpandedHeight());
+		slot.layout(hPos, vPos, hPos + slot.getScaledExpandedWidth(), vPos
+				+ slot.getScaledExpandedHeight());
 	}
 
 	/**
@@ -138,11 +138,12 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		// bracket
 		Bracket prevBracket = (bracket.getLeft() != null) ? bracket.getLeft()
 				: bracket.getRight();
-		BracketViewSlot prevSlot = this.views.get(prevBracket);
+		BracketViewSlot prevSlot = this.bracketViewSlots.get(prevBracket);
 
 		// Update slot's positioning
-		slot.layout(hPos, prevSlot.getTop(), hPos + slot.getExpandedWidth(),
-				prevSlot.getTop() + slot.getExpandedHeight());
+		slot.layout(hPos, prevSlot.getTop(),
+				hPos + slot.getScaledExpandedWidth(),
+				prevSlot.getTop() + slot.getScaledExpandedHeight());
 	}
 
 	/**
@@ -164,13 +165,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		// two bracket slots
 		Bracket left = bracket.getLeft();
 		Bracket right = bracket.getRight();
-		BracketViewSlot leftSlot = this.views.get(left);
-		BracketViewSlot rightSlot = this.views.get(right);
+		BracketViewSlot leftSlot = this.bracketViewSlots.get(left);
+		BracketViewSlot rightSlot = this.bracketViewSlots.get(right);
 		int avgTop = (leftSlot.getTop() + rightSlot.getTop()) / 2;
 
 		// Update slot's positioning
-		slot.layout(hPos, avgTop, hPos + slot.getExpandedWidth(),
-				avgTop + slot.getExpandedHeight());
+		slot.layout(hPos, avgTop, hPos + slot.getScaledExpandedWidth(), avgTop
+				+ slot.getScaledExpandedHeight());
 	}
 
 	@Override
@@ -208,6 +209,9 @@ public class SingleEliminationLayout extends BracketViewLayout {
 						// creating it if necessary
 						BracketViewSlot slot = this.getBracketViewSlot(bracket);
 
+						// Update scale of slot
+						slot.setScale(this.getScale());
+
 						// Update the positioning and sizing of this
 						// component
 						if (bracket.getRight() == null
@@ -224,11 +228,11 @@ public class SingleEliminationLayout extends BracketViewLayout {
 						}
 
 						// Update the positioning variables
-						vPos = Math.max(
-								slot.getBottom() + this.getVerticalSpacing(),
-								vPos);
+						vPos = Math
+								.max(slot.getBottom()
+										+ this.getScaledVerticalSpacing(), vPos);
 						maxBracketWidth = Math.max(maxBracketWidth,
-								slot.getExpandedWidth());
+								slot.getScaledExpandedWidth());
 
 						// Update vertical measurement variable
 						requiredHeight = Math.max(vPos, requiredHeight);
@@ -239,7 +243,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 
 					// Update positioning variables
 					vPos = this.getTopMargin();
-					hPos += maxBracketWidth + this.getHorizontalSpacing();
+					hPos += maxBracketWidth + this.getScaledHorizontalSpacing();
 
 					// Update horizontal measurement variable
 					requiredWidth = Math.max(hPos, requiredWidth);
@@ -247,9 +251,9 @@ public class SingleEliminationLayout extends BracketViewLayout {
 
 				// Update measurements
 				requiredHeight += this.getBottomMargin()
-						- this.getVerticalSpacing();
+						- this.getScaledVerticalSpacing();
 				requiredWidth += this.getRightMargin()
-						- this.getHorizontalSpacing();
+						- this.getScaledHorizontalSpacing();
 			}
 
 			// Commit measurements
@@ -260,4 +264,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			this.usedBrackets.clear();
 		}
 	}
+
+	// @Override
+	// public void setScale(float scale) {
+	// super.setScale(scale);
+	// Collection<BracketViewSlot> slots = this.bracketViewSlots.values();
+	// for (BracketViewSlot slot : slots) {
+	// slot.setScale(scale);
+	// }
+	// }
 }

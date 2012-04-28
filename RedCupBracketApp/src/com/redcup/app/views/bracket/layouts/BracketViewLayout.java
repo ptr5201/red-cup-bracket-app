@@ -25,6 +25,9 @@ public abstract class BracketViewLayout {
 	private int measuredHeight;
 	private int measuredWidth;
 
+	// The scale factor
+	private float scale = 1.0f;
+
 	/**
 	 * The frozen/thawed status of this {@code BracketViewLayout}. If
 	 * {@code true}, the layout will not be updated until this
@@ -276,6 +279,57 @@ public abstract class BracketViewLayout {
 	 */
 	public int getHorizontalSpacing() {
 		return this.spacing_horizontal;
+	}
+
+	/**
+	 * Returns the horizontal spacing between columns, adjusted for scale.
+	 * 
+	 * @return the horizontal spacing between columns, adjusted for scale.
+	 */
+	protected int getScaledVerticalSpacing() {
+		return this.applyScale(this.spacing_vertical);
+	}
+
+	/**
+	 * Returns the vertical spacing between columns, adjusted for scale.
+	 * 
+	 * @return the vertical spacing between columns, adjusted for scale.
+	 */
+	protected int getScaledHorizontalSpacing() {
+		return this.applyScale(this.spacing_horizontal);
+	}
+
+	/**
+	 * Sets the scale factor of this {@code BracketViewLayout}.
+	 * 
+	 * @param scale
+	 *            the scale factor of this {@code BracketViewLayout}.
+	 */
+	public void setScale(float scale) {
+		this.scale = scale;
+		if (this.getBracketView() != null) {
+			this.getBracketView().invalidate();
+		}
+	}
+
+	/**
+	 * Returns the scale factor of this {@code BracketViewLayout}.
+	 * 
+	 * @return the scale factor of this {@code BracketViewLayout}.
+	 */
+	public float getScale() {
+		return this.scale;
+	}
+
+	/**
+	 * Applies the scale factor to the given dimension.
+	 * 
+	 * @param dimension
+	 *            the dimension to scale.
+	 * @return the given dimension adjusted by the scale factor.
+	 */
+	protected int applyScale(int dimension) {
+		return Math.round(this.scale * dimension);
 	}
 
 	/**
