@@ -24,10 +24,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="36dp"
-            android:layout_toRightOf="@+id/createTournamentImage"
-            android:text="@string/createTournament" />
+            android:layout_alignBottom="@+id/createTournamentImage"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14dp"
+            android:text="@string/createTournament"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         
     </RelativeLayout>
 
@@ -57,10 +58,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="39dp"
-            android:layout_toRightOf="@+id/loadTournamentImage"
-            android:text="@string/loadTournament" />
+            android:layout_alignBottom="@+id/loadTournamentImage"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="29dp"
+            android:text="@string/loadTournament"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </RelativeLayout>
 
@@ -90,10 +92,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="38dp"
-            android:layout_toRightOf="@+id/pastTournamentsImage"
-            android:text="@string/pastTournaments" />
+            android:layout_alignBottom="@+id/pastTournamentsImage"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="26dp"
+            android:text="@string/pastTournaments"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </RelativeLayout>
 
@@ -123,10 +126,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="42dp"
+            android:layout_alignBottom="@+id/participantManagerImage"
+            android:layout_marginLeft="36dp"
             android:layout_toRightOf="@+id/participantManagerImage"
-            android:text="@string/participants" />
+            android:text="@string/participants"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         
     </RelativeLayout>
 
@@ -156,10 +160,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="44dp"
+            android:layout_alignBottom="@+id/helpImage"
+            android:layout_marginLeft="37dp"
             android:layout_toRightOf="@+id/helpImage"
-            android:text="@string/help" />
+            android:text="@string/help"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </RelativeLayout>
 
