@@ -165,8 +165,10 @@ public class BracketView extends ViewGroup {
 		entrants.add(new Participant("Player 2"));
 		entrants.add(new Participant("Player 3"));
 		entrants.add(new Participant("Player 4"));
-		// entrants.add(new Participant("Player 5"));
-		// entrants.add(new Participant("Player 6"));
+		entrants.add(new Participant("Player 5"));
+		entrants.add(new Participant("Player 6"));
+		entrants.add(new Participant("Player 7"));
+		entrants.add(new Participant("Player 8"));
 		SingleEliminationBracketStrategy model = new SingleEliminationBracketStrategy(
 				entrants);
 		SingleEliminationLayout layout = new SingleEliminationLayout(this,
