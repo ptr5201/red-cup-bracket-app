@@ -31,7 +31,7 @@ public class BracketView extends ViewGroup {
 	 */
 	private class GestureListener extends SimpleOnGestureListener {
 		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
+		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// Reset selection
 			BracketView.this.clearSelection();
 			return true;
@@ -61,15 +61,30 @@ public class BracketView extends ViewGroup {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
 			// TODO: Implement zooming using pinch mechanism
+			// Temporary testing code
 			if (layout != null) {
-				if (layout.getScale() > 1.1f) {
-					layout.setScale(0.75f);
+				// Update zoom factor and update the layout
+				if (layout.getScale() > 0.9f) {
+					layout.setScale(0.9f);
 				} else if (layout.getScale() < 0.9f) {
 					layout.setScale(1.0f);
 				} else {
-					layout.setScale(1.5f);
+					layout.setScale(0.75f);
 				}
 				onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+
+				// Update scroll position
+				int x = getScrollX();
+				int y = getScrollY();
+
+				// Apply movement bounds
+				x = Math.min(x, getViewportWidth() - getWidth());
+				x = Math.max(x, 0);
+				y = Math.min(y, getViewportHeight() - getHeight());
+				y = Math.max(y, 0);
+
+				// Move and return
+				scrollTo(x, y);
 			}
 			return true;
 		}
@@ -149,9 +164,9 @@ public class BracketView extends ViewGroup {
 		entrants.add(new Participant("Player 1"));
 		entrants.add(new Participant("Player 2"));
 		entrants.add(new Participant("Player 3"));
-		entrants.add(new Participant("Plater 4"));
-		entrants.add(new Participant("Player 5"));
-		entrants.add(new Participant("Player 6"));
+		entrants.add(new Participant("Player 4"));
+		// entrants.add(new Participant("Player 5"));
+		// entrants.add(new Participant("Player 6"));
 		SingleEliminationBracketStrategy model = new SingleEliminationBracketStrategy(
 				entrants);
 		SingleEliminationLayout layout = new SingleEliminationLayout(this,
