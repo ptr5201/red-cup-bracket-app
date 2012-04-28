@@ -18,6 +18,11 @@ import com.redcup.app.model.Bracket;
  */
 public class BracketViewSlot extends ViewGroup {
 
+	/**
+	 * The different expanded states this {@code BracketViewSlot} can be in.
+	 * 
+	 * @author Jackson Lamp
+	 */
 	public enum ExpandedState {
 		COLLAPSED, EXPANDED_HORIZONTAL, EXPANDED_VERTICAL, EXPANDED_BOTH
 	}
@@ -74,20 +79,28 @@ public class BracketViewSlot extends ViewGroup {
 		public void onExpandedStateChanged(OnExpandedStateChangedEvent evt);
 	}
 
+	// Child components
 	private BracketSlotButton slotButton;
 	private Button removeButton;
 	private Button demoteButton;
 	private Button promoteButton;
 	private PaintDrawable background = new PaintDrawable(Color.LTGRAY);
 
+	// The collapsed dimensions of this control
 	private int collapsedHeight = 70;
 	private int collapsedWidth = 240;
 
+	// The expanded dimensions of this control
 	private int expandedHeight = 140;
 	private int expandedWidth = 330;
 
+	// The scale factor of this control
+	private float scale = 1.0f;
+
+	// Used to dispatch expansion/contraction events to listening objects
 	private OnExpandedStateChangedListener onExpandedStateChangedListener = null;
 
+	// The used as the model for this control
 	private Bracket bracket = null;
 
 	/**
@@ -317,6 +330,79 @@ public class BracketViewSlot extends ViewGroup {
 	}
 
 	/**
+	 * Returns the collapsed height of this control, adjusted by the scale
+	 * factor.
+	 * 
+	 * @return the collapsed height of this control, adjusted by the scale
+	 *         factor.
+	 */
+	public int getScaledCollapsedHeight() {
+		return this.applyScale(this.collapsedHeight);
+	}
+
+	/**
+	 * Returns the collapsed width of this control, adjusted by the scale
+	 * factor.
+	 * 
+	 * @return the collapsed width of this control, adjusted by the scale
+	 *         factor.
+	 */
+	public int getScaledCollapsedWidth() {
+		return this.applyScale(this.collapsedWidth);
+	}
+
+	/**
+	 * Returns the expanded height of this control, adjusted by the scale
+	 * factor.
+	 * 
+	 * @return the expanded height of this control, adjusted by the scale
+	 *         factor.
+	 */
+	public int getScaledExpandedHeight() {
+		return this.applyScale(this.expandedHeight);
+	}
+
+	/**
+	 * Returns the expanded width of this control, adjusted by the scale factor.
+	 * 
+	 * @return the expanded width of this control, adjusted by the scale factor.
+	 */
+	public int getScaledExpandedWidth() {
+		return this.applyScale(this.expandedWidth);
+	}
+
+	/**
+	 * Sets the scale factor of this {@code BracketViewSlot}.
+	 * 
+	 * @param scale
+	 *            the scale factor of this {@code BracketViewSlot}.
+	 */
+	public void setScale(float scale) {
+		this.scale = scale;
+		this.invalidate();
+	}
+
+	/**
+	 * Returns the scale factor of this {@code BracketViewSlot}.
+	 * 
+	 * @return the scale factor of this {@code BracketViewSlot}.
+	 */
+	public float getScale() {
+		return this.scale;
+	}
+
+	/**
+	 * Applies the scale factor to the given dimension.
+	 * 
+	 * @param dimension
+	 *            the dimension to scale.
+	 * @return the given dimension adjusted by the scale factor.
+	 */
+	protected int applyScale(int dimension) {
+		return Math.round(this.scale * dimension);
+	}
+
+	/**
 	 * Sets the {@code Bracket} that acts as the model for this
 	 * {@code BracketViewSlot}.
 	 * 
@@ -346,14 +432,22 @@ public class BracketViewSlot extends ViewGroup {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		this.slotButton.layout(0, 0, this.collapsedWidth, this.collapsedHeight);
-		this.removeButton.layout(this.collapsedWidth + 5, 5,
-				this.expandedWidth - 5, this.collapsedHeight - 5);
-		this.demoteButton.layout(5, this.collapsedHeight + 5,
-				this.expandedHeight - this.collapsedHeight,
-				this.expandedHeight - 5);
-		this.promoteButton.layout(this.expandedHeight - this.collapsedHeight,
-				this.collapsedHeight + 5, this.collapsedWidth - 5,
-				this.expandedHeight - 5);
+		this.slotButton.layout(0, 0, this.applyScale(this.collapsedWidth),
+				this.applyScale(this.collapsedHeight));
+		this.removeButton.layout(this.applyScale(this.collapsedWidth + 5),
+				this.applyScale(5), this.applyScale(this.expandedWidth - 5),
+				this.applyScale(this.collapsedHeight - 5));
+		this.demoteButton.layout(this.applyScale(5),
+				this.applyScale(this.collapsedHeight + 5),
+				this.applyScale(this.expandedHeight - this.collapsedHeight),
+				this.applyScale(this.expandedHeight - 5));
+		this.promoteButton.layout(
+				this.applyScale(this.expandedHeight - this.collapsedHeight),
+				this.applyScale(this.collapsedHeight + 5),
+				this.applyScale(this.collapsedWidth - 5),
+				this.applyScale(this.expandedHeight - 5));
+		this.getBackground().setBounds(0, 0,
+				this.applyScale(this.collapsedWidth),
+				this.applyScale(this.collapsedWidth));
 	}
 }

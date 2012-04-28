@@ -141,7 +141,7 @@ public class BracketSlotButton extends View {
 			float textSize = textAreaBounds.height() / measuredBounds.height()
 					* DEFAULT_TEXT_SIZE;
 			textPaint.setTextSize(textSize);
-			
+
 			// Update measurements
 			textPaint.getTextBounds(SIZING_SAMPLE_TEXT, 0,
 					SIZING_SAMPLE_TEXT.length(), measuredBounds);
