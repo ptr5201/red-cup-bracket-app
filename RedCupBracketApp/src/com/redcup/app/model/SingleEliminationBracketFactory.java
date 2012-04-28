@@ -14,44 +14,114 @@ public class SingleEliminationBracketFactory {
 
 	/**
 	 * Factory method which creates bracket structures
-	 * @param participants list of participants
+	 * 
+	 * @param participants
+	 *            list of participants
 	 * @return Bracket pointing to head
 	 */
 	public static Bracket createBracketStructure(List<Participant> participants) {
-		// Find number of rounds in tournament
-		int roundCount = 1;
-		int participantSize = participants.size(); 
-		while ((participantSize >>= 1) > 0) {
-			roundCount++;
+		Bracket head = null;
+		
+		// Prepare the entry round brackets
+		List<Bracket> entryBrackets = new ArrayList<Bracket>();
+		for(Participant p : participants) {
+			entryBrackets.add(new Bracket(null, null, p));
 		}
-
-		participantStack = new Stack<Participant>();
-		for (Participant participant : participants) {
-			participantStack.push(participant);
-		}
-
-		System.out.println("Roundcount: " + roundCount);
-		Bracket head = buildTree(new Bracket(null, null, null), roundCount);
-		participantStack = null;
+		
+		// Build the bracket structure by recursively forming matchups
+		head = createBracketStructure_Recurse_BiasRight(entryBrackets);
+		
 		return head;
 	}
-
+	
 	/**
-	 * Recursively builds node tree
-	 * @param node
-	 * @param roundCount
-	 * @return new Bracket
+	 * Recursive helper function. Builds a list of brackets for a single round,
+	 * with each bracket linked to a previous bracket. If a bye is required in
+	 * this round, it is given to the bracket in the extreme left (hence this
+	 * function is "right biased"). If this occurs, the bias is switched for the
+	 * next round to prevent multiple byes being assigned to the same
+	 * participant.
+	 * 
+	 * @param prevRound
+	 *            the list of brackets in the previous round.
+	 * @return a reference to the head element of the bracket structure.
 	 */
-	private static Bracket buildTree(Bracket node, int roundCount) {
-		if (roundCount == 1) {
-			return new Bracket(null, null, participantStack.pop());
+	private static Bracket createBracketStructure_Recurse_BiasRight(List<Bracket> prevRound) {
+		boolean roundHasByes = false;
+		
+		// Check termination conditions
+		if(prevRound.size() == 0) {
+			// No brackets in previous round
+			return null;
+		} else if(prevRound.size() == 1) {
+			// Last round was the "head" round
+			return prevRound.get(0);
 		}
-		node = new Bracket(
-				buildTree(new Bracket(null, null, null), --roundCount),
-				buildTree(new Bracket(null, null, null), roundCount),
-				null
-		);
-		return node;
+		
+		// Compose the brackets in this round
+		List<Bracket> round = new ArrayList<Bracket>();
+		for(int i = 0; i + 1 < prevRound.size(); i += 2) {
+			Bracket right = prevRound.get(i);
+			Bracket left = prevRound.get(i + 1);
+			round.add(new Bracket(left, right));
+		}
+		
+		// Give remaining players (if any) a bye
+		for(int i = round.size() * 2; i < prevRound.size(); i++) {
+			roundHasByes = true;
+			round.add(prevRound.get(i));
+		}
+		
+		// Recurse, swapping bias if necessary
+		if(roundHasByes) {
+			return createBracketStructure_Recurse_BiasLeft(round);
+		}
+		return createBracketStructure_Recurse_BiasRight(round);
+	}
+	
+	/**
+	 * Recursive helper function. Builds a list of brackets for a single round,
+	 * with each bracket linked to a previous bracket. If a bye is required in
+	 * this round, it is given to the bracket in the extreme right (hence this
+	 * function is "left biased"). If this occurs, the bias is switched for the
+	 * next round to prevent multiple byes being assigned to the same
+	 * participant.
+	 * 
+	 * @param prevRound
+	 *            the list of brackets in the previous round.
+	 * @return a reference to the head element of the bracket structure.
+	 */
+	private static Bracket createBracketStructure_Recurse_BiasLeft(List<Bracket> prevRound) {
+		boolean roundHasByes = false;
+		
+		// Check termination conditions
+		if(prevRound.size() == 0) {
+			// No brackets in previous round
+			return null;
+		} else if(prevRound.size() == 1) {
+			// Last round was the "head" round
+			return prevRound.get(0);
+		}
+		
+		// Compose the brackets in this round
+		List<Bracket> round = new ArrayList<Bracket>();
+		for(int i = prevRound.size() - 2; i >= 0; i -= 2) {
+			Bracket right = prevRound.get(i);
+			Bracket left = prevRound.get(i + 1);
+			round.add(0, new Bracket(left, right));
+		}
+		
+		// Give remaining players (if any) a bye
+		for(int i = prevRound.size() - round.size() * 2 - 1; i >= 0; i--) {
+			roundHasByes = true;
+			round.add(0, prevRound.get(i));
+		}
+
+		// Recurse, swapping bias if necessary
+		if(roundHasByes) {
+			return createBracketStructure_Recurse_BiasRight(round);
+		}
+		return createBracketStructure_Recurse_BiasLeft(round);
 	}
 	
 	public static void main(String args[]) {
