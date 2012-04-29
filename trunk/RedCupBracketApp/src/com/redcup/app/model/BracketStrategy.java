@@ -12,21 +12,12 @@ public interface BracketStrategy {
 	 * @param participant
 	 * @return boolean indicating presence
 	 */
-	public boolean lookup(Participant participant);
+	public Bracket lookup(Participant participant);
 	
-	/**
-	 * Add the passed participant to the tournament.
-	 * 
-	 * Participant is added to the leftmost AVAILABLE position in the earliest round.
-	 * @param participant
-	 */
-	public void add(Participant participant);
-	
-	public boolean relocateUp(Participant participant) throws InvalidStateException;
-	public boolean relocateDown(Participant participant) throws InvalidStateException;
-	public boolean unWin(Participant participant) throws InvalidStateException;
-	public boolean win(Participant participant) throws InvalidStateException;
-
+	public void relocateUp(Participant participant) throws InvalidStateException;
+	public void relocateDown(Participant participant) throws InvalidStateException;
+	public void unWin(Participant participant) throws InvalidStateException;
+	public void win(Participant participant) throws InvalidStateException;
 	
 	/**
 	 * @return number of rounds in tournament

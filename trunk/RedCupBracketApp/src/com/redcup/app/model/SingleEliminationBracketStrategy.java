@@ -12,30 +12,24 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 	}
 
 	public SingleEliminationBracketStrategy(List<Participant> participants) {
-		this.head = SingleEliminationBracketFactory
-				.createBracketStructure(participants);
+		this.head = SingleEliminationBracketFactory.createBracketStructure(participants);
 	}
 
 	@Override
-	public boolean lookup(Participant participant) {
-		return lookup(head, participant);
+	public Bracket lookup(Participant participant) {
+		return lookupRecurse(head, participant);
 	}
 
-	private boolean lookup(Bracket node, Participant element) {
-		if (node == null)
-			return false;
-		if (element == node.getParticipant())
-			return true;
-		if (lookup(node.getLeft(), element))
-			return true;
-		if (lookup(node.getRight(), element))
-			return true;
-		return false;
-	}
+	private Bracket lookupRecurse(Bracket bracket, Participant element) {
+		if (element == bracket.getParticipant())
+			return bracket;
 
-	@Override
-	public void add(Participant participant) {
-		// TODO Auto-generated method stub
+		Bracket ret;
+		ret = lookupRecurse(bracket.getLeft(), element);
+		if (ret != null) return ret;
+		ret = lookupRecurse(bracket.getRight(), element);
+		if (ret != null) return ret;
+		return null;
 	}
 
 	@Override
@@ -52,8 +46,7 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 	}
 
 	/**
-	 * Returns a list of participants by round Also an example of how to use
-	 * roundStructure (should I encapsulate in a RoundStructure class?)
+	 * Prints a list of participants by round
 	 */
 	public String toString() {
 		List<List<Bracket>> structure = getRoundStructure();
@@ -135,33 +128,73 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 	}
 
 	@Override
-	public boolean relocateUp(Participant participant)
-			throws InvalidStateException {
-		// TODO Auto-generated method stub
-		System.out.println("Event occured!");
-		return false;
+	public void relocateUp(Participant participant)	throws InvalidStateException {
+		System.out.println("relocateUp event occured!");
+		Bracket start = lookup(participant);
+		if (start == null) throw new InvalidStateException();
+		Bracket parent = lookup(participant).getParent();
+		if (participant == parent.getLeft().getParticipant()) {
+			start.setParticipant(parent.getRight().getParticipant());
+			parent.getRight().setParticipant(participant);
+		} else if (participant == parent.getRight().getParticipant()) {
+			Bracket gParent = parent.getParent();
+			start.setParticipant(gParent.getRight().getLeft().getParticipant());
+			gParent.getRight().getLeft().setParticipant(participant);
+		} 
 	}
 
 	@Override
-	public boolean relocateDown(Participant participant)
-			throws InvalidStateException {
-		// TODO Auto-generated method stub
-		System.out.println("Event occured!");
-		return false;
+	public void relocateDown(Participant participant) throws InvalidStateException {
+		System.out.println("relocateDown event occured!");
+		Bracket start = lookup(participant);
+		if (start == null) throw new InvalidStateException();
+		Bracket parent = lookup(participant).getParent();
+		if (participant == parent.getLeft().getParticipant()) {
+			Bracket gParent = parent.getParent();
+			start.setParticipant(gParent.getLeft().getRight().getParticipant());
+			gParent.getLeft().getRight().setParticipant(participant);
+		} else if (participant == parent.getRight().getParticipant()) {
+			start.setParticipant(parent.getLeft().getParticipant());
+			parent.getLeft().setParticipant(participant);
+		} 
 	}
 
 	@Override
-	public boolean unWin(Participant participant) throws InvalidStateException {
-		// TODO Auto-generated method stub
-		System.out.println("Event occured!");
-		return false;
+	public void unWin(Participant participant) throws InvalidStateException {
+		System.out.println("unWin event occured!");
+		Bracket bracket = this.lookup(participant);
+		// Ensure participant is a player in the tournament & has played at least one game
+		if (bracket == null || bracket.getLeft() == null || bracket.getRight() == null) throw new InvalidStateException();		
+		if (bracket.getLeft().getParticipant() == participant
+		 || bracket.getRight().getParticipant() == participant) {	
+			bracket.setParticipant(null);
+			return;
+		}
+		// Something wrong has occurred
+		throw new InvalidStateException();
 	}
 
 	@Override
-	public boolean win(Participant participant) throws InvalidStateException {
-		// TODO Auto-generated method stub
-		System.out.println("Event occured!");
-		return false;
+	public void win(Participant participant) throws InvalidStateException {
+		System.out.println("Win event occured!");
+		//Bracket winBracket = parentLookupRecurse(this.head, participant);
+		Bracket winBracket = lookup(participant).getParent();
+		// Participant is at head or someone has already won the game 
+		if (winBracket == null || winBracket.getParticipant() != null) throw new InvalidStateException();
+		winBracket.setParticipant(participant);
+	}
+	
+	@Deprecated
+	private Bracket parentLookupRecurse(Bracket bracket, Participant element) {
+		if (element == bracket.getLeft().getParticipant() 
+		|| element == bracket.getRight().getParticipant()) return bracket;
+
+		Bracket ret;
+		ret = lookupRecurse(bracket.getLeft(), element);
+		if (ret != null) return ret;
+		ret = lookupRecurse(bracket.getRight(), element);
+		if (ret != null) return ret;
+		return null;
 	}
 
 }
