@@ -1,8 +1,5 @@
 package com.redcup.app.views.bracket;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -12,12 +9,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.redcup.app.model.Participant;
-import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.model.Tournament;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
-import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 /**
  * The control used for viewing and editing a bracket.

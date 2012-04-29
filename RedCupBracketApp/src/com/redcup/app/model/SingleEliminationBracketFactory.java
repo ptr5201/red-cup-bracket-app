@@ -112,7 +112,7 @@ public class SingleEliminationBracketFactory {
 			Bracket right = prevRound.get(i);
 			Bracket left = prevRound.get(i + 1);
 			Bracket newBracket = new Bracket(left, right);
-			round.add(newBracket);
+			round.add(0, newBracket);
 			right.setParent(newBracket);
 			left.setParent(newBracket);
 		}
