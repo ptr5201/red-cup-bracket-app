@@ -23,15 +23,24 @@ public class BracketViewSlot extends ViewGroup {
 	private Bracket.OnParticipantChangedListener participantChangedListener = new Bracket.OnParticipantChangedListener() {
 		@Override
 		public void onParticipantChanged(OnParticipantChangedEvent event) {
-			String name = null;
-			Participant participant = event.getBracket().getParticipant();
+			BracketViewSlot.this.updateText_ParticipantName();
+			BracketViewSlot.this.updateButtons_AdvanceDemote();
+		}
+	};
 
-			if (participant != null) {
-				name = participant.getName();
-			}
+	private OnClickListener slotButtonListener = new OnClickListener() {
 
-			BracketViewSlot.this.slotButton.setText(name);
-			BracketViewSlot.this.invalidate();
+		@Override
+		public void onClick(View v) {
+			BracketViewSlot.this
+					.raiseOnExpandedStateChangedEvent(new OnExpandedStateChangedEvent(
+							BracketViewSlot.this, ExpandedState.EXPANDED_BOTH));
+			v.setSelected(true);
+			BracketViewSlot.this.removeButton.setVisibility(VISIBLE);
+			BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
+			BracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
+			BracketViewSlot.this.background.setAlpha(255);
+			BracketViewSlot.this.updateButtons_AdvanceDemote();
 		}
 	};
 
@@ -42,6 +51,18 @@ public class BracketViewSlot extends ViewGroup {
 			if (b != null && b.getParent() != null) {
 				b.getParent().setParticipant(b.getParticipant());
 			}
+			BracketViewSlot.this.updateButtons_AdvanceDemote();
+		}
+	};
+
+	private OnClickListener demoteButtonListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Bracket b = BracketViewSlot.this.getBracket();
+			if (b != null) {
+				b.setParticipant(null);
+			}
+			BracketViewSlot.this.updateButtons_AdvanceDemote();
 		}
 	};
 
@@ -178,23 +199,7 @@ public class BracketViewSlot extends ViewGroup {
 
 		// Create the slot expansion/editing button
 		this.slotButton = new BracketSlotButton(context);
-		this.slotButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				BracketViewSlot.this
-						.raiseOnExpandedStateChangedEvent(new OnExpandedStateChangedEvent(
-								BracketViewSlot.this,
-								ExpandedState.EXPANDED_BOTH));
-				v.setSelected(true);
-				BracketViewSlot.this.removeButton.setVisibility(VISIBLE);
-				BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
-				BracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
-				BracketViewSlot.this.background.setAlpha(255);
-				BracketViewSlot.this.invalidate();
-			}
-		});
-		this.slotButton.setText("abcdefghijklmnopqrstuvwxyz");
+		this.slotButton.setOnClickListener(this.slotButtonListener);
 		this.addView(slotButton);
 
 		// Create the "remove" button
@@ -208,11 +213,13 @@ public class BracketViewSlot extends ViewGroup {
 		this.demoteButton.setText("<-");
 		this.demoteButton.setEnabled(false);
 		this.demoteButton.setVisibility(INVISIBLE);
+		this.demoteButton.setOnClickListener(this.demoteButtonListener);
 		this.addView(this.demoteButton);
 
 		// Create the "promote" button
 		this.promoteButton = new Button(context);
 		this.promoteButton.setText("---->");
+		this.promoteButton.setEnabled(false);
 		this.promoteButton.setVisibility(INVISIBLE);
 		this.promoteButton.setOnClickListener(this.promoteButtonListener);
 		this.addView(this.promoteButton);
@@ -454,12 +461,11 @@ public class BracketViewSlot extends ViewGroup {
 					.addOnParticipantChangedListener(this.participantChangedListener);
 		}
 
-		// Update appearance of this control
-		if (this.bracket != null && this.bracket.getParticipant() != null) {
-			this.slotButton.setText(this.bracket.getParticipant().getName());
-		} else {
-			this.slotButton.setText(null);
-		}
+		// Update text
+		this.updateText_ParticipantName();
+
+		// Update button statuses
+		this.updateButtons_AdvanceDemote();
 	}
 
 	/**
@@ -471,6 +477,29 @@ public class BracketViewSlot extends ViewGroup {
 	 */
 	public Bracket getBracket() {
 		return this.bracket;
+	}
+
+	protected void updateText_ParticipantName() {
+		if (this.bracket != null && this.bracket.getParticipant() != null) {
+			this.slotButton.setText(this.bracket.getParticipant().getName());
+		} else {
+			this.slotButton.setText(null);
+		}
+	}
+
+	protected void updateButtons_AdvanceDemote() {
+		if (this.bracket == null) {
+			this.promoteButton.setEnabled(false);
+			this.demoteButton.setEnabled(false);
+		} else {
+			this.promoteButton.setEnabled(this.bracket.getParent() != null
+					&& this.bracket.getParticipant() != null
+					&& this.bracket.getParent().getParticipant() == null);
+			this.demoteButton
+					.setEnabled((this.bracket.getRight() != null || this.bracket
+							.getLeft() != null)
+							&& this.bracket.getParticipant() != null);
+		}
 	}
 
 	@Override
