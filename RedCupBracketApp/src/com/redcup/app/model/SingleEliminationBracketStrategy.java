@@ -14,6 +14,10 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 	public SingleEliminationBracketStrategy(List<Participant> participants) {
 		this.head = SingleEliminationBracketFactory.createBracketStructure(participants);
 	}
+	
+	public SingleEliminationBracketStrategy() {
+		this.head = null;
+	}
 
 	@Override
 	public Bracket lookup(Participant participant) {
