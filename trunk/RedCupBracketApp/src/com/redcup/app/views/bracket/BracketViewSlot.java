@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.redcup.app.model.Bracket;
+import com.redcup.app.model.Participant;
+import com.redcup.app.model.Bracket.OnParticipantChangedEvent;
 
 /**
  * Handles the layout of the individual bracket components. Contains a central
@@ -17,6 +19,31 @@ import com.redcup.app.model.Bracket;
  * @author Jackson Lamp
  */
 public class BracketViewSlot extends ViewGroup {
+
+	private Bracket.OnParticipantChangedListener participantChangedListener = new Bracket.OnParticipantChangedListener() {
+		@Override
+		public void onParticipantChanged(OnParticipantChangedEvent event) {
+			String name = null;
+			Participant participant = event.getBracket().getParticipant();
+
+			if (participant != null) {
+				name = participant.getName();
+			}
+
+			BracketViewSlot.this.slotButton.setText(name);
+			BracketViewSlot.this.invalidate();
+		}
+	};
+
+	private OnClickListener promoteButtonListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Bracket b = BracketViewSlot.this.getBracket();
+			if (b != null && b.getParent() != null) {
+				b.getParent().setParticipant(b.getParticipant());
+			}
+		}
+	};
 
 	/**
 	 * The different expanded states this {@code BracketViewSlot} can be in.
@@ -187,6 +214,7 @@ public class BracketViewSlot extends ViewGroup {
 		this.promoteButton = new Button(context);
 		this.promoteButton.setText("---->");
 		this.promoteButton.setVisibility(INVISIBLE);
+		this.promoteButton.setOnClickListener(this.promoteButtonListener);
 		this.addView(this.promoteButton);
 
 		// Background drawable
@@ -411,7 +439,22 @@ public class BracketViewSlot extends ViewGroup {
 	 *            {@code BracketViewSlot}.
 	 */
 	public void setBracket(Bracket bracket) {
+		// Remove listener from old bracket
+		if (this.bracket != null) {
+			this.bracket
+					.removeOnParticipantChangedListener(this.participantChangedListener);
+		}
+
+		// Assign new bracket
 		this.bracket = bracket;
+
+		// Assign listener to new bracket
+		if (this.bracket != null) {
+			this.bracket
+					.addOnParticipantChangedListener(this.participantChangedListener);
+		}
+
+		// Update appearance of this control
 		if (this.bracket != null && this.bracket.getParticipant() != null) {
 			this.slotButton.setText(this.bracket.getParticipant().getName());
 		} else {
