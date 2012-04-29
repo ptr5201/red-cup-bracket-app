@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 
 import com.redcup.app.model.Participant;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
+import com.redcup.app.model.Tournament;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
+import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
 import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 /**
@@ -71,7 +73,7 @@ public class BracketView extends ViewGroup {
 				} else {
 					layout.setScale(0.75f);
 				}
-				onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+				updateLayout(true);
 
 				// Update scroll position
 				int x = getScrollX();
@@ -96,12 +98,20 @@ public class BracketView extends ViewGroup {
 		}
 	}
 
+	/**
+	 * Detector for gesture events.
+	 */
 	private GestureDetector gestures;
 
 	/**
 	 * The layout algorithm to use
 	 */
 	private BracketViewLayout layout = null;
+
+	/**
+	 * The tournament to manage.
+	 */
+	private Tournament tournament = null;
 
 	/**
 	 * Creates a new {@code BracketView}.
@@ -168,7 +178,7 @@ public class BracketView extends ViewGroup {
 		entrants.add(new Participant("Player 5"));
 		entrants.add(new Participant("Player 6"));
 		entrants.add(new Participant("Player 7"));
-//		entrants.add(new Participant("Player 8"));
+		// entrants.add(new Participant("Player 8"));
 		SingleEliminationBracketStrategy model = new SingleEliminationBracketStrategy(
 				entrants);
 		SingleEliminationLayout layout = new SingleEliminationLayout(this,
@@ -195,6 +205,29 @@ public class BracketView extends ViewGroup {
 	}
 
 	/**
+	 * Assigns a {@code Tournament} for this {@code BracketView} to manage.
+	 * 
+	 * @param tournament
+	 *            the {@code Tournament} for this {@code BracketView} to manage.
+	 */
+	public void setTournament(Tournament tournament) {
+		// TODO: Register/unregister event listeners
+		this.tournament = tournament;
+		BracketViewLayout layout = BracketViewLayoutFactory.createLayout(this,
+				this.tournament);
+		this.setLayoutAlgorithm(layout);
+	}
+
+	/**
+	 * Returns this {@code BracketView}'s {@code Tournament}.
+	 * 
+	 * @return this {@code BracketView}'s {@code Tournament}.
+	 */
+	public Tournament getTournament() {
+		return this.tournament;
+	}
+
+	/**
 	 * Sets the {@code BracketViewLayout} used to layout components in this
 	 * {@code BracketView}.
 	 * 
@@ -202,13 +235,14 @@ public class BracketView extends ViewGroup {
 	 *            the {@code BracketViewLayout} used to layout components in
 	 *            this {@code BracketView}.
 	 */
-	public void setLayoutAlgorithm(BracketViewLayout layout) {
+	protected void setLayoutAlgorithm(BracketViewLayout layout) {
 		if (this.layout != null) {
 			this.layout.setBracketView(null);
 		}
 		this.layout = layout;
 		this.layout.setBracketView(this);
 		this.removeAllViews();
+		this.updateLayout(true);
 		this.invalidate();
 	}
 
@@ -219,7 +253,7 @@ public class BracketView extends ViewGroup {
 	 * @return the {@code BracketViewLayout} used to layout components in this
 	 *         {@code BracketView}.
 	 */
-	public BracketViewLayout getLayoutAlgorithm() {
+	protected BracketViewLayout getLayoutAlgorithm() {
 		return this.layout;
 	}
 
@@ -258,6 +292,16 @@ public class BracketView extends ViewGroup {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		this.updateLayout(changed);
+	}
+
+	/**
+	 * Runs the layout manager.
+	 * 
+	 * @param changed
+	 *            whether an external change has occurred.
+	 */
+	protected void updateLayout(boolean changed) {
 		if (this.layout != null) {
 			this.layout.onLayout(changed);
 		}
