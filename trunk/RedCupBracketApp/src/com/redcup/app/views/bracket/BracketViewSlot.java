@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.redcup.app.model.Bracket;
-import com.redcup.app.model.Participant;
 import com.redcup.app.model.Bracket.OnParticipantChangedEvent;
 
 /**
@@ -23,8 +22,8 @@ public class BracketViewSlot extends ViewGroup {
 	private Bracket.OnParticipantChangedListener participantChangedListener = new Bracket.OnParticipantChangedListener() {
 		@Override
 		public void onParticipantChanged(OnParticipantChangedEvent event) {
-			BracketViewSlot.this.updateText_ParticipantName();
-			BracketViewSlot.this.updateButtons_AdvanceDemote();
+			BracketViewSlot.this.updateSlotButton();
+			BracketViewSlot.this.updateAdvanceDemoteButtons();
 		}
 	};
 
@@ -40,7 +39,7 @@ public class BracketViewSlot extends ViewGroup {
 			BracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
 			BracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
 			BracketViewSlot.this.background.setAlpha(255);
-			BracketViewSlot.this.updateButtons_AdvanceDemote();
+			BracketViewSlot.this.updateAdvanceDemoteButtons();
 		}
 	};
 
@@ -51,7 +50,7 @@ public class BracketViewSlot extends ViewGroup {
 			if (b != null && b.getParent() != null) {
 				b.getParent().setParticipant(b.getParticipant());
 			}
-			BracketViewSlot.this.updateButtons_AdvanceDemote();
+			BracketViewSlot.this.updateAdvanceDemoteButtons();
 		}
 	};
 
@@ -62,7 +61,7 @@ public class BracketViewSlot extends ViewGroup {
 			if (b != null) {
 				b.setParticipant(null);
 			}
-			BracketViewSlot.this.updateButtons_AdvanceDemote();
+			BracketViewSlot.this.updateAdvanceDemoteButtons();
 		}
 	};
 
@@ -280,6 +279,7 @@ public class BracketViewSlot extends ViewGroup {
 			this.promoteButton.setVisibility(INVISIBLE);
 			this.background.setAlpha(0);
 		}
+		this.invalidate();
 	}
 
 	/**
@@ -462,10 +462,10 @@ public class BracketViewSlot extends ViewGroup {
 		}
 
 		// Update text
-		this.updateText_ParticipantName();
+		this.updateSlotButton();
 
 		// Update button statuses
-		this.updateButtons_AdvanceDemote();
+		this.updateAdvanceDemoteButtons();
 	}
 
 	/**
@@ -479,26 +479,43 @@ public class BracketViewSlot extends ViewGroup {
 		return this.bracket;
 	}
 
-	protected void updateText_ParticipantName() {
+	protected void updateSlotButton() {
 		if (this.bracket != null && this.bracket.getParticipant() != null) {
 			this.slotButton.setText(this.bracket.getParticipant().getName());
+			this.slotButton.setEnabled(true);
 		} else {
 			this.slotButton.setText(null);
+			this.slotButton.setEnabled(false);
+			this.reset();
 		}
 	}
 
-	protected void updateButtons_AdvanceDemote() {
+	protected void updateAdvanceDemoteButtons() {
 		if (this.bracket == null) {
 			this.promoteButton.setEnabled(false);
 			this.demoteButton.setEnabled(false);
 		} else {
-			this.promoteButton.setEnabled(this.bracket.getParent() != null
-					&& this.bracket.getParticipant() != null
-					&& this.bracket.getParent().getParticipant() == null);
-			this.demoteButton
-					.setEnabled((this.bracket.getRight() != null || this.bracket
-							.getLeft() != null)
-							&& this.bracket.getParticipant() != null);
+			Bracket parent = this.bracket.getParent();
+			Bracket right = this.bracket.getRight();
+			Bracket left = this.bracket.getLeft();
+			Bracket siblingRight = null;
+			Bracket siblingLeft = null;
+			if (parent != null) {
+				siblingRight = parent.getRight();
+				siblingLeft = parent.getLeft();
+			}
+
+			this.promoteButton
+					.setEnabled(parent != null
+							&& bracket.getParticipant() != null
+							&& parent.getParticipant() == null
+							&& (siblingRight != null && siblingRight
+									.getParticipant() != null)
+							&& (siblingLeft != null && siblingLeft
+									.getParticipant() != null));
+			this.demoteButton.setEnabled((right != null || left != null)
+					&& bracket.getParticipant() != null
+					&& (parent == null || parent.getParticipant() == null));
 		}
 	}
 

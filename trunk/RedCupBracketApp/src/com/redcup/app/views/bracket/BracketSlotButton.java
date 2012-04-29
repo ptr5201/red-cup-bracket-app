@@ -17,8 +17,11 @@ import android.view.View;
  */
 public class BracketSlotButton extends View {
 
-	private static final int DEFAULT_COLOR = Color.argb(255, 255, 255, 255);
-	private static final int SELECTED_COLOR = Color.argb(255, 255, 255, 0);
+	private static final int DEFAULT_FILL_COLOR = Color
+			.argb(255, 255, 255, 255);
+	private static final int SELECTED_FILL_COLOR = Color.argb(255, 255, 255, 0);
+	private static final int DISABLED_FILL_COLOR = Color.argb(255, 160, 160,
+			160);
 
 	private static final int DEFAULT_TEXT_SIZE = 32;
 
@@ -106,6 +109,13 @@ public class BracketSlotButton extends View {
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setStyle(Style.FILL);
+		int fillColor = DEFAULT_FILL_COLOR;
+		if (this.isSelected()) {
+			fillColor = SELECTED_FILL_COLOR;
+		}
+		if (!this.isEnabled()) {
+			fillColor = DISABLED_FILL_COLOR;
+		}
 
 		// Draw border
 		paint.setColor(Color.BLACK);
@@ -114,7 +124,7 @@ public class BracketSlotButton extends View {
 				CORNER_RADIUS, CORNER_RADIUS, paint);
 
 		// Draw background
-		paint.setColor(this.isSelected() ? SELECTED_COLOR : DEFAULT_COLOR);
+		paint.setColor(fillColor);
 		canvas.drawRoundRect(
 				new RectF(BORDER_THICKNESS, BORDER_THICKNESS, this.getWidth()
 						- BORDER_THICKNESS, this.getHeight() - BORDER_THICKNESS),
