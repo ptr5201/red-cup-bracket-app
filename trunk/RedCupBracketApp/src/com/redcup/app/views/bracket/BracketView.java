@@ -157,7 +157,10 @@ public class BracketView extends ViewGroup {
 	 * constructors.
 	 */
 	private void initialize() {
+		// Configure background
 		this.setBackgroundColor(Color.WHITE);
+
+		// Configure scroll bars
 		this.setScrollContainer(true);
 		this.setScrollbarFadingEnabled(true);
 		this.setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
@@ -166,27 +169,8 @@ public class BracketView extends ViewGroup {
 		// this.setVerticalScrollBarEnabled(true);
 		// this.setHorizontalScrollBarEnabled(true);
 
+		// Configure gesture listener
 		gestures = new GestureDetector(this.getContext(), new GestureListener());
-
-		// TESTING CODE BEYOND THIS POINT
-
-		List<Participant> entrants = new ArrayList<Participant>();
-		entrants.add(new Participant("Player 1"));
-		entrants.add(new Participant("Player 2"));
-		entrants.add(new Participant("Player 3"));
-		entrants.add(new Participant("Player 4"));
-		entrants.add(new Participant("Player 5"));
-		entrants.add(new Participant("Player 6"));
-		entrants.add(new Participant("Player 7"));
-		// entrants.add(new Participant("Player 8"));
-		SingleEliminationBracketStrategy model = new SingleEliminationBracketStrategy(
-				entrants);
-		SingleEliminationLayout layout = new SingleEliminationLayout(this,
-				model);
-		this.setLayoutAlgorithm(layout);
-		// SingleEliminationLayout layout = new SingleEliminationLayout(this,
-		// null);
-		// this.setLayoutAlgorithm(layout);
 	}
 
 	/**

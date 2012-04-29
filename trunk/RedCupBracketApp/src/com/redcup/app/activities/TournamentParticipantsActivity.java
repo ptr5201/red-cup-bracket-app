@@ -35,10 +35,10 @@ public class TournamentParticipantsActivity extends Activity {
 		String tournamentID = getIntent().getStringExtra(EXTRA_TOURNAMENT_ID);
 		this.tournament = TournamentManager.getTournament(tournamentID);
 
-		View content = findViewById(R.layout.tournamentparticipants);
-		if (content != null) {
-			BracketView bracketView = (BracketView) content
-					.findViewWithTag("bracketview");
+		// Assign tournament to BracketView
+		BracketView bracketView = (BracketView) this
+				.findViewById(R.id.bracketView);
+		if (bracketView != null) {
 			bracketView.setTournament(this.tournament);
 		}
 	}

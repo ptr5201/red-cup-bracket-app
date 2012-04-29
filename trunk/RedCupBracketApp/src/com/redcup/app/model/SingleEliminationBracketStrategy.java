@@ -126,8 +126,11 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 
 	@Override
 	public List<List<Bracket>> getRoundStructure() {
-		List<List<Bracket>> roundStructure = new ArrayList<List<Bracket>>();
-		this.getRoundStructure_Recurse(roundStructure, this.head);
+		List<List<Bracket>> roundStructure = null;
+		if (this.head != null) {
+			roundStructure = new ArrayList<List<Bracket>>();
+			this.getRoundStructure_Recurse(roundStructure, this.head);
+		}
 		return roundStructure;
 	}
 

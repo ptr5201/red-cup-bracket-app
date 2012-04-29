@@ -1,5 +1,6 @@
 package com.redcup.app.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -88,13 +89,20 @@ public class CreateTournamentActivity extends Activity {
 		// Start to set up a new tournament
 		Tournament t = new Tournament();
 		t.setName(nameField.getText().toString());
+
+		// TODO: Remove test code
+		List<Participant> p = new ArrayList<Participant>();
+		for (int i = 1; i <= 7; i++) {
+			p.add(new Participant("Player " + i));
+		}
+		t.setParticipants(p);
 		TournamentManager.addTournament(t);
 
 		// TODO: determine how to set bracket strategy based on bracket type
 		switch (tournamentBracketType) {
 		case SINGLE_ELIMINATION:
-			t.setStrategy(new SingleEliminationBracketStrategy(
-					(List<Participant>) null));
+			t.setStrategy(new SingleEliminationBracketStrategy(t
+					.getParticipants()));
 			break;
 		case DOUBLE_ELIMINATION:
 			// 2 * 0 = 0
@@ -103,8 +111,8 @@ public class CreateTournamentActivity extends Activity {
 			// 2 = 1
 			// Therefore, single elimination = double elimination, right?
 			// TODO: Fix this once we implement a model for double elimination
-			t.setStrategy(new SingleEliminationBracketStrategy(
-					(List<Participant>) null));
+			t.setStrategy(new SingleEliminationBracketStrategy(t
+					.getParticipants()));
 			break;
 		}
 
