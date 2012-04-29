@@ -92,7 +92,12 @@ public class CreateTournamentActivity extends Activity {
 
 		// TODO: Remove test code
 		List<Participant> p = new ArrayList<Participant>();
-		for (int i = 1; i <= 7; i++) {
+		int numParticipants = 7;
+		String countText = participantCountField.getText().toString();
+		if (countText != null && countText.length() > 0) {
+			numParticipants = Integer.parseInt(countText);
+		}
+		for (int i = 1; i <= numParticipants; i++) {
 			p.add(new Participant("Player " + i));
 		}
 		t.setParticipants(p);
