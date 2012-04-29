@@ -179,7 +179,6 @@ public class BracketView extends ViewGroup {
 				slot.reset();
 			}
 		}
-		this.invalidate();
 	}
 
 	/**
