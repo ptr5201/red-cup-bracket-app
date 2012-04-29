@@ -36,15 +36,15 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	/**
 	 * Creates a new {@code SingleEliminationLayout}.
 	 * 
-	 * @param context
+	 * @param bracketView
 	 *            the {@code BracketView} that this object manages.
 	 * @param model
 	 *            the {@code SingleEliminationBracketStrategy} that acts as this
 	 *            object's internal model.
 	 */
-	public SingleEliminationLayout(BracketView context,
+	public SingleEliminationLayout(BracketView bracketView,
 			SingleEliminationBracketStrategy model) {
-		super(context);
+		super(bracketView);
 		this.model = model;
 	}
 

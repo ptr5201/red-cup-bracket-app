@@ -28,7 +28,7 @@ public final class R {
         public static final int addParticipantButton=0x7f070021;
         public static final int bracketTypeLabel=0x7f070002;
         public static final int bracketTypeSpinner=0x7f070003;
-        public static final int bracketViewSlot=0x7f070020;
+        public static final int bracketView=0x7f070020;
         public static final int button1=0x7f07001a;
         public static final int checkBox1=0x7f07001e;
         public static final int confirmButton1=0x7f070019;

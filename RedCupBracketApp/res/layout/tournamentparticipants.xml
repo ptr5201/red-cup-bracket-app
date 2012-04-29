@@ -8,14 +8,14 @@
         android:id="@+id/tournamentParticipantsName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bracketViewSlot"
+        android:layout_alignLeft="@+id/bracketView"
         android:layout_alignParentTop="true"
         android:text="@string/tournamentSetup"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#ffffff00" />
-
+
     <com.redcup.app.views.bracket.BracketView
-        android:id="@+id/bracketViewSlot"
+        android:id="@+id/bracketView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
