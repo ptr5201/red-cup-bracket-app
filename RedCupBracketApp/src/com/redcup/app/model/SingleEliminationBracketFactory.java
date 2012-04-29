@@ -63,7 +63,10 @@ public class SingleEliminationBracketFactory {
 		for(int i = 0; i + 1 < prevRound.size(); i += 2) {
 			Bracket right = prevRound.get(i);
 			Bracket left = prevRound.get(i + 1);
-			round.add(new Bracket(left, right));
+			Bracket newBracket = new Bracket(left, right);
+			round.add(newBracket);
+			right.setParent(newBracket);
+			left.setParent(newBracket);
 		}
 		
 		// Give remaining players (if any) a bye
@@ -108,7 +111,10 @@ public class SingleEliminationBracketFactory {
 		for(int i = prevRound.size() - 2; i >= 0; i -= 2) {
 			Bracket right = prevRound.get(i);
 			Bracket left = prevRound.get(i + 1);
-			round.add(0, new Bracket(left, right));
+			Bracket newBracket = new Bracket(left, right);
+			round.add(newBracket);
+			right.setParent(newBracket);
+			left.setParent(newBracket);
 		}
 		
 		// Give remaining players (if any) a bye
@@ -122,18 +128,5 @@ public class SingleEliminationBracketFactory {
 			return createBracketStructure_Recurse_BiasRight(round);
 		}
 		return createBracketStructure_Recurse_BiasLeft(round);
-	}
-	
-	public static void main(String args[]) {
-		List<Participant> entrants = new ArrayList<Participant>();
-		entrants.add(new Participant("P1"));
-		entrants.add(new Participant("P2"));
-		entrants.add(new Participant("P3"));
-		entrants.add(new Participant("P4"));
-//		entrants.add(new Participant("P5"));
-//		entrants.add(new Participant("P6"));
-		
-		Bracket head = createBracketStructure(entrants);
-		System.out.println(head);
 	}
 }
