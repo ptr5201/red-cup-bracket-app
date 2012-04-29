@@ -188,17 +188,4 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 		winBracket.setParticipant(participant);
 	}
 	
-	@Deprecated
-	private Bracket parentLookupRecurse(Bracket bracket, Participant element) {
-		if (element == bracket.getLeft().getParticipant() 
-		|| element == bracket.getRight().getParticipant()) return bracket;
-
-		Bracket ret;
-		ret = lookupRecurse(bracket.getLeft(), element);
-		if (ret != null) return ret;
-		ret = lookupRecurse(bracket.getRight(), element);
-		if (ret != null) return ret;
-		return null;
-	}
-
 }
