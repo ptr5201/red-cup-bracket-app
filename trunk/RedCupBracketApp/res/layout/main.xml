@@ -2,39 +2,37 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mainMenuScroll"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:padding="10.0dip" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/createTournament"
             android:layout_width="match_parent"
             android:layout_height="54dip"
             android:layout_marginTop="@dimen/mainMenuButton_topMargin"
             android:background="@android:drawable/list_selector_background"
-            android:onClick="switchActivityScreen" >
+            android:onClick="switchActivityScreen"
+            android:weightSum="1.0" >
 
             <ImageView
                 android:id="@+id/createTournamentImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="40dp"
+                android:layout_weight="0.35"
                 android:src="@drawable/create_tournament" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/createTournamentImage"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="14dp"
+                android:layout_weight="0.65"
                 android:text="@string/createTournament"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="wrap_content"
@@ -42,32 +40,29 @@
             android:layout_marginTop="10dp"
             android:background="#ffffff00" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/loadTournament"
             android:layout_width="match_parent"
             android:layout_height="54dip"
             android:layout_marginTop="@dimen/mainMenuButton_topMargin"
             android:background="@android:drawable/list_selector_background"
-            android:onClick="switchActivityScreen" >
+            android:onClick="switchActivityScreen"
+            android:weightSum="1.0" >
 
             <ImageView
                 android:id="@+id/loadTournamentImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="42dp"
+                android:layout_weight="0.35"
                 android:src="@drawable/load_tournament" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/loadTournamentImage"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="29dp"
+                android:layout_weight="0.65"
                 android:text="@string/loadTournament"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="wrap_content"
@@ -75,32 +70,29 @@
             android:layout_marginTop="10dp"
             android:background="#ffffff00" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/pastTournaments"
             android:layout_width="match_parent"
             android:layout_height="54dip"
             android:layout_marginTop="@dimen/mainMenuButton_topMargin"
             android:background="@android:drawable/list_selector_background"
-            android:onClick="switchActivityScreen" >
+            android:onClick="switchActivityScreen"
+            android:weightSum="1.0" >
 
             <ImageView
                 android:id="@+id/pastTournamentsImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="40dp"
+                android:layout_weight="0.35"
                 android:src="@drawable/view_history" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pastTournamentsImage"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="26dp"
+                android:layout_weight="0.65"
                 android:text="@string/pastTournaments"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="wrap_content"
@@ -108,32 +100,29 @@
             android:layout_marginTop="10dp"
             android:background="#ffffff00" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/participants"
             android:layout_width="match_parent"
             android:layout_height="54dip"
             android:layout_marginTop="@dimen/mainMenuButton_topMargin"
             android:background="@android:drawable/list_selector_background"
-            android:onClick="switchActivityScreen" >
+            android:onClick="switchActivityScreen"
+            android:weightSum="1.0" >
 
             <ImageView
                 android:id="@+id/participantManagerImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="40dp"
+                android:layout_weight="0.35"
                 android:src="@drawable/participant_manager" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/participantManagerImage"
-                android:layout_marginLeft="36dp"
-                android:layout_toRightOf="@+id/participantManagerImage"
+                android:layout_weight="0.65"
                 android:text="@string/participants"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <View
             android:layout_width="wrap_content"
@@ -141,32 +130,29 @@
             android:layout_marginTop="10dp"
             android:background="#ffffff00" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/help"
             android:layout_width="match_parent"
             android:layout_height="54dip"
             android:layout_marginTop="@dimen/mainMenuButton_topMargin"
             android:background="@android:drawable/list_selector_background"
-            android:onClick="switchActivityScreen" >
+            android:onClick="switchActivityScreen"
+            android:weightSum="1.0" >
 
             <ImageView
                 android:id="@+id/helpImage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="40dp"
+                android:layout_weight="0.35"
                 android:src="@drawable/help_menu" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/helpImage"
-                android:layout_marginLeft="37dp"
-                android:layout_toRightOf="@+id/helpImage"
+                android:layout_weight="0.65"
                 android:text="@string/help"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
