@@ -43,17 +43,18 @@ public class RedCupDB{
 		}
 	}
 	
-	public void deleteParticipant(String name){	
-		db.delete(Constants.PARTICIPANT_TABLE, Constants.PARTICIPANT_NAME+"=?", new String [] { name });
+	public void deleteParticipant(int id){	
+
+		db.delete(Constants.PARTICIPANT_TABLE, Constants.KEY_ID+"=?", new String [] { Integer.toString(id) });
 	}
 	
-	public void editParticipant(String newName, String oldName){
+	public void editParticipant(String newName, int id){
 		ContentValues content = new ContentValues();
 		content.put("name", newName);
-		db.update(Constants.PARTICIPANT_TABLE, content, Constants.PARTICIPANT_NAME+"=?", new String [] { oldName });
+		db.update(Constants.PARTICIPANT_TABLE, content, Constants.KEY_ID+"=?", new String [] { Integer.toString(id) });
 	}
 	
-	public Cursor getParticipants(){
+	public Cursor getCursor(){
 		Cursor c = db.query(Constants.PARTICIPANT_TABLE, null, null, null, null, null, null);
 		return c;
 	}

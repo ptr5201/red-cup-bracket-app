@@ -20,6 +20,7 @@ public class EditParticipantActivity extends Activity {
 	private RedCupDB db;
 	private EditText nameField;
 	private Button saveButton;
+	private int pos;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,6 +28,7 @@ public class EditParticipantActivity extends Activity {
 		saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setEnabled(false);
 		
+		pos = this.getIntent().getIntExtra("pos", 0);
 		
 		nameField = (EditText) findViewById(R.id.editNameEditText);
 		nameField.setText(this.getIntent().getStringExtra("name"));
@@ -68,7 +70,7 @@ public class EditParticipantActivity extends Activity {
 		String newName = nameField.getText().toString();
 		
 		db.open();
-		db.editParticipant(newName, oldName);
+		db.editParticipant(newName, pos);
 		db.close();
 		
 		getIntent().putExtra("name", newName);
