@@ -91,7 +91,7 @@ public class ParticipantSelectorActivity extends Activity {
 		
 		public void getdata(){
 			participants.clear();
-			Cursor c = db.getParticipants();
+			Cursor c = db.getCursor();
 			startManagingCursor(c);
 			if(c.moveToFirst()){
 				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));

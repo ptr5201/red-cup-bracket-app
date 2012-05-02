@@ -66,7 +66,9 @@ public class ParticipantManagerActivity extends Activity {
 	protected boolean onLongListItemClick(View v, int pos, long id) {
 	    Log.i(TAG, "onLongListItemClick id=" + pos);
 	    db.open();
-	    db.deleteParticipant(participantAdapter.participants.get(pos).getName());
+
+	    db.deleteParticipant(getKeyID(pos));
+    
 	    participantAdapter.getdata();
 	    participantAdapter.notifyDataSetChanged();
 	    db.close();
@@ -78,6 +80,10 @@ public class ParticipantManagerActivity extends Activity {
 	    String name = participantAdapter.participants.get(pos).getName();
 	    Intent editParticipant = new Intent(this, EditParticipantActivity.class);
 	    editParticipant.putExtra("name",name);
+	    db.open();
+	    int keyid = getKeyID(pos);
+	    editParticipant.putExtra("pos", keyid);
+	    db.close();
 		startActivity(editParticipant);
 	}
 	
@@ -113,6 +119,18 @@ public class ParticipantManagerActivity extends Activity {
 		}
 	}
 	
+	private int getKeyID(int pos){
+	    Cursor c = db.getCursor();
+	    if (c.moveToPosition(pos)){
+	        int keyid = c.getInt(c.getColumnIndex(Constants.KEY_ID));
+	        return keyid;
+	    }
+	    else{
+	    	return 0;
+	    }
+	    
+	}
+	
 	private class ParticipantAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		public ArrayList<Participant> participants;
@@ -125,7 +143,7 @@ public class ParticipantManagerActivity extends Activity {
 		
 		public void getdata(){
 			participants.clear();
-			Cursor c = db.getParticipants();
+			Cursor c = db.getCursor();
 			startManagingCursor(c);
 			if(c.moveToFirst()){
 				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
