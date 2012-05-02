@@ -7,7 +7,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.redcup.app.R;
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.Bracket.OnParticipantChangedEvent;
 
@@ -128,9 +130,9 @@ public class BracketViewSlot extends ViewGroup {
 
 	// Child components
 	private BracketSlotButton slotButton;
-	private Button removeButton;
-	private Button demoteButton;
-	private Button promoteButton;
+	private ImageButton removeButton;
+	private ImageButton demoteButton;
+	private ImageButton promoteButton;
 	private PaintDrawable background = new PaintDrawable(Color.LTGRAY);
 
 	// The collapsed dimensions of this control
@@ -202,22 +204,22 @@ public class BracketViewSlot extends ViewGroup {
 		this.addView(slotButton);
 
 		// Create the "remove" button
-		this.removeButton = new Button(context);
-		this.removeButton.setText("X");
+		this.removeButton = new ImageButton(context);
+		this.removeButton.setImageResource(R.drawable.red_x);
 		this.removeButton.setVisibility(INVISIBLE);
 		this.addView(this.removeButton);
 
 		// Create the "demote" button
-		this.demoteButton = new Button(context);
-		this.demoteButton.setText("<-");
+		this.demoteButton = new ImageButton(context);
+		this.demoteButton.setImageResource(R.drawable.orange_arrow);
 		this.demoteButton.setEnabled(false);
 		this.demoteButton.setVisibility(INVISIBLE);
 		this.demoteButton.setOnClickListener(this.demoteButtonListener);
 		this.addView(this.demoteButton);
 
 		// Create the "promote" button
-		this.promoteButton = new Button(context);
-		this.promoteButton.setText("---->");
+		this.promoteButton = new ImageButton(context);
+		this.promoteButton.setImageResource(R.drawable.green_checkmark);
 		this.promoteButton.setEnabled(false);
 		this.promoteButton.setVisibility(INVISIBLE);
 		this.promoteButton.setOnClickListener(this.promoteButtonListener);
