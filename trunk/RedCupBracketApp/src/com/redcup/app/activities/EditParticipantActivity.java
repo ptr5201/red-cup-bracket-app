@@ -32,6 +32,7 @@ public class EditParticipantActivity extends Activity {
 		
 		nameField = (EditText) findViewById(R.id.editNameEditText);
 		nameField.setText(this.getIntent().getStringExtra("name"));
+		nameField.setSelection(this.getIntent().getStringExtra("name").length());
 		nameField.addTextChangedListener(new TextWatcher(){
 
 			@Override
