@@ -65,8 +65,7 @@ public class EditParticipantActivity extends Activity {
 			Log.e(TAG, "Participant must have a name");
 			return;
 		}
-		
-		String oldName = this.getIntent().getStringExtra("name");
+
 		String newName = nameField.getText().toString();
 		
 		db.open();
