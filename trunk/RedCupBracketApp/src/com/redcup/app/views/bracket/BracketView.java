@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.redcup.app.model.Tournament;
+import com.redcup.app.model.Tournament.ParticipantChangedEvent;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
 
@@ -108,6 +109,16 @@ public class BracketView extends ViewGroup {
 	private Tournament tournament = null;
 
 	/**
+	 * Used to handle changes in the list of participants in the Tournament.
+	 */
+	private Tournament.ParticipantChangedListener tournamentParticipantChangedListener = new Tournament.ParticipantChangedListener() {
+		@Override
+		public void onParticipantListChanged(ParticipantChangedEvent event) {
+			BracketView.this.updateLayout(true);
+		}
+	};
+
+	/**
 	 * Creates a new {@code BracketView}.
 	 * 
 	 * @param context
@@ -188,8 +199,22 @@ public class BracketView extends ViewGroup {
 	 *            the {@code Tournament} for this {@code BracketView} to manage.
 	 */
 	public void setTournament(Tournament tournament) {
-		// TODO: Register/unregister event listeners
+		// Remove listeners from existing tournament
+		if (this.tournament != null) {
+			this.tournament
+					.removeOnParticipantListChangedListener(this.tournamentParticipantChangedListener);
+		}
+
+		// Assign tournament
 		this.tournament = tournament;
+
+		// Register listeners with new tournament
+		if (this.tournament != null) {
+			this.tournament
+					.addOnParticipantListChangedListener(this.tournamentParticipantChangedListener);
+		}
+
+		// Create and set the corresponding layout manaager
 		BracketViewLayout layout = BracketViewLayoutFactory.createLayout(this,
 				this.tournament);
 		this.setLayoutAlgorithm(layout);
