@@ -36,6 +36,7 @@ public class BracketSlotButton extends View {
 	private static final String SIZING_SAMPLE_TEXT = "Ty";
 
 	private String text = null;
+	private float scale = 1.0f;
 
 	/**
 	 * Creates a new {@code BracketSlotButton}.
@@ -104,6 +105,19 @@ public class BracketSlotButton extends View {
 		return this.text;
 	}
 
+	public void setScale(float scale) {
+		this.scale = scale;
+		this.invalidate();
+	}
+
+	public float getScale() {
+		return this.scale;
+	}
+
+	protected float applyScale(float dimension) {
+		return this.scale * dimension;
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		Paint paint = new Paint();
@@ -116,28 +130,37 @@ public class BracketSlotButton extends View {
 		if (!this.isEnabled()) {
 			fillColor = DISABLED_FILL_COLOR;
 		}
+		int scaledCornerRadius = Math.round(this.applyScale(CORNER_RADIUS));
+		int scaledTextMarginTop = Math.round(this.applyScale(TOP_TEXT_MARGIN));
+		int scaledTextMarginLeft = Math
+				.round(this.applyScale(LEFT_TEXT_MARGIN));
+		int scaledTextMarginRight = Math.round(this
+				.applyScale(RIGHT_TEXT_MARGIN));
+		int scaledTextMarginBottom = Math.round(this
+				.applyScale(BOTTOM_TEXT_MARGIN));
 
 		// Draw border
 		paint.setColor(Color.BLACK);
 		canvas.drawRoundRect(
 				new RectF(0, 0, this.getWidth(), this.getHeight()),
-				CORNER_RADIUS, CORNER_RADIUS, paint);
+				scaledCornerRadius, scaledCornerRadius, paint);
 
 		// Draw background
 		paint.setColor(fillColor);
 		canvas.drawRoundRect(
 				new RectF(BORDER_THICKNESS, BORDER_THICKNESS, this.getWidth()
 						- BORDER_THICKNESS, this.getHeight() - BORDER_THICKNESS),
-				CORNER_RADIUS - BORDER_THICKNESS, CORNER_RADIUS
+				scaledCornerRadius - BORDER_THICKNESS, scaledCornerRadius
 						- BORDER_THICKNESS, paint);
 
 		// Draw label
 		if (this.text != null) {
 			canvas.save();
 			// Configure paint
-			RectF textAreaBounds = new RectF(LEFT_TEXT_MARGIN, TOP_TEXT_MARGIN,
-					this.getWidth() - RIGHT_TEXT_MARGIN, this.getHeight()
-							- BOTTOM_TEXT_MARGIN);
+			RectF textAreaBounds = new RectF(scaledTextMarginLeft,
+					scaledTextMarginTop, this.getWidth()
+							- scaledTextMarginRight, this.getHeight()
+							- scaledTextMarginBottom);
 			Paint textPaint = new Paint(paint);
 			canvas.clipRect(textAreaBounds);
 			textPaint.setColor(Color.BLACK);
