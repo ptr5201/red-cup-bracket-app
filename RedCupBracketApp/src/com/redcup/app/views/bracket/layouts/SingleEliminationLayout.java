@@ -17,6 +17,7 @@ import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListener;
+import com.redcup.app.views.bracket.SetupBracketViewSlot;
 
 /**
  * Implementation of {@code BracketViewLayout} that is used to visually
@@ -73,7 +74,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 		if (slot == null) {
 			// Create the BracketSlot
-			slot = new BracketViewSlot(this.getBracketView().getContext());
+			slot = new SetupBracketViewSlot(this.getBracketView().getContext());
 
 			// Assign the bracket to the BracketViewSlot
 			slot.setBracket(bracket);
