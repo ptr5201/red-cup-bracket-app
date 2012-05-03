@@ -7,8 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import android.graphics.Rect;
+import android.view.View;
+
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
+import com.redcup.app.views.bracket.BracketConnector;
 import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
@@ -24,6 +28,12 @@ public class SingleEliminationLayout extends BracketViewLayout {
 
 	private final SingleEliminationBracketStrategy model;
 	private final Map<Bracket, BracketViewSlot> bracketViewSlots = new HashMap<Bracket, BracketViewSlot>();
+
+	/**
+	 * Used to keep track of the bracket objects that have been used; after
+	 * brackets have been added to the system, they are removed if they are not
+	 * on this list
+	 */
 	private final Collection<Bracket> usedBrackets = new HashSet<Bracket>();
 
 	private final OnExpandedStateChangedListener expandedStateChangedListener = new OnExpandedStateChangedListener() {
@@ -172,6 +182,18 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		// Update slot's positioning
 		slot.layout(hPos, avgTop, hPos + slot.getScaledExpandedWidth(), avgTop
 				+ slot.getScaledExpandedHeight());
+
+		// TODO: Remove kludgey connector code
+		// Create and add a BracketConnector
+		BracketConnector connector = new BracketConnector(this.getBracketView()
+				.getContext());
+		connector.addLeftBracket(leftSlot);
+		connector.addLeftBracket(rightSlot);
+		connector.addRightBracket(slot);
+		this.getBracketView().addView(connector, 0);
+		Rect connectorBounds = connector.computeBounds();
+		connector.layout(connectorBounds.left, connectorBounds.top,
+				connectorBounds.right, connectorBounds.bottom);
 	}
 
 	@Override
@@ -181,9 +203,15 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			int requiredHeight = 0;
 			int requiredWidth = 0;
 
-			// Used to keep track of the bracket objects that have been
-			// used; after brackets have been added to the system, they are
-			// removed if they are not on this list
+			// TODO: Remove kludgey connector code
+			// Remove all connectors from BracketView
+			for (int i = 0; i < this.getBracketView().getChildCount(); i++) {
+				View child = this.getBracketView().getChildAt(i);
+				if (child instanceof BracketConnector) {
+					this.getBracketView().removeViewAt(i);
+					i--;
+				}
+			}
 
 			// Get the round structure, if possible
 			List<List<Bracket>> roundStructure = null;

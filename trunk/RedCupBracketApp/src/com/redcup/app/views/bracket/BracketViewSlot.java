@@ -6,7 +6,6 @@ import android.graphics.drawable.PaintDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.redcup.app.R;
