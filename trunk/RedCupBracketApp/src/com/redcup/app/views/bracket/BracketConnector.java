@@ -142,7 +142,7 @@ public class BracketConnector extends View {
 		for (BracketViewSlot b : this.rightBrackets) {
 			// Compute the start of this line
 			int startX = b.getLeft() - this.getLeft();
-			int startY = b.getTop() + b.getCollapsedHeight() / 2
+			int startY = b.getTop() + b.getScaledCollapsedHeight() / 2
 					- this.getTop();
 			canvas.drawLine(startX, startY, centerX, startY, paint);
 
