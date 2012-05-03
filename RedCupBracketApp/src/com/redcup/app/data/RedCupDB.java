@@ -44,7 +44,6 @@ public class RedCupDB{
 	}
 	
 	public void deleteParticipant(int id){	
-
 		db.delete(Constants.PARTICIPANT_TABLE, Constants.KEY_ID+"=?", new String [] { Integer.toString(id) });
 	}
 	

@@ -1,7 +1,5 @@
 package com.redcup.app.activities;
 
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -66,8 +64,9 @@ public class ParticipantManagerActivity extends Activity {
 	protected boolean onLongListItemClick(View v, int pos, long id) {
 	    Log.i(TAG, "onLongListItemClick id=" + pos);
 	    db.open();
-
-	    db.deleteParticipant(getKeyID(pos));
+	    
+	    int keyid = participantAdapter.participants.get(pos).getId();
+	    db.deleteParticipant(keyid);
     
 	    participantAdapter.getdata();
 	    participantAdapter.notifyDataSetChanged();
@@ -81,7 +80,7 @@ public class ParticipantManagerActivity extends Activity {
 	    Intent editParticipant = new Intent(this, EditParticipantActivity.class);
 	    editParticipant.putExtra("name",name);
 	    db.open();
-	    int keyid = getKeyID(pos);
+	    int keyid = participantAdapter.participants.get(pos).getId();
 	    editParticipant.putExtra("pos", keyid);
 	    db.close();
 		startActivity(editParticipant);
@@ -119,18 +118,6 @@ public class ParticipantManagerActivity extends Activity {
 		}
 	}
 	
-	private int getKeyID(int pos){
-	    Cursor c = db.getCursor();
-	    if (c.moveToPosition(pos)){
-	        int keyid = c.getInt(c.getColumnIndex(Constants.KEY_ID));
-	        return keyid;
-	    }
-	    else{
-	    	return 0;
-	    }
-	    
-	}
-	
 	private class ParticipantAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		public ArrayList<Participant> participants;
@@ -149,12 +136,14 @@ public class ParticipantManagerActivity extends Activity {
 				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
 			
 				Participant temp = new Participant(name);
+				temp.setId(c.getInt(c.getColumnIndex(Constants.KEY_ID)));
 				participants.add(0, temp);
 			}
 			while(c.moveToNext()){
 				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
 				
 				Participant temp = new Participant(name);
+				temp.setId(c.getInt(c.getColumnIndex(Constants.KEY_ID)));
 				participants.add(0, temp);
 			}
 			db.close();
@@ -203,11 +192,12 @@ public class ParticipantManagerActivity extends Activity {
 			
 			return v;
 		}
-
+		
 	}
 	
 	public class ViewHolder{
 		Participant participant;
+		int keyid;
 		TextView name;
 	}
 	
