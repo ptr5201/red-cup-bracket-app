@@ -112,6 +112,9 @@ public class BracketConnector extends View {
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
 		paint.setStrokeWidth(4);
+		
+		// Create a reusable path
+		Path path = new Path();
 
 		// TODO: Eliminate hard coded center computation
 		// Compute the center of the view
@@ -129,7 +132,7 @@ public class BracketConnector extends View {
 					- this.getTop();
 
 			// Build the path object
-			Path path = new Path();
+			path.reset();
 			path.moveTo(startX, startY);
 			path.lineTo(centerX, startY);
 			path.lineTo(centerX, centerY);
@@ -147,7 +150,7 @@ public class BracketConnector extends View {
 			canvas.drawLine(startX, startY, centerX, startY, paint);
 
 			// Build the path object
-			Path path = new Path();
+			path.reset();
 			path.moveTo(startX, startY);
 			path.lineTo(centerX, startY);
 			path.lineTo(centerX, centerY);
