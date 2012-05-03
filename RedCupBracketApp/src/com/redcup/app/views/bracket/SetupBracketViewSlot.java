@@ -113,6 +113,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.removeButton = new ImageButton(context);
 		this.removeButton.setImageResource(R.drawable.red_x);
 		this.removeButton.setVisibility(INVISIBLE);
+		// this.removeButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.removeButton);
 
 		// Create the "demote" button
@@ -121,6 +122,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.demoteButton.setEnabled(false);
 		this.demoteButton.setVisibility(INVISIBLE);
 		this.demoteButton.setOnClickListener(this.demoteButtonListener);
+		// this.demoteButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.demoteButton);
 
 		// Create the "promote" button
@@ -129,12 +131,13 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.promoteButton.setEnabled(false);
 		this.promoteButton.setVisibility(INVISIBLE);
 		this.promoteButton.setOnClickListener(this.promoteButtonListener);
+		// this.promoteButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.promoteButton);
 
 		// Background drawable
 		this.background.setBounds(0, 0, this.getExpandedWidth(),
 				this.getCollapsedHeight());
-		this.background.setCornerRadius(20);
+		this.background.setCornerRadius(this.applyScale(20));
 		this.background.setAlpha(0);
 		this.setBackgroundDrawable(this.background);
 	}
@@ -204,6 +207,12 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 	}
 
 	@Override
+	public void setScale(float scale) {
+		super.setScale(scale);
+		this.slotButton.setScale(scale);
+	}
+
+	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		this.slotButton.layout(0, 0, this.applyScale(this.getCollapsedWidth()),
 				this.applyScale(this.getCollapsedHeight()));
@@ -223,8 +232,10 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 				this.applyScale(this.getCollapsedHeight() + 5),
 				this.applyScale(this.getCollapsedWidth() - 5),
 				this.applyScale(this.getExpandedHeight() - 5));
-		this.getBackground().setBounds(0, 0,
+
+		this.background.setBounds(0, 0,
 				this.applyScale(this.getCollapsedWidth()),
 				this.applyScale(this.getCollapsedWidth()));
+		this.background.setCornerRadius(this.applyScale(20));
 	}
 }

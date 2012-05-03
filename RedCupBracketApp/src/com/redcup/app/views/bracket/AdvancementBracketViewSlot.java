@@ -206,6 +206,12 @@ public class AdvancementBracketViewSlot extends BracketViewSlot {
 	}
 
 	@Override
+	public void setScale(float scale) {
+		super.setScale(scale);
+		this.slotButton.setScale(scale);
+	}
+
+	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		this.slotButton.layout(0, 0, this.applyScale(this.getCollapsedWidth()),
 				this.applyScale(this.getCollapsedHeight()));
