@@ -1,0 +1,47 @@
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TextView
+            android:id="@+id/selectParticipantTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/selectParticipant"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ffffff00" />
+
+        <ListView
+            android:id="@+id/selectParticipantListView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_above="@+id/selectParticipantButton1"
+            android:layout_below="@+id/selectParticipantTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp" >
+
+        </ListView>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:onClick="done"
+            android:text="@string/participantSelectorDone" />
+
+        <Button
+            android:id="@+id/selectParticipantButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/button1"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:onClick="createParticipant"
+            android:text="@string/createParticipant" />
+
+    </RelativeLayout>
