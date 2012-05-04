@@ -64,6 +64,8 @@ public class TournamentParticipantsActivity extends Activity {
 				for (Participant part : participantList) {
 					Log.v(TAG, part.getName());
 				}
+				
+				tournament.setParticipants(participantList);
 			}
 		}
 	}
