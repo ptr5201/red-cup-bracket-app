@@ -97,12 +97,14 @@ public class ParticipantSelectorActivity extends Activity {
 				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
 			
 				Participant temp = new Participant(name);
+				temp.setId(c.getInt(c.getColumnIndex(Constants.KEY_ID)));
 				participants.add(0, temp);
 			}
 			while(c.moveToNext()){
 				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
 				
 				Participant temp = new Participant(name);
+				temp.setId(c.getInt(c.getColumnIndex(Constants.KEY_ID)));
 				participants.add(0, temp);
 			}
 			db.close();
