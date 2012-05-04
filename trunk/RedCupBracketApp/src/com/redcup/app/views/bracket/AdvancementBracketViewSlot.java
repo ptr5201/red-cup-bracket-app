@@ -113,13 +113,13 @@ public class AdvancementBracketViewSlot extends BracketViewSlot {
 
 		// Create the "remove" button
 		this.removeButton = new ImageButton(context);
-		this.removeButton.setImageResource(R.drawable.red_x);
+		this.removeButton.setImageResource(R.drawable.remove_participant);
 		this.removeButton.setVisibility(INVISIBLE);
 		this.addView(this.removeButton);
 
 		// Create the "demote" button
 		this.demoteButton = new ImageButton(context);
-		this.demoteButton.setImageResource(R.drawable.orange_arrow);
+		this.demoteButton.setImageResource(R.drawable.demote_participant);
 		this.demoteButton.setEnabled(false);
 		this.demoteButton.setVisibility(INVISIBLE);
 		this.demoteButton.setOnClickListener(this.demoteButtonListener);
@@ -127,7 +127,7 @@ public class AdvancementBracketViewSlot extends BracketViewSlot {
 
 		// Create the "promote" button
 		this.promoteButton = new ImageButton(context);
-		this.promoteButton.setImageResource(R.drawable.green_checkmark);
+		this.promoteButton.setImageResource(R.drawable.promote_participant);
 		this.promoteButton.setEnabled(false);
 		this.promoteButton.setVisibility(INVISIBLE);
 		this.promoteButton.setOnClickListener(this.promoteButtonListener);
