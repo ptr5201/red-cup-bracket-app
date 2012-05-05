@@ -6,6 +6,7 @@ import android.graphics.drawable.PaintDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView.ScaleType;
 
 import com.redcup.app.R;
 import com.redcup.app.model.Bracket;
@@ -113,7 +114,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.removeButton = new ImageButton(context);
 		this.removeButton.setImageResource(R.drawable.remove_participant);
 		this.removeButton.setVisibility(INVISIBLE);
-		// this.removeButton.setScaleType(ScaleType.FIT_CENTER);
+		this.removeButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.removeButton);
 
 		// Create the "demote" button
@@ -122,7 +123,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.demoteButton.setEnabled(false);
 		this.demoteButton.setVisibility(INVISIBLE);
 		this.demoteButton.setOnClickListener(this.demoteButtonListener);
-		// this.demoteButton.setScaleType(ScaleType.FIT_CENTER);
+		this.demoteButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.demoteButton);
 
 		// Create the "promote" button
@@ -131,7 +132,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.promoteButton.setEnabled(false);
 		this.promoteButton.setVisibility(INVISIBLE);
 		this.promoteButton.setOnClickListener(this.promoteButtonListener);
-		// this.promoteButton.setScaleType(ScaleType.FIT_CENTER);
+		this.promoteButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.promoteButton);
 
 		// Background drawable
