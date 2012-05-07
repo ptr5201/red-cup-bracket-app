@@ -91,7 +91,8 @@ public class CreateTournamentActivity extends Activity {
 		t.setName(nameField.getText().toString());
 
 		// TODO: Remove test code
-		List<Participant> p = new ArrayList<Participant>();
+		/*
+	 	List<Participant> p = new ArrayList<Participant>();
 		int numParticipants = 7;
 		String countText = participantCountField.getText().toString();
 		if (countText != null && countText.length() > 0) {
@@ -101,6 +102,8 @@ public class CreateTournamentActivity extends Activity {
 			p.add(new Participant("Player " + i));
 		}
 		t.setParticipants(p);
+		*/
+		
 		TournamentManager.addTournament(t);
 
 		// TODO: determine how to set bracket strategy based on bracket type

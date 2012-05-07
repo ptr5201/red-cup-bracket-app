@@ -61,11 +61,16 @@ public class TournamentParticipantsActivity extends Activity {
 				participantList = (ArrayList<Participant>) data
 						.getSerializableExtra(null);
 
-				for (Participant part : participantList) {
-					Log.v(TAG, part.getName());
+				for (Participant p : participantList) {
+					Log.v(TAG, p.getName());
+					this.tournament.addParticipant(p);
 				}
 				
-				tournament.setParticipants(participantList);
+				BracketView bracketView = (BracketView) this.findViewById(R.id.bracketView);
+				if (bracketView != null) {
+					bracketView.setTournament(this.tournament);
+				}
+				
 			}
 		}
 	}
