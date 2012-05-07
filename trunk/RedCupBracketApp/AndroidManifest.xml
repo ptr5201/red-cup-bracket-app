@@ -15,7 +15,7 @@
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CreateTournamentActivity" android:label="@string/app_name"></activity>
+        <activity android:name=".activities.CreateTournamentActivity" android:label="@string/app_name" android:noHistory="true"></activity>
         <activity android:name=".activities.ParticipantManagerActivity" android:label="@string/app_name"></activity>
         <activity android:name=".activities.LoadTournamentActivity" android:label="@string/app_name"></activity>
         <activity android:name=".activities.NewParticipantActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Dialog"></activity>

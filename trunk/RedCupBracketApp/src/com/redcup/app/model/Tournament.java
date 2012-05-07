@@ -22,7 +22,7 @@ public class Tournament {
 
 	private BracketStrategy strategy;
 	private String name;
-	private List<Participant> participants;
+	private List<Participant> participants = new ArrayList<Participant>();
 
 	private List<ParticipantChangedListener> participantChangedListeners = new ArrayList<Tournament.ParticipantChangedListener>();
 
