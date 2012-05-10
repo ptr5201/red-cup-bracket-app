@@ -1,5 +1,7 @@
 package com.redcup.app.data;
 
+import com.redcup.app.data.Constants;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,53 +10,83 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 
-public class RedCupDB{
+public class RedCupDB {
 	private SQLiteDatabase db;
 	private final Context context;
 	private final RedCupDBHelper helper;
 	
-	public RedCupDB(Context c){
+	public RedCupDB(Context c) {
 		context = c;
-		helper = new RedCupDBHelper(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
+		helper = new RedCupDBHelper(context, 
+				Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
 	}
 	
-	public void close(){
+	public void close() {
 		db.close();
 	}
 	
-	public void open(){
-		try{
+	public void open() {
+		try {
 			db = helper.getWritableDatabase();
-		}catch(SQLiteException e){
+		} catch(SQLiteException e) {
 			Log.v("Open Database Exception", e.getMessage());
 			db = helper.getReadableDatabase();
 		}
 	}
 	
-	public long insertParticipant(String name){
-		try{
+	public long insertParticipant(String name) {
+		try {
 			ContentValues taskValue = new ContentValues();
-			taskValue.put(Constants.PARTICIPANT_NAME, name);
-			taskValue.put(Constants.DATE_NAME, 
+			taskValue.put(Constants.Participant.PARTICIPANT_NAME, name);
+			taskValue.put(Constants.Participant.DATE_CREATED, 
 							java.lang.System.currentTimeMillis());
-			return db.insert(Constants.PARTICIPANT_TABLE, null, taskValue);
-		}catch(Exception e){
+			return db.insert(Constants.Participant.TABLE_NAME, null, taskValue);
+		} catch(Exception e) {
 			return -1;
 		}
 	}
 	
-	public void deleteParticipant(int id){	
-		db.delete(Constants.PARTICIPANT_TABLE, Constants.KEY_ID+"=?", new String [] { Integer.toString(id) });
+	public void deleteParticipant(int participantId) {	
+		db.delete(
+				Constants.Participant.TABLE_NAME, 
+				Constants.Participant.KEY_ID + "=?", 
+				new String [] { Integer.toString(participantId) });
 	}
 	
-	public void editParticipant(String newName, int id){
-		ContentValues content = new ContentValues();
-		content.put("name", newName);
-		db.update(Constants.PARTICIPANT_TABLE, content, Constants.KEY_ID+"=?", new String [] { Integer.toString(id) });
+	public void editParticipant(String newName, int participantId) {
+		ContentValues taskValue = new ContentValues();
+		taskValue.put(Constants.Participant.PARTICIPANT_NAME, newName);
+		db.update(Constants.Participant.TABLE_NAME, taskValue, 
+				Constants.Participant.KEY_ID + "=?", 
+				new String [] { Integer.toString(participantId) });
 	}
 	
-	public Cursor getCursor(){
-		Cursor c = db.query(Constants.PARTICIPANT_TABLE, null, null, null, null, null, null);
+	public long insertTournament(String name) {
+		ContentValues taskValue = new ContentValues();
+		taskValue.put(Constants.Tournament.TOURNAMENT_NAME, name);
+		taskValue.put(Constants.Tournament.DATE_CREATED, 
+				java.lang.System.currentTimeMillis());
+		return db.insert(Constants.Tournament.TABLE_NAME, null, taskValue);
+	}
+	
+	public void startTournament(int tournamentId) {
+		ContentValues taskValue = new ContentValues();
+		taskValue.put(Constants.Tournament.STARTED, 1L);
+		db.update(Constants.Tournament.TABLE_NAME, taskValue, 
+				Constants.Tournament.KEY_ID + "=?",  
+				new String [] { Integer.toString(tournamentId) });
+	}
+	
+	public void completeTournament(int tournamentId) {
+		ContentValues taskValue = new ContentValues();
+		taskValue.put(Constants.Tournament.COMPLETED, 1L);
+		db.update(Constants.Tournament.TABLE_NAME, taskValue, 
+				Constants.Tournament.KEY_ID + "=?",  
+				new String [] { Integer.toString(tournamentId) });
+	}
+	
+	public Cursor getCursor(String tableName) {
+		Cursor c = db.query(tableName, null, null, null, null, null, null);
 		return c;
 	}
 }

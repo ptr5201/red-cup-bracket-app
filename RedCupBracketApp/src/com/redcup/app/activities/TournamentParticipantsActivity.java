@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.redcup.app.R;
+import com.redcup.app.data.RedCupDB;
 import com.redcup.app.model.Participant;
 import com.redcup.app.model.Tournament;
 import com.redcup.app.model.TournamentManager;
@@ -25,6 +26,8 @@ public class TournamentParticipantsActivity extends Activity {
 	private ArrayList<Participant> participantList;
 
 	private Tournament tournament = null;
+	
+	private RedCupDB db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,10 @@ public class TournamentParticipantsActivity extends Activity {
 		if (bracketView != null) {
 			bracketView.setTournament(this.tournament);
 		}
+		
+		db = new RedCupDB(this);
+		db.open();
+		db.close();
 	}
 
 	public void addParticipant(View v) {
@@ -49,7 +56,13 @@ public class TournamentParticipantsActivity extends Activity {
 	}
 
 	public void startTournament(View v) {
-
+		db.open();
+		// TODO: have Tournament store it's ID from the database
+		// in memory, so that tournaments can be started and completed
+		// by grabbing their IDs instead of their names
+		//tournament.getName();
+		//db.startTournament(tournamentId);
+		db.close();
 	}
 
 	@SuppressWarnings("unchecked")
