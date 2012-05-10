@@ -11,6 +11,8 @@ import android.graphics.Rect;
 import android.view.View;
 
 import com.redcup.app.model.Bracket;
+import com.redcup.app.model.InvalidStateException;
+import com.redcup.app.model.Participant;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.BracketConnector;
 import com.redcup.app.views.bracket.BracketView;
@@ -18,6 +20,12 @@ import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListener;
 import com.redcup.app.views.bracket.SetupBracketViewSlot;
+import com.redcup.app.views.bracket.events.OnDemotedEvent;
+import com.redcup.app.views.bracket.events.OnDemotedListener;
+import com.redcup.app.views.bracket.events.OnParticipantRemovedEvent;
+import com.redcup.app.views.bracket.events.OnParticipantRemovedListener;
+import com.redcup.app.views.bracket.events.OnPromotedEvent;
+import com.redcup.app.views.bracket.events.OnPromotedListener;
 
 /**
  * Implementation of {@code BracketViewLayout} that is used to visually
@@ -27,6 +35,43 @@ import com.redcup.app.views.bracket.SetupBracketViewSlot;
  */
 public class SingleEliminationLayout extends BracketViewLayout {
 
+	// Event handlers
+	private final OnPromotedListener onPromotedListener = new OnPromotedListener() {
+		@Override
+		public void onPromoted(OnPromotedEvent event) {
+			try {
+				SingleEliminationLayout.this.model.promoteParticipantAt(event
+						.getBracket());
+			} catch (InvalidStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+
+	private final OnDemotedListener onDemotedListener = new OnDemotedListener() {
+		@Override
+		public void onDemoted(OnDemotedEvent event) {
+			try {
+				SingleEliminationLayout.this.model.demoteParticipantAt(event
+						.getBracket());
+			} catch (InvalidStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+
+	private final OnParticipantRemovedListener onParticipantRemovedListener = new OnParticipantRemovedListener() {
+		@Override
+		public void onParticipantRemoved(OnParticipantRemovedEvent event) {
+			Participant p = event.getParticipant();
+			SingleEliminationLayout.this.getBracketView().getTournament()
+					.removeParticipant(p);
+		}
+	};
+
+	// Internal state
 	private final SingleEliminationBracketStrategy model;
 	private final Map<Bracket, BracketViewSlot> bracketViewSlots = new HashMap<Bracket, BracketViewSlot>();
 
@@ -73,8 +118,14 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	private BracketViewSlot getBracketViewSlot(Bracket bracket) {
 		BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 		if (slot == null) {
-			// Create the BracketSlot
-			slot = new SetupBracketViewSlot(this.getBracketView().getContext());
+			// Create the SetupBracketViewSlot
+			SetupBracketViewSlot setupSlot = new SetupBracketViewSlot(this
+					.getBracketView().getContext());
+			setupSlot.addOnPromotedListener(this.onPromotedListener);
+			setupSlot.addOnDemotedListener(this.onDemotedListener);
+			setupSlot
+					.addOnParticipantRemovedListener(this.onParticipantRemovedListener);
+			slot = setupSlot;
 
 			// Assign the bracket to the BracketViewSlot
 			slot.setBracket(bracket);
@@ -184,7 +235,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		slot.layout(hPos, avgTop, hPos + slot.getScaledExpandedWidth(), avgTop
 				+ slot.getScaledExpandedHeight());
 
-		// TODO: Remove kludgey connector code
+		// TODO: Replace kludgey connector code
 		// Create and add a BracketConnector
 		BracketConnector connector = new BracketConnector(this.getBracketView()
 				.getContext());

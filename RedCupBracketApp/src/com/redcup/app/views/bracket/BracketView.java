@@ -9,12 +9,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.redcup.app.model.BracketStrategy;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.model.Tournament;
 import com.redcup.app.model.Tournament.ParticipantChangedEvent;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
+import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 /**
  * The control used for viewing and editing a bracket.
@@ -118,10 +118,16 @@ public class BracketView extends ViewGroup {
 		public void onParticipantListChanged(ParticipantChangedEvent event) {
 			// TODO: Remove once better system is in place
 			Tournament source = event.getSource();
-			BracketStrategy bracket = new SingleEliminationBracketStrategy(source.getParticipants());
+			SingleEliminationBracketStrategy bracket = new SingleEliminationBracketStrategy(
+					source.getParticipants());
 			source.setStrategy(bracket);
-			
-			BracketView.this.updateLayout(true);
+
+			// Create and configure the new layout instance
+			BracketViewLayout oldLayout = BracketView.this.getLayoutAlgorithm();
+			BracketViewLayout newLayout = new SingleEliminationLayout(
+					BracketView.this, bracket);
+			newLayout.setScale(oldLayout.getScale());
+			BracketView.this.setLayoutAlgorithm(newLayout);
 		}
 	};
 

@@ -188,4 +188,31 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 		winBracket.setParticipant(participant);
 	}
 	
+	@Override
+	public void promoteParticipantAt(Bracket bracket) throws InvalidStateException {
+		// Check for valid state
+		if (bracket.getParent() == null || bracket.getParticipant() == null) {
+			// Bracket either doesn't have a participant to advance or is in the
+			// last round
+			throw new InvalidStateException();
+		}
+
+		// Advance participant in given slot
+		bracket.getParent().setParticipant(bracket.getParticipant());
+	}
+
+	@Override
+	public void demoteParticipantAt(Bracket bracket) throws InvalidStateException {
+		// Check for valid state
+		if (bracket.getLeft() == null || bracket.getRight() == null
+				|| bracket.getParticipant() == null) {
+			// Bracket either doesn't have a participant to demote or is in the
+			// first round
+			throw new InvalidStateException();
+		}
+
+		// Demote participant in given slot
+		bracket.setParticipant(null);
+	}
+	
 }

@@ -1,5 +1,8 @@
 package com.redcup.app.views.bracket;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.PaintDrawable;
@@ -10,9 +13,17 @@ import android.widget.ImageView.ScaleType;
 
 import com.redcup.app.R;
 import com.redcup.app.model.Bracket;
+import com.redcup.app.model.Participant;
+import com.redcup.app.views.bracket.events.OnDemotedEvent;
+import com.redcup.app.views.bracket.events.OnDemotedListener;
+import com.redcup.app.views.bracket.events.OnParticipantRemovedEvent;
+import com.redcup.app.views.bracket.events.OnParticipantRemovedListener;
+import com.redcup.app.views.bracket.events.OnPromotedEvent;
+import com.redcup.app.views.bracket.events.OnPromotedListener;
 
 public class SetupBracketViewSlot extends BracketViewSlot {
 
+	// Listener Definitions
 	private OnClickListener slotButtonListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -29,27 +40,40 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		}
 	};
 
-	private OnClickListener promoteButtonListener = new OnClickListener() {
+	private final OnClickListener promoteButtonListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			Bracket b = SetupBracketViewSlot.this.getBracket();
-			if (b != null && b.getParent() != null) {
-				b.getParent().setParticipant(b.getParticipant());
-			}
+			OnPromotedEvent event = new OnPromotedEvent(b);
+			SetupBracketViewSlot.this.raiseOnPromotedEvent(event);
 			SetupBracketViewSlot.this.updateInternalComponents();
 		}
 	};
 
-	private OnClickListener demoteButtonListener = new OnClickListener() {
+	private final OnClickListener demoteButtonListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			Bracket b = SetupBracketViewSlot.this.getBracket();
-			if (b != null) {
-				b.setParticipant(null);
-			}
+			OnDemotedEvent event = new OnDemotedEvent(b);
+			SetupBracketViewSlot.this.raiseOnDemotedEvent(event);
 			SetupBracketViewSlot.this.updateInternalComponents();
 		}
 	};
+
+	private final OnClickListener removeButtonListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			Bracket b = SetupBracketViewSlot.this.getBracket();
+			Participant p = b.getParticipant();
+			OnParticipantRemovedEvent event = new OnParticipantRemovedEvent(p);
+			SetupBracketViewSlot.this.raiseOnParticipantRemovedEvent(event);
+		}
+	};
+
+	// Event management
+	private final Collection<OnPromotedListener> onPromotedListenerList = new ArrayList<OnPromotedListener>();
+	private final Collection<OnDemotedListener> onDemotedListenerList = new ArrayList<OnDemotedListener>();
+	private final Collection<OnParticipantRemovedListener> onParticipantRemovedListenerList = new ArrayList<OnParticipantRemovedListener>();
 
 	// Child components
 	private BracketSlotButton slotButton;
@@ -114,6 +138,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.removeButton = new ImageButton(context);
 		this.removeButton.setImageResource(R.drawable.remove_participant);
 		this.removeButton.setVisibility(INVISIBLE);
+		this.removeButton.setOnClickListener(this.removeButtonListener);
 		this.removeButton.setScaleType(ScaleType.FIT_CENTER);
 		this.addView(this.removeButton);
 
@@ -159,10 +184,118 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.invalidate();
 	}
 
-	@Override
-	protected void updateInternalComponents() {
-		this.updateSlotButton();
-		this.updateAdvanceDemoteButtons();
+	/**
+	 * Registers the given {@code OnPromotedListener} with this
+	 * {@code SetupBracketViewSlot}.
+	 * 
+	 * @param listener
+	 *            the {@code OnPromotedListener} to register.
+	 */
+	public void addOnPromotedListener(OnPromotedListener listener) {
+		if (!this.onPromotedListenerList.contains(listener)) {
+			this.onPromotedListenerList.add(listener);
+		}
+	}
+
+	/**
+	 * Removes the given {@code OnPromotedListener} from this
+	 * {@code SetupBracketViewSlot}'s list of registered listeners.
+	 * 
+	 * @param listener
+	 *            the {@code OnPromotedListener} to remove.
+	 */
+	public void removeOnPromotedListener(OnPromotedListener listener) {
+		this.onPromotedListenerList.remove(listener);
+	}
+
+	/**
+	 * Dispatches the given {@code OnPromotedEvent} to all registered
+	 * {@code OnPromotedListener}s.
+	 * 
+	 * @param event
+	 *            the {@code OnPromotedEvent} to raise.
+	 */
+	protected void raiseOnPromotedEvent(OnPromotedEvent event) {
+		for (OnPromotedListener l : this.onPromotedListenerList) {
+			l.onPromoted(event);
+		}
+	}
+
+	/**
+	 * Registers the given {@code OnDemotedListener} with this
+	 * {@code SetupBracketViewSlot}.
+	 * 
+	 * @param listener
+	 *            the {@code OnDemotedListener} to register.
+	 */
+	public void addOnDemotedListener(OnDemotedListener listener) {
+		if (!this.onDemotedListenerList.contains(listener)) {
+			this.onDemotedListenerList.add(listener);
+		}
+	}
+
+	/**
+	 * Removes the given {@code OnDemotedListener} from this
+	 * {@code SetupBracketViewSlot}'s list of registered listeners.
+	 * 
+	 * @param listener
+	 *            the {@code OnDemotedListener} to remove.
+	 */
+	public void removeOnDemotedListener(OnDemotedListener listener) {
+		this.onDemotedListenerList.remove(listener);
+	}
+
+	/**
+	 * Dispatches the given {@code OnDemotedEvent} to all registered
+	 * {@code OnDemotedListener}s.
+	 * 
+	 * @param event
+	 *            the {@code OnDemotedEvent} to raise.
+	 */
+	protected void raiseOnDemotedEvent(OnDemotedEvent event) {
+		for (OnDemotedListener l : this.onDemotedListenerList) {
+			l.onDemoted(event);
+		}
+	}
+
+	/**
+	 * Registers the given {@code OnParticipantRemovedListener} with this
+	 * {@code SetupBracketViewSlot}.
+	 * 
+	 * @param listener
+	 *            the {@code OnParticipantRemovedListener} to register.
+	 */
+	public void addOnParticipantRemovedListener(
+			OnParticipantRemovedListener listener) {
+		if (!this.onParticipantRemovedListenerList.contains(listener)) {
+			this.onParticipantRemovedListenerList.add(listener);
+		}
+	}
+
+	/**
+	 * Removes the given {@code OnParticipantRemovedListener} from this
+	 * {@code SetupBracketViewSlot}'s list of registered listeners.
+	 * 
+	 * @param listener
+	 *            the {@code OnParticipantRemovedListener} to remove.
+	 */
+	public void removeOnParticipantRemovedListener(
+			OnParticipantRemovedListener listener) {
+		this.onParticipantRemovedListenerList.remove(listener);
+	}
+
+	/**
+	 * Dispatches the given {@code OnParticipantRemovedEvent} to all registered
+	 * {@code OnParticipantRemovedListener}s.
+	 * 
+	 * @param event
+	 *            the {@code OnParticipantRemovedEvent} to raise.
+	 */
+	protected void raiseOnParticipantRemovedEvent(
+			OnParticipantRemovedEvent event) {
+		for (OnParticipantRemovedListener l : this.onParticipantRemovedListenerList) {
+			l.onParticipantRemoved(event);
+		}
 	}
 
 	protected void updateSlotButton() {
@@ -205,6 +338,12 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 					&& getBracket().getParticipant() != null
 					&& (parent == null || parent.getParticipant() == null));
 		}
+	}
+
+	@Override
+	protected void updateInternalComponents() {
+		this.updateSlotButton();
+		this.updateAdvanceDemoteButtons();
 	}
 
 	@Override
