@@ -1,8 +1,5 @@
 package com.redcup.app.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.redcup.app.R;
+import com.redcup.app.data.RedCupDB;
 import com.redcup.app.model.BracketTypeEnum;
-import com.redcup.app.model.Participant;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.model.Tournament;
 import com.redcup.app.model.TournamentManager;
@@ -26,6 +23,8 @@ import com.redcup.app.model.TournamentManager;
 public class CreateTournamentActivity extends Activity {
 
 	private static final String TAG = "CreateTournamentActivity";
+	
+	RedCupDB db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +62,10 @@ public class CreateTournamentActivity extends Activity {
 			}
 
 		});
+		
+		db = new RedCupDB(this);
+		db.open();
+		db.close();
 	}
 
 	public void createTournament(View v) {
@@ -133,8 +136,10 @@ public class CreateTournamentActivity extends Activity {
 		}
 
 		// TODO: we have the tournament set up, now we need to persist it
-		Log.v(TAG,
-				"Tournament created. Persist tournament and proceed to Tournament View");
+		Log.v(TAG, "Inserting tournament in table");
+		db.open();
+		db.insertTournament(t.getName());
+		db.close();
 
 		Intent tournamentParticipants = new Intent(this,
 				TournamentParticipantsActivity.class);

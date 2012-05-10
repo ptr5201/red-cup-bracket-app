@@ -96,7 +96,7 @@ public class ParticipantManagerActivity extends Activity {
 	    db.close();
 	}
 	
-	public void createParticipant(View v){
+	public void createParticipant(View v) {
 		Log.v(TAG, getString(R.string.createParticipant));
 
 		Intent newParticipant = new Intent(this, NewParticipantActivity.class);
@@ -122,28 +122,28 @@ public class ParticipantManagerActivity extends Activity {
 		private LayoutInflater inflater;
 		public ArrayList<Participant> participants;
 		
-		public ParticipantAdapter(Context context){
+		public ParticipantAdapter(Context context) {
 			inflater = LayoutInflater.from(context);
 			participants = new ArrayList<Participant>();
 			getdata();
 		}
 		
-		public void getdata(){
+		public void getdata() {
 			participants.clear();
-			Cursor c = db.getCursor();
+			Cursor c = db.getCursor(Constants.Participant.TABLE_NAME);
 			startManagingCursor(c);
-			if(c.moveToFirst()){
-				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
+			if(c.moveToFirst()) {
+				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
 			
 				Participant temp = new Participant(name);
-				temp.setId(c.getInt(c.getColumnIndex(Constants.KEY_ID)));
+				temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
 				participants.add(0, temp);
 			}
-			while(c.moveToNext()){
-				String name = c.getString(c.getColumnIndex(Constants.PARTICIPANT_NAME));
+			while(c.moveToNext()) {
+				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
 				
 				Participant temp = new Participant(name);
-				temp.setId(c.getInt(c.getColumnIndex(Constants.KEY_ID)));
+				temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
 				participants.add(0, temp);
 			}
 			db.close();
