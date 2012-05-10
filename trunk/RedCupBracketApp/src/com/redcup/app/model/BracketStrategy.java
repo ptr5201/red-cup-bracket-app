@@ -18,6 +18,8 @@ public interface BracketStrategy {
 	public void relocateDown(Participant participant) throws InvalidStateException;
 	public void unWin(Participant participant) throws InvalidStateException;
 	public void win(Participant participant) throws InvalidStateException;
+	public void promoteParticipantAt(Bracket bracket) throws InvalidStateException;
+	public void demoteParticipantAt(Bracket bracket) throws InvalidStateException;
 	
 	/**
 	 * @return number of rounds in tournament
