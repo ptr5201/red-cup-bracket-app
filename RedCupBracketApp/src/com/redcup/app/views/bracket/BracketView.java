@@ -43,17 +43,11 @@ public class BracketView extends ViewGroup {
 			awakenScrollBars();
 
 			// Compute the position we want to move to
-			int x = (int) Math.round(getScrollX() + distanceX);
-			int y = (int) Math.round(getScrollY() + distanceY);
-
-			// Apply movement bounds
-			x = Math.min(x, getViewportWidth() - getWidth());
-			x = Math.max(x, 0);
-			y = Math.min(y, getViewportHeight() - getHeight());
-			y = Math.max(y, 0);
+			int x = (int) Math.round(BracketView.this.getScrollX() + distanceX);
+			int y = (int) Math.round(BracketView.this.getScrollY() + distanceY);
 
 			// Move and return
-			scrollTo(x, y);
+			BracketView.this.scrollTo(x, y);
 			return true;
 		}
 
@@ -73,17 +67,9 @@ public class BracketView extends ViewGroup {
 				updateLayout(true);
 
 				// Update scroll position
-				int x = getScrollX();
-				int y = getScrollY();
-
-				// Apply movement bounds
-				x = Math.min(x, getViewportWidth() - getWidth());
-				x = Math.max(x, 0);
-				y = Math.min(y, getViewportHeight() - getHeight());
-				y = Math.max(y, 0);
-
-				// Move and return
-				scrollTo(x, y);
+				int x = BracketView.this.getScrollX();
+				int y = BracketView.this.getScrollY();
+				BracketView.this.scrollTo(x, y);
 			}
 			return true;
 		}
@@ -128,6 +114,11 @@ public class BracketView extends ViewGroup {
 					BracketView.this, bracket);
 			newLayout.setScale(oldLayout.getScale());
 			BracketView.this.setLayoutAlgorithm(newLayout);
+
+			// Update scroll position
+			int x = BracketView.this.getScrollX();
+			int y = BracketView.this.getScrollY();
+			BracketView.this.scrollTo(x, y);
 		}
 	};
 
@@ -300,16 +291,6 @@ public class BracketView extends ViewGroup {
 		return 0;
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return this.gestures.onTouchEvent(event);
-	}
-
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		this.updateLayout(changed);
-	}
-
 	/**
 	 * Runs the layout manager.
 	 * 
@@ -320,5 +301,27 @@ public class BracketView extends ViewGroup {
 		if (this.layout != null) {
 			this.layout.onLayout(changed);
 		}
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		return this.gestures.onTouchEvent(event);
+	}
+
+	@Override
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		this.updateLayout(changed);
+	}
+
+	@Override
+	public void scrollTo(int x, int y) {
+		// Apply movement bounds
+		x = Math.min(x, getViewportWidth() - getWidth());
+		x = Math.max(x, 0);
+		y = Math.min(y, getViewportHeight() - getHeight());
+		y = Math.max(y, 0);
+
+		// Scroll
+		super.scrollTo(x, y);
 	}
 }
