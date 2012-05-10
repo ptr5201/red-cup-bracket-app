@@ -19,7 +19,7 @@ import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListener;
-import com.redcup.app.views.bracket.SetupBracketViewSlot;
+import com.redcup.app.views.bracket.AdvancementBracketViewSlot;
 import com.redcup.app.views.bracket.events.OnDemotedEvent;
 import com.redcup.app.views.bracket.events.OnDemotedListener;
 import com.redcup.app.views.bracket.events.OnParticipantRemovedEvent;
@@ -118,8 +118,8 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	private BracketViewSlot getBracketViewSlot(Bracket bracket) {
 		BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 		if (slot == null) {
-			// Create the SetupBracketViewSlot
-			SetupBracketViewSlot setupSlot = new SetupBracketViewSlot(this
+			// Create the AdvancementBracketViewSlot
+			AdvancementBracketViewSlot setupSlot = new AdvancementBracketViewSlot(this
 					.getBracketView().getContext());
 			setupSlot.addOnPromotedListener(this.onPromotedListener);
 			setupSlot.addOnDemotedListener(this.onDemotedListener);
