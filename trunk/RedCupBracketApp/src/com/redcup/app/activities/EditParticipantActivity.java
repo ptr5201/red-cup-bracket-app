@@ -28,11 +28,11 @@ public class EditParticipantActivity extends Activity {
 		saveButton = (Button) findViewById(R.id.saveButton);
 		saveButton.setEnabled(false);
 		
-		pos = this.getIntent().getIntExtra("pos", 0);
+		pos = this.getIntent().getIntExtra(ParticipantManagerActivity.EXTRA_PARTICIPANT_ID, 0);
 		
 		nameField = (EditText) findViewById(R.id.editNameEditText);
-		nameField.setText(this.getIntent().getStringExtra("name"));
-		nameField.setSelection(this.getIntent().getStringExtra("name").length());
+		nameField.setText(this.getIntent().getStringExtra(ParticipantManagerActivity.EXTRA_PARTICIPANT_OLD_NAME));
+		nameField.setSelection(this.getIntent().getStringExtra(ParticipantManagerActivity.EXTRA_PARTICIPANT_OLD_NAME).length());
 		nameField.addTextChangedListener(new TextWatcher(){
 
 			@Override
@@ -47,7 +47,7 @@ public class EditParticipantActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 					int arg3) {
-				if (nameField.getText().toString().equals(getIntent().getStringExtra("name")) 
+				if (nameField.getText().toString().equals(getIntent().getStringExtra(ParticipantManagerActivity.EXTRA_PARTICIPANT_ID)) 
 						|| nameField.getText().toString().equals("")) {
 					saveButton.setEnabled(false);
 				} else {
@@ -72,7 +72,7 @@ public class EditParticipantActivity extends Activity {
 		db.editParticipant(newName, pos);
 		db.close();
 		
-		getIntent().putExtra("name", newName);
+		getIntent().putExtra(ParticipantManagerActivity.EXTRA_PARTICIPANT_ID, newName);
 		
 		AlertDialog.Builder adBuilder = new AlertDialog.Builder(this);
 		adBuilder.setMessage("Name change successful")

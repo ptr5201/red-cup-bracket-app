@@ -47,8 +47,7 @@ public class RedCupDB {
 	}
 	
 	public void deleteParticipant(int participantId) {	
-		db.delete(
-				Constants.Participant.TABLE_NAME, 
+		db.delete(Constants.Participant.TABLE_NAME, 
 				Constants.Participant.KEY_ID + "=?", 
 				new String [] { Integer.toString(participantId) });
 	}
@@ -85,7 +84,16 @@ public class RedCupDB {
 				new String [] { Integer.toString(tournamentId) });
 	}
 	
-	public Cursor getCursor(String tableName) {
+	public long insertTournamentParticipantLink(int tournamentId, int participantId) {
+		ContentValues taskValue = new ContentValues();
+		taskValue.put(Constants.Tournament_Participant.TOURNAMENT_ID, tournamentId);
+		taskValue.put(Constants.Tournament_Participant.PARTICIPANT_ID, participantId);
+		taskValue.put(Constants.Tournament_Participant.DATE_CREATED, 
+				java.lang.System.currentTimeMillis());
+		return db.insert(Constants.Tournament_Participant.TABLE_NAME, null, taskValue);
+	}
+	
+	public Cursor getTableCursor(String tableName) {
 		Cursor c = db.query(tableName, null, null, null, null, null, null);
 		return c;
 	}

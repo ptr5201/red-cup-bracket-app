@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +37,8 @@ public class TournamentParticipantsActivity extends Activity {
 		setContentView(R.layout.tournamentparticipants);
 
 		// Check if we are getting a tournament to work with
-		String tournamentID = getIntent().getStringExtra(EXTRA_TOURNAMENT_ID);
+		int tournamentID = getIntent().getIntExtra(EXTRA_TOURNAMENT_ID, -1);
+		Log.v(TAG, "Row ID retrieved from create tournament screen: " + tournamentID);
 		this.tournament = TournamentManager.getTournament(tournamentID);
 
 		// Assign tournament to BracketView
@@ -57,11 +60,7 @@ public class TournamentParticipantsActivity extends Activity {
 
 	public void startTournament(View v) {
 		db.open();
-		// TODO: have Tournament store it's ID from the database
-		// in memory, so that tournaments can be started and completed
-		// by grabbing their IDs instead of their names
-		//tournament.getName();
-		//db.startTournament(tournamentId);
+		db.startTournament(tournament.getId());
 		db.close();
 	}
 
@@ -73,11 +72,14 @@ public class TournamentParticipantsActivity extends Activity {
 
 				participantList = (ArrayList<Participant>) data
 						.getSerializableExtra(null);
-
+				
+				db.open();
 				for (Participant p : participantList) {
 					Log.v(TAG, p.getName());
 					this.tournament.addParticipant(p);
+					db.insertTournamentParticipantLink(tournament.getId(), p.getId());
 				}
+				db.close();
 				
 				BracketView bracketView = (BracketView) this.findViewById(R.id.bracketView);
 				if (bracketView != null) {

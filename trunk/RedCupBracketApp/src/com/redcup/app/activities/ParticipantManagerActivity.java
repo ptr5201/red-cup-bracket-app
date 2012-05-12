@@ -25,6 +25,8 @@ import com.redcup.app.model.Participant;
 
 public class ParticipantManagerActivity extends Activity {
 	
+	public static final String EXTRA_PARTICIPANT_ID = "pos";
+	public static final String EXTRA_PARTICIPANT_OLD_NAME = "name";
 	private static final String TAG = "ParticipantManagerActivity";
 	private ListView participantList;	
 	
@@ -78,10 +80,10 @@ public class ParticipantManagerActivity extends Activity {
 	    Log.i(TAG, "onListItemClick id=" + pos);
 	    String name = participantAdapter.participants.get(pos).getName();
 	    Intent editParticipant = new Intent(this, EditParticipantActivity.class);
-	    editParticipant.putExtra("name",name);
+	    editParticipant.putExtra(EXTRA_PARTICIPANT_OLD_NAME, name);
 	    db.open();
 	    int keyid = participantAdapter.participants.get(pos).getId();
-	    editParticipant.putExtra("pos", keyid);
+	    editParticipant.putExtra(EXTRA_PARTICIPANT_ID, keyid);
 	    db.close();
 		startActivity(editParticipant);
 	}
@@ -130,7 +132,7 @@ public class ParticipantManagerActivity extends Activity {
 		
 		public void getdata() {
 			participants.clear();
-			Cursor c = db.getCursor(Constants.Participant.TABLE_NAME);
+			Cursor c = db.getTableCursor(Constants.Participant.TABLE_NAME);
 			startManagingCursor(c);
 			if(c.moveToFirst()) {
 				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));

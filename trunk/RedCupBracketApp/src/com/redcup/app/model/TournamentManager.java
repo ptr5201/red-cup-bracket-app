@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Jackson Lamp
  */
 public final class TournamentManager {
-	private static final Map<String, Tournament> tournaments = new HashMap<String, Tournament>();
+	private static final Map<Integer, Tournament> tournaments = new HashMap<Integer, Tournament>();
 
 	private TournamentManager() {
 	}
@@ -23,7 +23,7 @@ public final class TournamentManager {
 	 *         {@code null} if this did not occur.
 	 */
 	public static Tournament addTournament(Tournament t) {
-		return tournaments.put(t.getName(), t);
+		return tournaments.put(t.getId(), t);
 	}
 
 	/**
@@ -33,7 +33,7 @@ public final class TournamentManager {
 	 * @param id
 	 *            the ID of the {@code Tournament} to remove.
 	 */
-	public static void deleteTournament(String id) {
+	public static void deleteTournament(Integer id) {
 		tournaments.remove(id);
 	}
 
@@ -46,7 +46,7 @@ public final class TournamentManager {
 	 * @return the {@code Tournament} with the given ID or {@code null} if none
 	 *         exists.
 	 */
-	public static Tournament getTournament(String id) {
+	public static Tournament getTournament(Integer id) {
 		return tournaments.get(id);
 	}
 
@@ -59,7 +59,7 @@ public final class TournamentManager {
 	 * @return {@code true} if the {@code Tournament} could be found,
 	 *         {@code false} otherwise.
 	 */
-	public static boolean containsTournament(String id) {
+	public static boolean containsTournament(Integer id) {
 		return tournaments.containsKey(id);
 	}
 }
