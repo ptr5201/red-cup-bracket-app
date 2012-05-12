@@ -91,16 +91,16 @@ public class ParticipantSelectorActivity extends Activity {
 		
 		public void getdata(){
 			participants.clear();
-			Cursor c = db.getCursor(Constants.Participant.TABLE_NAME);
+			Cursor c = db.getTableCursor(Constants.Participant.TABLE_NAME);
 			startManagingCursor(c);
-			if(c.moveToFirst()){
+			if (c.moveToFirst()) {
 				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
 			
 				Participant temp = new Participant(name);
 				temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
 				participants.add(0, temp);
 			}
-			while(c.moveToNext()){
+			while (c.moveToNext()) {
 				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
 				
 				Participant temp = new Participant(name);

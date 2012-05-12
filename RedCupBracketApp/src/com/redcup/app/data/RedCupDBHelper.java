@@ -21,9 +21,17 @@ public class RedCupDBHelper extends SQLiteOpenHelper {
 		Constants.Tournament.TABLE_NAME + " (" +
 		Constants.Tournament.KEY_ID + " integer primary key autoincrement, " +
 		Constants.Tournament.TOURNAMENT_NAME + " text not null, " +
-		Constants.Tournament.DATE_CREATED + " long, " +
 		Constants.Tournament.STARTED + " integer not null default (0), " +
-		Constants.Tournament.COMPLETED + " integer not null default (0)" +
+		Constants.Tournament.COMPLETED + " integer not null default (0), " +
+		Constants.Tournament.DATE_CREATED + " long" +
+				");";
+	
+	private static final String CREATE_TOURNAMENT_PARTICIPANT_TABLE = "create table " +
+		Constants.Tournament_Participant.TABLE_NAME + " (" +
+		Constants.Tournament_Participant.KEY_ID + " integer primary key autoincrement, " +
+		Constants.Tournament_Participant.TOURNAMENT_ID + " integer, " +
+		Constants.Tournament_Participant.PARTICIPANT_ID + " integer, " +
+		Constants.Tournament_Participant.DATE_CREATED + " long" +
 				");";
 	
 	public RedCupDBHelper(Context context, String name, CursorFactory factory, int version) {
@@ -36,8 +44,9 @@ public class RedCupDBHelper extends SQLiteOpenHelper {
 		try{
 			db.execSQL(CREATE_PARTICIPANT_TABLE);
 			db.execSQL(CREATE_TOURNAMENT_TABLE);
+			db.execSQL(CREATE_TOURNAMENT_PARTICIPANT_TABLE);
 		}catch(Exception e){
-			Log.v("Create Tables Error", e.getMessage());
+			Log.e("Create Tables Error", e.getMessage());
 		}
 		
 	}
@@ -46,6 +55,7 @@ public class RedCupDBHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("drop table if exists " + Constants.Participant.TABLE_NAME);
 		db.execSQL("drop table if exists " + Constants.Tournament.TABLE_NAME);
+		db.execSQL("drop table if exists " + Constants.Tournament_Participant.TABLE_NAME);
 		onCreate(db);		
 	}
 

@@ -22,6 +22,7 @@ public class Tournament {
 
 	private BracketStrategy strategy;
 	private String name;
+	private int id;
 	private List<Participant> participants = new ArrayList<Participant>();
 
 	private List<ParticipantChangedListener> participantChangedListeners = new ArrayList<Tournament.ParticipantChangedListener>();
@@ -40,6 +41,14 @@ public class Tournament {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	// Event listener management

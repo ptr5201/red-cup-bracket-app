@@ -2,6 +2,7 @@ package com.redcup.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.redcup.app.R;
+import com.redcup.app.data.Constants;
 import com.redcup.app.data.RedCupDB;
 import com.redcup.app.model.BracketTypeEnum;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
@@ -93,22 +95,6 @@ public class CreateTournamentActivity extends Activity {
 		Tournament t = new Tournament();
 		t.setName(nameField.getText().toString());
 
-		// TODO: Remove test code
-		/*
-	 	List<Participant> p = new ArrayList<Participant>();
-		int numParticipants = 7;
-		String countText = participantCountField.getText().toString();
-		if (countText != null && countText.length() > 0) {
-			numParticipants = Integer.parseInt(countText);
-		}
-		for (int i = 1; i <= numParticipants; i++) {
-			p.add(new Participant("Player " + i));
-		}
-		t.setParticipants(p);
-		*/
-		
-		TournamentManager.addTournament(t);
-
 		// TODO: determine how to set bracket strategy based on bracket type
 		switch (tournamentBracketType) {
 		case SINGLE_ELIMINATION:
@@ -135,17 +121,21 @@ public class CreateTournamentActivity extends Activity {
 			// t.setParticipantCapacity(Integer.parseInt(participantCountField.getText().toString()));
 		}
 
-		// TODO: we have the tournament set up, now we need to persist it
-		Log.v(TAG, "Inserting tournament in table");
+		// persist the tournament after it has been created
+		Log.v(TAG, "Inserting new tournament in table");
 		db.open();
-		db.insertTournament(t.getName());
+		int t_id = (int) db.insertTournament(t.getName());
 		db.close();
+		
+		Log.v(TAG, "Row ID of new tournament: " + t_id);
+		t.setId(t_id);
+		TournamentManager.addTournament(t);
 
 		Intent tournamentParticipants = new Intent(this,
 				TournamentParticipantsActivity.class);
 		tournamentParticipants
 				.putExtra(TournamentParticipantsActivity.EXTRA_TOURNAMENT_ID,
-						t.getName());
+						t.getId());
 		startActivity(tournamentParticipants);
 	}
 
