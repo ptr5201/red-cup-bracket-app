@@ -97,6 +97,11 @@ public class BracketView extends ViewGroup {
 	private Tournament tournament = null;
 
 	/**
+	 * The mode of this control.
+	 */
+	private BracketMode mode = BracketMode.SETUP;
+
+	/**
 	 * Used to handle changes in the list of participants in the Tournament.
 	 */
 	private Tournament.ParticipantChangedListener tournamentParticipantChangedListener = new Tournament.ParticipantChangedListener() {
@@ -301,6 +306,28 @@ public class BracketView extends ViewGroup {
 		if (this.layout != null) {
 			this.layout.onLayout(changed);
 		}
+	}
+
+	/**
+	 * Sets the current mode of this {@code BracketView}.
+	 * 
+	 * @param mode
+	 *            the mode to set this {@code BracketView} to.
+	 */
+	public void setMode(BracketMode mode) {
+		this.mode = mode;
+		if (this.layout != null) {
+			this.layout.setMode(this.mode);
+		}
+	}
+
+	/**
+	 * Returns the current mode of this {@code BracketView}.
+	 * 
+	 * @return the current mode of this {@code BracketView}.
+	 */
+	public BracketMode getMode() {
+		return this.mode;
 	}
 
 	@Override
