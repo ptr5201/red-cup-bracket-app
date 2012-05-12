@@ -29,4 +29,5 @@
     <string name="history">History</string>
     <string name="save">Save</string>
     <string name="tournamentSetup">Tournament Setup</string>
+    <string name="selectParticipants">Select Participants</string>
 </resources>
