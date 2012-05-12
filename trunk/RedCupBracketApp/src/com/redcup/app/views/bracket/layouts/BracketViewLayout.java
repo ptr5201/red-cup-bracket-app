@@ -1,5 +1,6 @@
 package com.redcup.app.views.bracket.layouts;
 
+import com.redcup.app.views.bracket.BracketMode;
 import com.redcup.app.views.bracket.BracketView;
 
 /**
@@ -10,6 +11,7 @@ import com.redcup.app.views.bracket.BracketView;
  * @author Jackson Lamp
  */
 public abstract class BracketViewLayout {
+
 	// Margin settings
 	private int margin_top = 10;
 	private int margin_bottom = 10;
@@ -27,6 +29,9 @@ public abstract class BracketViewLayout {
 
 	// The scale factor
 	private float scale = 1.0f;
+
+	// Mode
+	private BracketMode mode = BracketMode.SETUP;
 
 	/**
 	 * The frozen/thawed status of this {@code BracketViewLayout}. If
@@ -319,6 +324,26 @@ public abstract class BracketViewLayout {
 	 */
 	public float getScale() {
 		return this.scale;
+	}
+
+	/**
+	 * Sets the current mode of this {@code BracketViewLayout}.
+	 * 
+	 * @param mode
+	 *            the mode to set this {@code BracketViewLayout} to.
+	 */
+	public void setMode(BracketMode mode) {
+		this.mode = mode;
+		this.onLayout(true);
+	}
+
+	/**
+	 * Returns the current mode of this {@code BracketViewLayout}.
+	 * 
+	 * @return the current mode of this {@code BracketViewLayout}.
+	 */
+	public BracketMode getMode() {
+		return this.mode;
 	}
 
 	/**
