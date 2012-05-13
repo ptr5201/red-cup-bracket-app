@@ -5,7 +5,7 @@
         android:minHeight="45dp" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/selectorParticipantNameId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -13,11 +13,11 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <CheckBox
-            android:id="@+id/checkBox1"
+            android:id="@+id/selectorParticipantCheckboxId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/textView1"
-            android:layout_alignBottom="@+id/textView1"
+            android:layout_alignBaseline="@+id/selectorParticipantNameId"
+            android:layout_alignBottom="@+id/selectorParticipantNameId"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="40dp" />
