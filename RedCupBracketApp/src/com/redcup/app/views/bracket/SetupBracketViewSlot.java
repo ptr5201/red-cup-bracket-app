@@ -10,7 +10,6 @@ import android.view.View;
 import com.redcup.app.R;
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.Participant;
-import com.redcup.app.views.CorneredButton;
 import com.redcup.app.views.bracket.events.OnDemotedEvent;
 import com.redcup.app.views.bracket.events.OnDemotedListener;
 import com.redcup.app.views.bracket.events.OnParticipantRemovedEvent;
