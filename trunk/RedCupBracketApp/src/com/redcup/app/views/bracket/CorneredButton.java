@@ -1,4 +1,4 @@
-package com.redcup.app.views;
+package com.redcup.app.views.bracket;
 
 import android.content.Context;
 import android.graphics.Bitmap;
