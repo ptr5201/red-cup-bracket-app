@@ -25,14 +25,8 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		@Override
 		public void onClick(View v) {
 			SetupBracketViewSlot.this
-					.raiseOnExpandedStateChangedEvent(new OnExpandedStateChangedEvent(
-							SetupBracketViewSlot.this,
-							ExpandedState.EXPANDED_BOTH));
-			v.setSelected(true);
-			SetupBracketViewSlot.this.removeButton.setVisibility(VISIBLE);
-			SetupBracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
-			SetupBracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
-			SetupBracketViewSlot.this.updateInternalComponents();
+					.raiseOnExpansionEvent(new OnExpansionEvent(
+							SetupBracketViewSlot.this, ExpandedState.EXPANDED));
 		}
 	};
 
@@ -65,6 +59,9 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 			SetupBracketViewSlot.this.raiseOnParticipantRemovedEvent(event);
 		}
 	};
+
+	// Bracket mode
+	private BracketMode mode = BracketMode.SETUP;
 
 	// Event management
 	private final Collection<OnPromotedListener> onPromotedListenerList = new ArrayList<OnPromotedListener>();
@@ -156,19 +153,31 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.addView(this.promoteButton, 0);
 	}
 
+	@Override
+	public void setSelected(boolean selected) {
+		boolean changed = this.isSelected() != selected;
+		super.setSelected(selected);
+		if (changed) {
+			this.slotButton.setSelected(selected);
+			this.removeButton
+					.setVisibility((this.mode == BracketMode.SETUP && selected) ? VISIBLE
+							: INVISIBLE);
+			this.promoteButton
+					.setVisibility((this.mode == BracketMode.ADVANCEMENT && selected) ? VISIBLE
+							: INVISIBLE);
+			this.demoteButton
+					.setVisibility((this.mode == BracketMode.ADVANCEMENT && selected) ? VISIBLE
+							: INVISIBLE);
+			this.updateInternalComponents();
+			this.invalidate();
+		}
+	}
+
 	/**
 	 * Returns this control to its default state (collapsed, deselected).
 	 */
 	public void reset() {
-		if (this.slotButton != null) {
-			this.slotButton.setSelected(false);
-		}
-		if (this.removeButton != null) {
-			this.removeButton.setVisibility(INVISIBLE);
-			this.demoteButton.setVisibility(INVISIBLE);
-			this.promoteButton.setVisibility(INVISIBLE);
-		}
-		this.invalidate();
+		this.setSelected(false);
 	}
 
 	/**
@@ -272,6 +281,27 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 	}
 
 	/**
+	 * Sets the current mode of this {@code SetupBracketViewSlot}.
+	 * 
+	 * @param mode
+	 *            the mode to set this {@code SetupBracketViewSlot} to.
+	 */
+	public void setMode(BracketMode mode) {
+		this.mode = mode;
+		this.updateInternalComponents();
+		this.invalidate();
+	}
+
+	/**
+	 * Returns the current mode of this {@code SetupBracketViewSlot}.
+	 * 
+	 * @return the current mode of this {@code SetupBracketViewSlot}.
+	 */
+	public BracketMode getMode() {
+		return this.mode;
+	}
+
+	/**
 	 * Dispatches the given {@code OnParticipantRemovedEvent} to all registered
 	 * {@code OnParticipantRemovedListener}s.
 	 * 
@@ -294,7 +324,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		} else {
 			this.slotButton.setText(null);
 			this.slotButton.setEnabled(false);
-			this.reset();
+			this.setSelected(false);
 		}
 	}
 

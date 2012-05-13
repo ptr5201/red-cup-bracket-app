@@ -17,8 +17,9 @@ import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.BracketConnector;
 import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
-import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedEvent;
-import com.redcup.app.views.bracket.BracketViewSlot.OnExpandedStateChangedListener;
+import com.redcup.app.views.bracket.BracketViewSlot.ExpandedState;
+import com.redcup.app.views.bracket.BracketViewSlot.OnExpansionEvent;
+import com.redcup.app.views.bracket.BracketViewSlot.OnExpansionListener;
 import com.redcup.app.views.bracket.SetupBracketViewSlot;
 import com.redcup.app.views.bracket.events.OnDemotedEvent;
 import com.redcup.app.views.bracket.events.OnDemotedListener;
@@ -82,10 +83,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	 */
 	private final Collection<Bracket> usedBrackets = new HashSet<Bracket>();
 
-	private final OnExpandedStateChangedListener expandedStateChangedListener = new OnExpandedStateChangedListener() {
+	private final OnExpansionListener expandedStateChangedListener = new OnExpansionListener() {
 		@Override
-		public void onExpandedStateChanged(OnExpandedStateChangedEvent evt) {
+		public void onExpansion(OnExpansionEvent evt) {
 			SingleEliminationLayout.this.getBracketView().clearSelection();
+			if (evt.getNewState() == ExpandedState.EXPANDED) {
+				evt.getView().setSelected(true);
+			}
 		}
 	};
 
@@ -131,7 +135,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			slot.setBracket(bracket);
 
 			// Assign listeners to the BracketSlot
-			slot.setOnExpandedStateChangedListener(this.expandedStateChangedListener);
+			slot.setOnExpansionListener(this.expandedStateChangedListener);
 
 			// Add the BracketSlot to the map and
 			// BracketView
