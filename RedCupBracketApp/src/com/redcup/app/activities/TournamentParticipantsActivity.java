@@ -19,8 +19,6 @@ import com.redcup.app.views.bracket.BracketView;
 
 public class TournamentParticipantsActivity extends Activity {
 
-	public static final String EXTRA_TOURNAMENT_ID = "EXTRA_TOURNAMENT_ID";
-
 	private static final int ACTIVITY_ADD_PARTICIPANT = 1;
 
 	private static final String TAG = "TournamentParticipantsActivity";
@@ -37,7 +35,7 @@ public class TournamentParticipantsActivity extends Activity {
 		setContentView(R.layout.tournamentparticipants);
 
 		// Check if we are getting a tournament to work with
-		int tournamentID = getIntent().getIntExtra(EXTRA_TOURNAMENT_ID, -1);
+		int tournamentID = getIntent().getIntExtra(getString(R.string.EXTRA_TOURNAMENT_ID), -1);
 		Log.v(TAG, "Row ID retrieved from create tournament screen: " + tournamentID);
 		this.tournament = TournamentManager.getTournament(tournamentID);
 
@@ -62,6 +60,10 @@ public class TournamentParticipantsActivity extends Activity {
 		db.open();
 		db.startTournament(tournament.getId());
 		db.close();
+		Intent startTournament = new Intent(this, StartTournamentActivity.class);
+		startTournament.putExtra("TournamentName", tournament.getName());
+		startTournament.putExtra(getString(R.string.EXTRA_TOURNAMENT_ID), tournament.getId());
+		startActivity(startTournament);
 	}
 
 	@SuppressWarnings("unchecked")
