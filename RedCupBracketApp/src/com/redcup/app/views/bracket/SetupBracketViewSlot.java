@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.PaintDrawable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView.ScaleType;
 
 import com.redcup.app.R;
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.Participant;
+import com.redcup.app.views.CorneredButton;
 import com.redcup.app.views.bracket.events.OnDemotedEvent;
 import com.redcup.app.views.bracket.events.OnDemotedListener;
 import com.redcup.app.views.bracket.events.OnParticipantRemovedEvent;
@@ -35,7 +32,6 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 			SetupBracketViewSlot.this.removeButton.setVisibility(VISIBLE);
 			SetupBracketViewSlot.this.demoteButton.setVisibility(VISIBLE);
 			SetupBracketViewSlot.this.promoteButton.setVisibility(VISIBLE);
-			SetupBracketViewSlot.this.background.setAlpha(255);
 			SetupBracketViewSlot.this.updateInternalComponents();
 		}
 	};
@@ -77,10 +73,9 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 
 	// Child components
 	private BracketSlotButton slotButton;
-	private ImageButton removeButton;
-	private ImageButton demoteButton;
-	private ImageButton promoteButton;
-	private PaintDrawable background = new PaintDrawable(Color.LTGRAY);
+	private CorneredButton removeButton;
+	private CorneredButton demoteButton;
+	private CorneredButton promoteButton;
 
 	/**
 	 * Creates a new {@code SetupBracketViewSlot}.
@@ -135,37 +130,30 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		this.addView(slotButton);
 
 		// Create the "remove" button
-		this.removeButton = new ImageButton(context);
-		this.removeButton.setImageResource(R.drawable.remove_participant);
+		this.removeButton = new CorneredButton(context);
+		this.removeButton.setIcon(R.drawable.remove_participant);
 		this.removeButton.setVisibility(INVISIBLE);
 		this.removeButton.setOnClickListener(this.removeButtonListener);
-		this.removeButton.setScaleType(ScaleType.FIT_CENTER);
-		this.addView(this.removeButton);
+		// this.removeButton.setScaleType(ScaleType.FIT_CENTER);
+		this.addView(this.removeButton, 0);
 
 		// Create the "demote" button
-		this.demoteButton = new ImageButton(context);
-		this.demoteButton.setImageResource(R.drawable.demote_participant);
+		this.demoteButton = new CorneredButton(context);
+		this.demoteButton.setIcon(R.drawable.demote_participant);
 		this.demoteButton.setEnabled(false);
 		this.demoteButton.setVisibility(INVISIBLE);
 		this.demoteButton.setOnClickListener(this.demoteButtonListener);
-		this.demoteButton.setScaleType(ScaleType.FIT_CENTER);
-		this.addView(this.demoteButton);
+		// this.demoteButton.setScaleType(ScaleType.FIT_CENTER);
+		this.addView(this.demoteButton, 0);
 
 		// Create the "promote" button
-		this.promoteButton = new ImageButton(context);
-		this.promoteButton.setImageResource(R.drawable.promote_participant);
+		this.promoteButton = new CorneredButton(context);
+		this.promoteButton.setIcon(R.drawable.promote_participant);
 		this.promoteButton.setEnabled(false);
 		this.promoteButton.setVisibility(INVISIBLE);
 		this.promoteButton.setOnClickListener(this.promoteButtonListener);
-		this.promoteButton.setScaleType(ScaleType.FIT_CENTER);
-		this.addView(this.promoteButton);
-
-		// Background drawable
-		this.background.setBounds(0, 0, this.getExpandedWidth(),
-				this.getCollapsedHeight());
-		this.background.setCornerRadius(this.applyScale(20));
-		this.background.setAlpha(0);
-		this.setBackgroundDrawable(this.background);
+		// this.promoteButton.setScaleType(ScaleType.FIT_CENTER);
+		this.addView(this.promoteButton, 0);
 	}
 
 	/**
@@ -179,7 +167,6 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 			this.removeButton.setVisibility(INVISIBLE);
 			this.demoteButton.setVisibility(INVISIBLE);
 			this.promoteButton.setVisibility(INVISIBLE);
-			this.background.setAlpha(0);
 		}
 		this.invalidate();
 	}
@@ -354,28 +341,37 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		this.slotButton.layout(0, 0, this.applyScale(this.getCollapsedWidth()),
-				this.applyScale(this.getCollapsedHeight()));
-		this.removeButton.layout(this.applyScale(this.getCollapsedWidth() + 5),
-				this.applyScale(5),
-				this.applyScale(this.getExpandedWidth() - 5),
-				this.applyScale(this.getCollapsedHeight() - 5));
-		this.demoteButton.layout(
-				this.applyScale(5),
-				this.applyScale(this.getCollapsedHeight() + 5),
-				this.applyScale(this.getExpandedHeight()
-						- this.getCollapsedHeight()),
-				this.applyScale(this.getExpandedHeight() - 5));
-		this.promoteButton.layout(
-				this.applyScale(this.getExpandedHeight()
-						- this.getCollapsedHeight()),
-				this.applyScale(this.getCollapsedHeight() + 5),
-				this.applyScale(this.getCollapsedWidth() - 5),
-				this.applyScale(this.getExpandedHeight() - 5));
+		// Compute scaled dimensions
+		int collapsedWidth = this.applyScale(this.getCollapsedWidth());
+		int collapsedHeight = this.applyScale(this.getCollapsedHeight());
+		int expandedWidth = this.applyScale(this.getExpandedWidth());
+		int expandedHeight = this.applyScale(this.getExpandedHeight());
+		int collapsedCenterX = collapsedWidth / 2;
+		int collapsedCenterY = collapsedHeight / 2;
 
-		this.background.setBounds(0, 0,
-				this.applyScale(this.getCollapsedWidth()),
-				this.applyScale(this.getCollapsedWidth()));
-		this.background.setCornerRadius(this.applyScale(20));
+		// Apply layouts
+		this.slotButton.layout(0, 0, collapsedWidth, collapsedHeight);
+		this.removeButton.layout(collapsedCenterX, 0, expandedWidth,
+				collapsedHeight);
+		this.demoteButton.layout(0, collapsedCenterY,
+				(expandedHeight - collapsedHeight), expandedHeight);
+		this.promoteButton.layout((expandedHeight - collapsedHeight),
+				(collapsedHeight / 2), collapsedWidth, expandedHeight);
+
+		// Apply corners to CornerButtons
+		float cornerRadius = applyScale(20);
+		this.removeButton.setCorners(0, cornerRadius, cornerRadius, 0);
+		this.demoteButton.setCorners(0, 0, 0, cornerRadius);
+		this.promoteButton.setCorners(0, 0, cornerRadius, 0);
+
+		// Apply insets to CornerButtons
+		float padding = applyScale(20);
+		// TODO: Finish setting insets
+		this.removeButton.setInsets(collapsedCenterX + padding, padding,
+				padding, padding);
+		this.demoteButton.setInsets(padding, collapsedCenterY + padding,
+				padding, padding);
+		this.promoteButton.setInsets(padding, collapsedCenterY + padding,
+				padding, padding);
 	}
 }

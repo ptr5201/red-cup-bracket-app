@@ -11,6 +11,8 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.redcup.app.R;
@@ -20,9 +22,10 @@ public class CorneredButton extends View {
 	// Fill colors
 	private static final int FILL_DEFAULT = Color.WHITE;
 	private static final int FILL_CLICKED = Color.YELLOW;
+	private static final int FILL_DISABLED = Color.LTGRAY;
 
 	// Border colors
-	private static final int BORDER_DEFAULT = Color.RED;
+	private static final int BORDER_DEFAULT = Color.BLACK;
 
 	// Border thickness
 	private static final int BORDER_THICKNESS = 4;
@@ -58,8 +61,38 @@ public class CorneredButton extends View {
 	}
 
 	private void initialize() {
+		this.setClickable(true);
+
 		this.icon = BitmapFactory.decodeResource(getResources(),
 				R.drawable.remove_participant);
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		boolean result = super.onTouchEvent(event);
+
+		// Update pressed state
+		if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+			this.setPressed(true);
+			this.invalidate();
+		} else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+			this.setPressed(false);
+			this.invalidate();
+		} else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+			boolean isPointerOver = false;
+			for (int i = 0; i < event.getPointerCount(); i++) {
+				isPointerOver |= event.getX(i) >= 0
+						&& event.getX(i) <= this.getWidth()
+						&& event.getY(i) >= 0
+						&& event.getY(i) <= this.getHeight();
+			}
+			this.setPressed(isPointerOver);
+			this.invalidate();
+		} else {
+			Log.v("onTouchEvent()", "MotionEvent = " + event.getActionMasked());
+		}
+
+		return result;
 	}
 
 	public void setIcon(Bitmap icon) {
@@ -97,6 +130,26 @@ public class CorneredButton extends View {
 	}
 
 	/**
+	 * Sets the insets, which dictate content placement.
+	 * 
+	 * @param l
+	 *            left padding.
+	 * @param t
+	 *            top padding.
+	 * @param r
+	 *            right padding.
+	 * @param b
+	 *            bottom padding.
+	 */
+	public void setInsets(float l, float t, float r, float b) {
+		this.insets_left = l;
+		this.insets_top = t;
+		this.insets_right = r;
+		this.insets_bottom = b;
+		this.invalidate();
+	}
+
+	/**
 	 * Draws a rounded rectangle with the given corner radii.
 	 * 
 	 * @param canvas
@@ -114,8 +167,14 @@ public class CorneredButton extends View {
 	 * @param rbr
 	 *            the bottom right corner radius.
 	 */
-	protected void drawRoundedRect(Canvas canvas, Paint paint, RectF rect,
-			float rtl, float rtr, float rbr, float rbl) {
+	protected static void drawRoundedRect(Canvas canvas, Paint paint,
+			RectF rect, float rtl, float rtr, float rbr, float rbl) {
+		// Apply bounds to radii
+		rtl = Math.max(rtl, 0);
+		rtr = Math.max(rtr, 0);
+		rbr = Math.max(rbr, 0);
+		rbl = Math.max(rbl, 0);
+
 		// Build path; start at top left and move clockwise
 		Path path = new Path();
 		path.moveTo(rect.left + rtl, rect.top);
@@ -139,6 +198,7 @@ public class CorneredButton extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		Paint paint = new Paint();
+		paint.setAntiAlias(true);
 		paint.setStyle(Style.FILL);
 
 		// Set colors according to state
@@ -146,14 +206,20 @@ public class CorneredButton extends View {
 		if (this.isPressed()) {
 			fillColor = FILL_CLICKED;
 		}
+		if (!this.isEnabled()) {
+			fillColor = FILL_DISABLED;
+		}
 
-		// Draw background
+		// Draw border
 		paint.setColor(BORDER_DEFAULT);
-		this.drawRoundedRect(canvas, paint, new RectF(0, 0, this.getWidth(),
-				this.getHeight()), this.corner_topleft, this.corner_topright,
+		drawRoundedRect(canvas, paint,
+				new RectF(0, 0, this.getWidth(), this.getHeight()),
+				this.corner_topleft, this.corner_topright,
 				this.corner_bottomright, this.corner_bottomleft);
+
+		// Draw fill
 		paint.setColor(fillColor);
-		this.drawRoundedRect(
+		drawRoundedRect(
 				canvas,
 				paint,
 				new RectF(BORDER_THICKNESS, BORDER_THICKNESS, this.getWidth()
