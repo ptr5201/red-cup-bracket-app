@@ -5,11 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -43,7 +44,10 @@ public class CorneredButton extends View {
 	private float insets_right = 20;
 
 	// Icon
-	private Bitmap icon = null;
+	private Drawable icon = null;
+
+	// Icon scaling
+	private boolean symmetricIconScaling = true;
 
 	public CorneredButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -63,8 +67,30 @@ public class CorneredButton extends View {
 	private void initialize() {
 		this.setClickable(true);
 
-		this.icon = BitmapFactory.decodeResource(getResources(),
-				R.drawable.remove_participant);
+		this.icon = new BitmapDrawable(BitmapFactory.decodeResource(
+				getResources(), R.drawable.remove_participant));
+	}
+
+	/**
+	 * Used to enable or disable symmetric icon scaling.
+	 * 
+	 * @param symmetric
+	 *            if {@code true}, icon will be scaled symmetrically.
+	 */
+	public void setSymmetricIconScaling(boolean symmetric) {
+		this.symmetricIconScaling = symmetric;
+		this.invalidate();
+	}
+
+	/**
+	 * Returns {@code true} if this {@code CorneredButton} is using symmetric
+	 * icon scaling.
+	 * 
+	 * @return {@code true} if this {@code CorneredButton} is using symmetric
+	 *         icon scaling.
+	 */
+	public boolean getSymmetricScaling() {
+		return this.symmetricIconScaling;
 	}
 
 	@Override
@@ -96,16 +122,17 @@ public class CorneredButton extends View {
 	}
 
 	public void setIcon(Bitmap icon) {
-		this.icon = icon;
+		this.icon = new BitmapDrawable(icon);
 		this.invalidate();
 	}
 
 	public void setIcon(int resid) {
-		this.icon = BitmapFactory.decodeResource(this.getResources(), resid);
+		this.icon = new BitmapDrawable(BitmapFactory.decodeResource(
+				this.getResources(), resid));
 		this.invalidate();
 	}
 
-	public Bitmap getIcon() {
+	public Drawable getIcon() {
 		return this.icon;
 	}
 
@@ -236,26 +263,25 @@ public class CorneredButton extends View {
 					- this.insets_right;
 			float iconAvailableHeight = this.getHeight() - this.insets_top
 					- this.insets_bottom;
-			float iconWidth = this.icon.getWidth();
-			float iconHeight = this.icon.getHeight();
+			float iconWidth = this.icon.getMinimumWidth();
+			float iconHeight = this.icon.getMinimumHeight();
 
 			// Compute the icon scaling factor
 			float iconScaleX = iconAvailableWidth / iconWidth;
 			float iconScaleY = iconAvailableHeight / iconHeight;
-			iconScaleX = Math.min(iconScaleX, iconScaleY);
-			iconScaleY = iconScaleX;
-
-			// Build the transformation matrix
-			Matrix matrix = new Matrix();
-			float tx = this.insets_left
-					+ (iconAvailableWidth - iconWidth * iconScaleX) / 2;
-			float ty = this.insets_top
-					+ (iconAvailableHeight - iconHeight * iconScaleY) / 2;
-			matrix.preTranslate(tx, ty);
-			matrix.preScale(iconScaleX, iconScaleY);
+			if (this.symmetricIconScaling) {
+				iconScaleX = Math.min(iconScaleX, iconScaleY);
+				iconScaleY = iconScaleX;
+			}
+			iconWidth *= iconScaleX;
+			iconHeight *= iconScaleY;
+			float tx = this.insets_left + (iconAvailableWidth - iconWidth) / 2;
+			float ty = this.insets_top + (iconAvailableHeight - iconHeight) / 2;
 
 			// Draw the icon
-			canvas.drawBitmap(this.icon, matrix, paint);
+			this.icon.setBounds((int) tx, (int) ty, (int) (tx + iconWidth),
+					(int) (ty + iconHeight));
+			this.icon.draw(canvas);
 		}
 	}
 }

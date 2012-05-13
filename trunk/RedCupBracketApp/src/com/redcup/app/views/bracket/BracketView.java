@@ -2,6 +2,7 @@ package com.redcup.app.views.bracket;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -55,21 +56,38 @@ public class BracketView extends ViewGroup {
 		public boolean onDoubleTap(MotionEvent e) {
 			// TODO: Implement zooming using pinch mechanism
 			// Temporary testing code
-			if (layout != null) {
-				// Update zoom factor and update the layout
-				if (layout.getScale() > 0.9f) {
-					layout.setScale(0.9f);
-				} else if (layout.getScale() < 0.9f) {
-					layout.setScale(1.0f);
-				} else {
-					layout.setScale(0.75f);
-				}
-				updateLayout(true);
+			// if (layout != null) {
+			// // Update zoom factor and update the layout
+			// if (layout.getScale() > 0.9f) {
+			// layout.setScale(0.9f);
+			// } else if (layout.getScale() < 0.9f) {
+			// layout.setScale(1.0f);
+			// } else {
+			// layout.setScale(0.75f);
+			// }
+			// updateLayout(true);
+			//
+			// // Update scroll position
+			// int x = BracketView.this.getScrollX();
+			// int y = BracketView.this.getScrollY();
+			// BracketView.this.scrollTo(x, y);
+			// }
 
-				// Update scroll position
-				int x = BracketView.this.getScrollX();
-				int y = BracketView.this.getScrollY();
-				BracketView.this.scrollTo(x, y);
+			if (layout != null) {
+				float x = e.getX();
+				float y = e.getY();
+				float scale = layout.getScale();
+				float zoom = 0.9f;
+
+				if (scale > 0.9f) {
+					zoom = 0.9f;
+				} else if (scale > 0.75f) {
+					zoom = 0.75f / scale;
+				} else {
+					zoom = 1.0f / scale;
+				}
+
+				zoomOn(new PointF(x, y), zoom);
 			}
 			return true;
 		}
@@ -328,6 +346,19 @@ public class BracketView extends ViewGroup {
 	 */
 	public BracketMode getMode() {
 		return this.mode;
+	}
+
+	protected void zoomOn(PointF center, float zoom) {
+		int x = Math.round((center.x + this.getScrollX()) * zoom)
+				- this.getWidth() / 2;
+		int y = Math.round((center.y + this.getScrollY()) * zoom)
+				- this.getHeight() / 2;
+		if (this.getLayoutAlgorithm() != null) {
+			this.getLayoutAlgorithm().setScale(
+					this.getLayoutAlgorithm().getScale() * zoom);
+		}
+		this.updateLayout(true);
+		this.scrollTo(x, y);
 	}
 
 	@Override
