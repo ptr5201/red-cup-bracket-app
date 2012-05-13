@@ -145,8 +145,8 @@ public class ParticipantSelectorActivity extends Activity {
 			if((v == null) || (v.getTag() == null)){
 				v = inflater.inflate(R.layout.participantselectoritem, null);
 				holder = new ViewHolder();				
-				holder.name = (TextView)v.findViewById(R.id.textView1);
-				holder.check = (CheckBox)v.findViewById(R.id.checkBox1);
+				holder.name = (TextView)v.findViewById(R.id.selectorParticipantNameId);
+				holder.check = (CheckBox)v.findViewById(R.id.selectorParticipantCheckboxId);
 				
 				v.setTag(holder);
 			}

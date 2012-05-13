@@ -12,20 +12,19 @@
             android:text="@string/selectParticipants"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#ffffff00" />
-
+
         <ListView
             android:id="@+id/selectParticipantListView"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_above="@+id/selectParticipantButton1"
+            android:layout_above="@+id/participantSelectorCreateButtonId"
             android:layout_below="@+id/selectParticipantTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp" >
 
-        </ListView>
-
+        </ListView>
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/doneButtonId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -35,10 +34,10 @@
             android:text="@string/participantSelectorDone" />
 
         <Button
-            android:id="@+id/selectParticipantButton1"
+            android:id="@+id/participantSelectorCreateButtonId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/button1"
+            android:layout_above="@+id/doneButtonId"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:onClick="createParticipant"

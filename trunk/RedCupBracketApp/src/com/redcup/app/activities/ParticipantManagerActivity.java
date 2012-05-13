@@ -186,7 +186,7 @@ public class ParticipantManagerActivity extends Activity {
 			if((v == null) || (v.getTag() == null)){
 				v = inflater.inflate(R.layout.participantlistitem, null);
 				holder = new ViewHolder();				
-				holder.name = (TextView)v.findViewById(R.id.textView1);
+				holder.name = (TextView)v.findViewById(R.id.participantListItemId);
 				v.setTag(holder);
 			}
 			else{
