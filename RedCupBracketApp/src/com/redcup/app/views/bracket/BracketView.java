@@ -348,7 +348,7 @@ public class BracketView extends ViewGroup {
 	 * @param changed
 	 *            whether an external change has occurred.
 	 */
-	protected void updateLayout(boolean changed) {
+	public void updateLayout(boolean changed) {
 		if (this.layout != null) {
 			this.layout.onLayout(changed);
 		}

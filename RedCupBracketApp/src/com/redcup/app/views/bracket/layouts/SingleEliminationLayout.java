@@ -7,9 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.View;
 
+import com.redcup.app.activities.EditParticipantActivity;
+import com.redcup.app.activities.ParticipantManagerActivity;
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.InvalidStateException;
 import com.redcup.app.model.Participant;
@@ -73,6 +77,32 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			Participant p = event.getParticipant();
 			SingleEliminationLayout.this.getBracketView().getTournament()
 					.removeParticipant(p);
+		}
+	};
+
+	private final OnEditBracketClickedListener onEditBracketClickedListener = new OnEditBracketClickedListener() {
+		@Override
+		public void onEditBracketClicked(OnEditBracketClickedEvent event) {
+			// Depending on our current state, show either the selection dialog
+			// or the editor dialog
+			if (getMode() == BracketMode.SETUP) {
+				// TODO: Open single selector
+			} else {
+				// Open participant editor
+				// TODO: Figure out how to update participant in BracketView
+				Context context = getBracketView().getContext();
+				Intent participantEditorIntent = new Intent(context,
+						EditParticipantActivity.class);
+				participantEditorIntent.putExtra(
+						ParticipantManagerActivity.EXTRA_PARTICIPANT_OLD_NAME,
+						event.getSource().getBracket().getParticipant()
+								.getName());
+				participantEditorIntent.putExtra(
+						ParticipantManagerActivity.EXTRA_PARTICIPANT_ID, event
+								.getSource().getBracket().getParticipant()
+								.getId());
+				context.startActivity(participantEditorIntent);
+			}
 		}
 	};
 
@@ -142,24 +172,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 						.addOnParticipantRemovedListener(this.onParticipantRemovedListener);
 				setupSlot.setMode(this.getMode());
 				setupSlot
-						.addOnEditBracketClickedListener(new OnEditBracketClickedListener() {
-							@Override
-							public void onEditBracketClicked(
-									OnEditBracketClickedEvent event) {
-								SetupBracketViewSlot source = event.getSource();
-								switch (source.getMode()) {
-								case ADVANCEMENT:
-									source.setMode(BracketMode.READONLY);
-									break;
-								case READONLY:
-									source.setMode(BracketMode.SETUP);
-									break;
-								case SETUP:
-									source.setMode(BracketMode.ADVANCEMENT);
-									break;
-								}
-							}
-						});
+						.addOnEditBracketClickedListener(this.onEditBracketClickedListener);
 				slot = setupSlot;
 			}
 
