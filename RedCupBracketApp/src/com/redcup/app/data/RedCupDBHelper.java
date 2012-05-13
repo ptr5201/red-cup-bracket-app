@@ -14,7 +14,8 @@ public class RedCupDBHelper extends SQLiteOpenHelper {
 		Constants.Participant.TABLE_NAME + " (" +
 		Constants.Participant.KEY_ID + " integer primary key autoincrement, " +
 		Constants.Participant.PARTICIPANT_NAME + " text not null, " +
-		Constants.Participant.DATE_CREATED + " long" +
+		Constants.Participant.DATE_CREATED + " long," +
+		Constants.Participant.DATE_ENDED + " long" +
 				");";
 	
 	private static final String CREATE_TOURNAMENT_TABLE = "create table " +

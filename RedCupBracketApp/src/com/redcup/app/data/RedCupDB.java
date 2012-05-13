@@ -39,11 +39,19 @@ public class RedCupDB {
 		taskValue.put(Constants.Participant.PARTICIPANT_NAME, name);
 		taskValue.put(Constants.Participant.DATE_CREATED, 
 				java.lang.System.currentTimeMillis());
+		taskValue.put(Constants.Participant.DATE_ENDED, 0);
 		return db.insert(Constants.Participant.TABLE_NAME, null, taskValue);
 	}
 	
 	public void deleteParticipant(int participantId) {	
-		db.delete(Constants.Participant.TABLE_NAME, 
+		/*db.delete(Constants.Participant.TABLE_NAME, 
+				Constants.Participant.KEY_ID + "=?", 
+				new String [] { Integer.toString(participantId) });*/
+		
+		ContentValues taskValue = new ContentValues();
+		taskValue.put(Constants.Participant.DATE_ENDED, 
+				java.lang.System.currentTimeMillis());
+		db.update(Constants.Participant.TABLE_NAME, taskValue, 
 				Constants.Participant.KEY_ID + "=?", 
 				new String [] { Integer.toString(participantId) });
 	}
