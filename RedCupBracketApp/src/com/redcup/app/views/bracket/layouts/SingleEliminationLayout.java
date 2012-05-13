@@ -300,6 +300,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	}
 
 	@Override
+	protected void resetLayout() {
+		this.getBracketView().removeAllViews();
+		this.bracketViewSlots.clear();
+		this.usedBrackets.clear();
+	}
+
+	@Override
 	public void onLayout(boolean changed) {
 		// Check to make sure that we need to actually update anything
 		if (this.isLayoutRequired(changed)) {

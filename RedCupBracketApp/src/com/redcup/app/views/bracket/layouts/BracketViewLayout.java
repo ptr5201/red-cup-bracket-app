@@ -334,6 +334,7 @@ public abstract class BracketViewLayout {
 	 */
 	public void setMode(BracketMode mode) {
 		this.mode = mode;
+		this.resetLayout();
 		this.onLayout(true);
 	}
 
@@ -370,6 +371,14 @@ public abstract class BracketViewLayout {
 	protected boolean isLayoutRequired(boolean changed) {
 		return (changed || this.hasChangedInternally()) && !this.isFrozen();
 	}
+
+	/**
+	 * Resets the layout. Called whenever the a major change (e.g. the mode) is
+	 * made to the layout. Child classes should implement this method to remove
+	 * any components from their implementation lists and the managed
+	 * {@code BracketView}.
+	 */
+	protected abstract void resetLayout();
 
 	/**
 	 * Performs the layout for the bracket.
