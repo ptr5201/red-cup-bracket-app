@@ -21,6 +21,7 @@ import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.ExpandedState;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpansionEvent;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpansionListener;
+import com.redcup.app.views.bracket.PlaceholderBracketViewSlot;
 import com.redcup.app.views.bracket.SetupBracketViewSlot;
 import com.redcup.app.views.bracket.SetupBracketViewSlot.OnEditBracketClickedEvent;
 import com.redcup.app.views.bracket.SetupBracketViewSlot.OnEditBracketClickedListener;
@@ -125,33 +126,42 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	private BracketViewSlot getBracketViewSlot(Bracket bracket) {
 		BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 		if (slot == null) {
-			// Create the SetupBracketViewSlot
-			final SetupBracketViewSlot setupSlot = new SetupBracketViewSlot(
-					this.getBracketView().getContext());
-			setupSlot.addOnPromotedListener(this.onPromotedListener);
-			setupSlot.addOnDemotedListener(this.onDemotedListener);
-			setupSlot
-					.addOnParticipantRemovedListener(this.onParticipantRemovedListener);
-			setupSlot
-					.addOnEditBracketClickedListener(new OnEditBracketClickedListener() {
-						@Override
-						public void onEditBracketClicked(
-								OnEditBracketClickedEvent event) {
-							SetupBracketViewSlot source = event.getSource();
-							switch (source.getMode()) {
-							case ADVANCEMENT:
-								source.setMode(BracketMode.READONLY);
-								break;
-							case READONLY:
-								source.setMode(BracketMode.SETUP);
-								break;
-							case SETUP:
-								source.setMode(BracketMode.ADVANCEMENT);
-								break;
+			// Create and configure the view
+			if (this.getMode() == BracketMode.SETUP
+					&& (bracket.getLeft() != null || bracket.getRight() != null)) {
+				// Create a PlaceholderBracketViewSlot
+				slot = new PlaceholderBracketViewSlot(this.getBracketView()
+						.getContext());
+			} else {
+				// Create the SetupBracketViewSlot
+				final SetupBracketViewSlot setupSlot = new SetupBracketViewSlot(
+						this.getBracketView().getContext());
+				setupSlot.addOnPromotedListener(this.onPromotedListener);
+				setupSlot.addOnDemotedListener(this.onDemotedListener);
+				setupSlot
+						.addOnParticipantRemovedListener(this.onParticipantRemovedListener);
+				setupSlot.setMode(this.getMode());
+				setupSlot
+						.addOnEditBracketClickedListener(new OnEditBracketClickedListener() {
+							@Override
+							public void onEditBracketClicked(
+									OnEditBracketClickedEvent event) {
+								SetupBracketViewSlot source = event.getSource();
+								switch (source.getMode()) {
+								case ADVANCEMENT:
+									source.setMode(BracketMode.READONLY);
+									break;
+								case READONLY:
+									source.setMode(BracketMode.SETUP);
+									break;
+								case SETUP:
+									source.setMode(BracketMode.ADVANCEMENT);
+									break;
+								}
 							}
-						}
-					});
-			slot = setupSlot;
+						});
+				slot = setupSlot;
+			}
 
 			// Assign the bracket to the BracketViewSlot
 			slot.setBracket(bracket);
@@ -255,11 +265,13 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		Bracket right = bracket.getRight();
 		BracketViewSlot leftSlot = this.bracketViewSlots.get(left);
 		BracketViewSlot rightSlot = this.bracketViewSlots.get(right);
-		int avgTop = (leftSlot.getTop() + rightSlot.getTop()) / 2;
+		int cY = (leftSlot.getTop() + rightSlot.getTop() + leftSlot
+				.getCollapsedHeight()) / 2;
+		cY -= slot.getCollapsedHeight() / 2;
 
 		// Update slot's positioning
-		slot.layout(hPos, avgTop, hPos + slot.getScaledExpandedWidth(), avgTop
-				+ slot.getScaledExpandedHeight());
+		slot.layout(hPos, cY, hPos + slot.getScaledExpandedWidth(),
+				cY + slot.getScaledExpandedHeight());
 
 		// TODO: Replace kludgey connector code
 		// Create and add a BracketConnector
@@ -370,13 +382,4 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			this.usedBrackets.clear();
 		}
 	}
-
-	// @Override
-	// public void setScale(float scale) {
-	// super.setScale(scale);
-	// Collection<BracketViewSlot> slots = this.bracketViewSlots.values();
-	// for (BracketViewSlot slot : slots) {
-	// slot.setScale(scale);
-	// }
-	// }
 }

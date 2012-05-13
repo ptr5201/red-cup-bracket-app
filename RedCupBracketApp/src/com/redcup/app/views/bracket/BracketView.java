@@ -214,7 +214,7 @@ public class BracketView extends ViewGroup {
 			View child = this.getChildAt(i);
 			if (child instanceof BracketViewSlot) {
 				BracketViewSlot slot = (BracketViewSlot) child;
-				slot.reset();
+				slot.setSelected(false);
 			}
 		}
 	}

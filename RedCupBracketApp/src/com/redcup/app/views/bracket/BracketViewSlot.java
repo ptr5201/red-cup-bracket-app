@@ -178,11 +178,6 @@ public abstract class BracketViewSlot extends ViewGroup {
 	}
 
 	/**
-	 * Returns this control to its default state (collapsed, deselected).
-	 */
-	public abstract void reset();
-
-	/**
 	 * Sets the amount of horizontal space this control uses when collapsed.
 	 * 
 	 * @param width
