@@ -137,9 +137,7 @@ public class CreateTournamentActivity extends Activity {
 
 		Intent tournamentParticipants = new Intent(this,
 				TournamentParticipantsActivity.class);
-		tournamentParticipants
-				.putExtra(TournamentParticipantsActivity.EXTRA_TOURNAMENT_ID,
-						t.getId());
+		tournamentParticipants.putExtra(getString(R.string.EXTRA_TOURNAMENT_ID), t.getId());
 		startActivity(tournamentParticipants);
 	}
 
