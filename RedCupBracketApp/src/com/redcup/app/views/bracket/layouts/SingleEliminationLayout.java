@@ -15,12 +15,15 @@ import com.redcup.app.model.InvalidStateException;
 import com.redcup.app.model.Participant;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.views.bracket.BracketConnector;
+import com.redcup.app.views.bracket.BracketMode;
 import com.redcup.app.views.bracket.BracketView;
 import com.redcup.app.views.bracket.BracketViewSlot;
 import com.redcup.app.views.bracket.BracketViewSlot.ExpandedState;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpansionEvent;
 import com.redcup.app.views.bracket.BracketViewSlot.OnExpansionListener;
 import com.redcup.app.views.bracket.SetupBracketViewSlot;
+import com.redcup.app.views.bracket.SetupBracketViewSlot.OnEditBracketClickedEvent;
+import com.redcup.app.views.bracket.SetupBracketViewSlot.OnEditBracketClickedListener;
 import com.redcup.app.views.bracket.events.OnDemotedEvent;
 import com.redcup.app.views.bracket.events.OnDemotedListener;
 import com.redcup.app.views.bracket.events.OnParticipantRemovedEvent;
@@ -122,13 +125,32 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	private BracketViewSlot getBracketViewSlot(Bracket bracket) {
 		BracketViewSlot slot = this.bracketViewSlots.get(bracket);
 		if (slot == null) {
-			// Create the AdvancementBracketViewSlot
-			SetupBracketViewSlot setupSlot = new SetupBracketViewSlot(this
-					.getBracketView().getContext());
+			// Create the SetupBracketViewSlot
+			final SetupBracketViewSlot setupSlot = new SetupBracketViewSlot(
+					this.getBracketView().getContext());
 			setupSlot.addOnPromotedListener(this.onPromotedListener);
 			setupSlot.addOnDemotedListener(this.onDemotedListener);
 			setupSlot
 					.addOnParticipantRemovedListener(this.onParticipantRemovedListener);
+			setupSlot
+					.addOnEditBracketClickedListener(new OnEditBracketClickedListener() {
+						@Override
+						public void onEditBracketClicked(
+								OnEditBracketClickedEvent event) {
+							SetupBracketViewSlot source = event.getSource();
+							switch (source.getMode()) {
+							case ADVANCEMENT:
+								source.setMode(BracketMode.READONLY);
+								break;
+							case READONLY:
+								source.setMode(BracketMode.SETUP);
+								break;
+							case SETUP:
+								source.setMode(BracketMode.ADVANCEMENT);
+								break;
+							}
+						}
+					});
 			slot = setupSlot;
 
 			// Assign the bracket to the BracketViewSlot
