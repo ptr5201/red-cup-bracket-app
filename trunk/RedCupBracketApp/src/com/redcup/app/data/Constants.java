@@ -10,6 +10,7 @@ public final class Constants {
 		public static final String TABLE_NAME = "participants";
 		public static final String KEY_ID = "p_id";
 		public static final String DATE_CREATED = "p_date";
+		public static final String DATE_ENDED = "p_date_end";
 		public static final String PARTICIPANT_NAME = "p_name";
 		
 	}

@@ -96,16 +96,20 @@ public class ParticipantSelectorActivity extends Activity {
 			if (c.moveToFirst()) {
 				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
 			
-				Participant temp = new Participant(name);
-				temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
-				participants.add(0, temp);
+				if(c.getLong(c.getColumnIndex(com.redcup.app.data.Constants.Participant.DATE_ENDED)) == 0){
+					Participant temp = new Participant(name);
+					temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
+					participants.add(0, temp);
+				}
 			}
 			while (c.moveToNext()) {
 				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
 				
-				Participant temp = new Participant(name);
-				temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
-				participants.add(0, temp);
+				if(c.getLong(c.getColumnIndex(com.redcup.app.data.Constants.Participant.DATE_ENDED)) == 0){
+					Participant temp = new Participant(name);
+					temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
+					participants.add(0, temp);
+				}
 			}
 			db.close();
 			
