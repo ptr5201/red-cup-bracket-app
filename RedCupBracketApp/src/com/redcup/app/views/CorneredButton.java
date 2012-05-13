@@ -15,8 +15,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.redcup.app.R;
-
 public class CorneredButton extends View {
 
 	// Fill colors
@@ -65,9 +63,6 @@ public class CorneredButton extends View {
 
 	private void initialize() {
 		this.setClickable(true);
-
-		this.icon = new BitmapDrawable(BitmapFactory.decodeResource(
-				getResources(), R.drawable.remove_participant));
 	}
 
 	/**
@@ -138,11 +133,22 @@ public class CorneredButton extends View {
 		return this.icon;
 	}
 
+	/**
+	 * Sets this control's border thickness.
+	 * 
+	 * @param borderThickness
+	 *            this control's border thickness.
+	 */
 	public void setBorderThickness(float borderThickness) {
 		this.borderThickness = borderThickness;
 		this.invalidate();
 	}
 
+	/**
+	 * Returns this control's border thickness.
+	 * 
+	 * @return this control's border thickness.
+	 */
 	public float getBorderThickness() {
 		return this.borderThickness;
 	}

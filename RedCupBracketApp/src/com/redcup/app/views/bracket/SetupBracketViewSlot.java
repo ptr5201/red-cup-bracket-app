@@ -440,8 +440,10 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 		int collapsedHeight = this.applyScale(this.getCollapsedHeight());
 		int expandedWidth = this.applyScale(this.getExpandedWidth());
 		int expandedHeight = this.applyScale(this.getExpandedHeight());
-		int collapsedCenterX = collapsedWidth / 2;
-		int collapsedCenterY = collapsedHeight / 2;
+		int collapsedCenterX = collapsedWidth
+				- this.applyScale(this.slotButton.getCornerRadius());
+		int collapsedCenterY = collapsedHeight
+				- this.applyScale(this.slotButton.getCornerRadius());
 
 		// Apply layouts
 		this.slotButton.layout(0, 0, collapsedWidth, collapsedHeight);
@@ -451,7 +453,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 				(expandedHeight - collapsedHeight), expandedHeight);
 		this.promoteButton.layout((expandedHeight - collapsedHeight - Math
 				.round(this.promoteButton.getBorderThickness())),
-				(collapsedHeight / 2), collapsedWidth, expandedHeight);
+				collapsedCenterY, collapsedWidth, expandedHeight);
 
 		// Apply corners to CornerButtons
 		float cornerRadius = applyScale(20);
@@ -461,11 +463,12 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 
 		// Apply insets to CornerButtons
 		float padding = applyScale(20);
-		this.removeButton.setInsets(collapsedCenterX + padding, padding,
-				padding, padding);
-		this.demoteButton.setInsets(padding, collapsedCenterY + padding,
-				padding, padding);
-		this.promoteButton.setInsets(padding, collapsedCenterY + padding,
-				padding, padding);
+		this.removeButton.setInsets(
+				collapsedWidth - collapsedCenterX + padding, padding, padding,
+				padding);
+		this.demoteButton.setInsets(padding, collapsedHeight - collapsedCenterY
+				+ padding, padding, padding);
+		this.promoteButton.setInsets(padding, collapsedHeight
+				- collapsedCenterY + padding, padding, padding);
 	}
 }
