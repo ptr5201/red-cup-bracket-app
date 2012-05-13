@@ -32,11 +32,10 @@ public class PlaceholderBracketViewSlot extends BracketViewSlot {
 
 	private void initialize() {
 		// Configure size
-		int size = this.applyScale(SIZE);
-		this.setCollapsedWidth(size);
-		this.setCollapsedHeight(size);
-		this.setExpandedWidth(size);
-		this.setExpandedHeight(size);
+		this.setCollapsedWidth(SIZE);
+		this.setCollapsedHeight(SIZE);
+		this.setExpandedWidth(SIZE);
+		this.setExpandedHeight(SIZE);
 
 		// Configure background drawable
 		this.setBackgroundDrawable(new Drawable() {
@@ -56,8 +55,8 @@ public class PlaceholderBracketViewSlot extends BracketViewSlot {
 
 			@Override
 			public void draw(Canvas canvas) {
-				int width = getCollapsedWidth();
-				int height = getCollapsedHeight();
+				int width = applyScale(getCollapsedWidth());
+				int height = applyScale(getCollapsedHeight());
 				Paint paint = new Paint();
 				paint.setAntiAlias(true);
 				paint.setColor(Color.BLACK);
@@ -76,12 +75,5 @@ public class PlaceholderBracketViewSlot extends BracketViewSlot {
 
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// Configure size
-		int size = this.applyScale(SIZE);
-		this.setCollapsedWidth(size);
-		this.setCollapsedHeight(size);
-		this.setExpandedWidth(size);
-		this.setExpandedHeight(size);
-		this.invalidate();
 	}
 }

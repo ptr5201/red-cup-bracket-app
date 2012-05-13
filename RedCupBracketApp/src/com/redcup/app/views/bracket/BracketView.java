@@ -220,6 +220,34 @@ public class BracketView extends ViewGroup {
 	}
 
 	/**
+	 * Sets the fixed number of participants that are allowed in a tournament.
+	 * Negative numbers remove this restriction.
+	 * 
+	 * @param limit
+	 *            the number of participatns that are allowed in this
+	 *            tournament.
+	 */
+	public void setParticipantLimit(int limit) {
+		if (this.tournament != null) {
+			this.tournament.setParticipantLimit(limit);
+		}
+	}
+
+	/**
+	 * Returns the fixed number of participants that are allowed in a
+	 * tournament. Negative numbers remove this restriction.
+	 * 
+	 * @return the fixed number of participants that are allowed in a
+	 *         tournament. Negative numbers remove this restriction.
+	 */
+	public int getParticipantLimit() {
+		if (this.tournament != null) {
+			return this.tournament.getParticipantLimit();
+		}
+		return -1;
+	}
+
+	/**
 	 * Assigns a {@code Tournament} for this {@code BracketView} to manage.
 	 * 
 	 * @param tournament

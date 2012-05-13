@@ -24,6 +24,7 @@ public class Tournament {
 	private String name;
 	private int id;
 	private List<Participant> participants = new ArrayList<Participant>();
+	private int participantLimit = -1;
 
 	private List<ParticipantChangedListener> participantChangedListeners = new ArrayList<Tournament.ParticipantChangedListener>();
 
@@ -49,6 +50,29 @@ public class Tournament {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * Sets the fixed number of participants that are allowed in a tournament.
+	 * Negative numbers remove this restriction.
+	 * 
+	 * @param limit
+	 *            the number of participatns that are allowed in this
+	 *            tournament.
+	 */
+	public void setParticipantLimit(int limit) {
+		this.participantLimit = limit;
+	}
+
+	/**
+	 * Returns the fixed number of participants that are allowed in a
+	 * tournament. Negative numbers remove this restriction.
+	 * 
+	 * @return the fixed number of participants that are allowed in a
+	 *         tournament. Negative numbers remove this restriction.
+	 */
+	public int getParticipantLimit() {
+		return this.participantLimit;
 	}
 
 	// Event listener management
