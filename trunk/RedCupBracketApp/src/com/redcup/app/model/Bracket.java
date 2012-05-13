@@ -3,6 +3,9 @@ package com.redcup.app.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.redcup.app.model.Participant.OnNameChangedEvent;
+import com.redcup.app.model.Participant.OnNameChangedListener;
+
 /**
  * Node in binary tree (can probably be subclassed if you need an n-ary tree)
  */
@@ -22,6 +25,15 @@ public class Bracket {
 	public interface OnParticipantChangedListener {
 		public void onParticipantChanged(OnParticipantChangedEvent event);
 	}
+
+	private OnNameChangedListener onNameChangedListener = new OnNameChangedListener() {
+		@Override
+		public void onNameChanged(OnNameChangedEvent event) {
+			Bracket.this
+					.raiseOnParticipantChangedEvent(new OnParticipantChangedEvent(
+							Bracket.this));
+		}
+	};
 
 	private Bracket parent;
 	private Participant participant;
@@ -52,7 +64,17 @@ public class Bracket {
 	}
 
 	public void setParticipant(Participant participant) {
+		if (this.participant != null) {
+			this.participant
+					.removeOnNameChangedListener(this.onNameChangedListener);
+		}
+
 		this.participant = participant;
+
+		if (this.participant != null) {
+			this.participant
+					.addOnNameChangedListener(this.onNameChangedListener);
+		}
 		this.raiseOnParticipantChangedEvent(new OnParticipantChangedEvent(this));
 	}
 
