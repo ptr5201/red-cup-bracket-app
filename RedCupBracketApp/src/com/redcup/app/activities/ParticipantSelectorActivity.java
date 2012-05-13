@@ -32,8 +32,8 @@ public class ParticipantSelectorActivity extends Activity {
 	private ListView participantListView;
 	private ArrayList<Participant> participantList;
 	
-	RedCupDB db;
-	ParticipantAdapter participantAdapter;
+	private RedCupDB db;
+	private ParticipantAdapter participantAdapter;
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -81,7 +81,7 @@ public class ParticipantSelectorActivity extends Activity {
 	
 	private class ParticipantAdapter extends BaseAdapter{
 		private LayoutInflater inflater;
-		public ArrayList<Participant> participants;
+		private ArrayList<Participant> participants;
 		
 		public ParticipantAdapter(Context context){
 			inflater = LayoutInflater.from(context);
