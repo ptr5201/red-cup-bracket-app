@@ -355,7 +355,8 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 				collapsedHeight);
 		this.demoteButton.layout(0, collapsedCenterY,
 				(expandedHeight - collapsedHeight), expandedHeight);
-		this.promoteButton.layout((expandedHeight - collapsedHeight),
+		this.promoteButton.layout((expandedHeight - collapsedHeight - Math
+				.round(this.promoteButton.getBorderThickness())),
 				(collapsedHeight / 2), collapsedWidth, expandedHeight);
 
 		// Apply corners to CornerButtons

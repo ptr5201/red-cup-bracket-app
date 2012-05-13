@@ -29,7 +29,7 @@ public class CorneredButton extends View {
 	private static final int BORDER_DEFAULT = Color.BLACK;
 
 	// Border thickness
-	private static final int BORDER_THICKNESS = 4;
+	private float borderThickness = 4;
 
 	// Corner radii
 	private float corner_topleft = 20;
@@ -121,6 +121,11 @@ public class CorneredButton extends View {
 		return result;
 	}
 
+	public void setDrawable(Drawable icon) {
+		this.icon = icon;
+		this.invalidate();
+	}
+
 	public void setIcon(Bitmap icon) {
 		this.icon = new BitmapDrawable(icon);
 		this.invalidate();
@@ -134,6 +139,15 @@ public class CorneredButton extends View {
 
 	public Drawable getIcon() {
 		return this.icon;
+	}
+
+	public void setBorderThickness(float borderThickness) {
+		this.borderThickness = borderThickness;
+		this.invalidate();
+	}
+
+	public float getBorderThickness() {
+		return this.borderThickness;
 	}
 
 	/**
@@ -246,15 +260,13 @@ public class CorneredButton extends View {
 
 		// Draw fill
 		paint.setColor(fillColor);
-		drawRoundedRect(
-				canvas,
-				paint,
-				new RectF(BORDER_THICKNESS, BORDER_THICKNESS, this.getWidth()
-						- BORDER_THICKNESS, this.getHeight() - BORDER_THICKNESS),
-				this.corner_topleft - BORDER_THICKNESS, this.corner_topright
-						- BORDER_THICKNESS, this.corner_bottomright
-						- BORDER_THICKNESS, this.corner_bottomleft
-						- BORDER_THICKNESS);
+		drawRoundedRect(canvas, paint,
+				new RectF(borderThickness, borderThickness, this.getWidth()
+						- borderThickness, this.getHeight() - borderThickness),
+				this.corner_topleft - borderThickness, this.corner_topright
+						- borderThickness, this.corner_bottomright
+						- borderThickness, this.corner_bottomleft
+						- borderThickness);
 
 		// Draw the icon
 		if (this.icon != null) {
