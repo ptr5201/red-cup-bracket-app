@@ -27,22 +27,24 @@ public class BracketSlotButton extends View {
 	// Refernce font size
 	private static final int DEFAULT_TEXT_SIZE = 32;
 
-	// Margins
-	private static final int TOP_TEXT_MARGIN = 20;
-	private static final int BOTTOM_TEXT_MARGIN = 15;
-	private static final int LEFT_TEXT_MARGIN = 10;
-	private static final int RIGHT_TEXT_MARGIN = 10;
-
-	// Border thickness and corner radius
-	private static final int BORDER_THICKNESS = 4;
-	private static final int CORNER_RADIUS = 20;
-
 	// Sample text used to compute text sizes
 	private static final String SIZING_SAMPLE_TEXT = "Ty";
 
+	// Border thickness
+	private float borderThickness = 4;
+
+	// Corner radius
+	private float cornerRadius = 20;
+
+	// Insets
+	private float insets_top = 20;
+	private float insets_left = 10;
+	private float insets_bottom = 15;
+	private float insets_right = 10;
+
 	// Diplayed text
 	private String text = null;
-	
+
 	// Scale factor
 	private float scale = 1.0f;
 
@@ -139,6 +141,66 @@ public class BracketSlotButton extends View {
 		return this.text;
 	}
 
+	/**
+	 * Sets this control's border thickness.
+	 * 
+	 * @param borderThickness
+	 *            this control's border thickness.
+	 */
+	public void setBorderThickness(float borderThickness) {
+		this.borderThickness = borderThickness;
+		this.invalidate();
+	}
+
+	/**
+	 * Returns this control's border thickness.
+	 * 
+	 * @return this control's border thickness.
+	 */
+	public float getBorderThickness() {
+		return this.borderThickness;
+	}
+
+	/**
+	 * Sets this control's corner radius.
+	 * 
+	 * @param radius
+	 *            the new radius to use.
+	 */
+	public void setCornerRadius(float radius) {
+		this.cornerRadius = radius;
+		this.invalidate();
+	}
+
+	/**
+	 * Returns this control's corner radius.
+	 * 
+	 * @return this control's corner radius.
+	 */
+	public float getCornerRadius() {
+		return this.cornerRadius;
+	}
+
+	/**
+	 * Sets the insets, which dictate content placement.
+	 * 
+	 * @param l
+	 *            left padding.
+	 * @param t
+	 *            top padding.
+	 * @param r
+	 *            right padding.
+	 * @param b
+	 *            bottom padding.
+	 */
+	public void setInsets(float l, float t, float r, float b) {
+		this.insets_left = l;
+		this.insets_top = t;
+		this.insets_right = r;
+		this.insets_bottom = b;
+		this.invalidate();
+	}
+
 	public void setScale(float scale) {
 		this.scale = scale;
 		this.invalidate();
@@ -167,14 +229,14 @@ public class BracketSlotButton extends View {
 		if (!this.isEnabled()) {
 			fillColor = FILL_DISABLED;
 		}
-		int scaledCornerRadius = Math.round(this.applyScale(CORNER_RADIUS));
-		int scaledTextMarginTop = Math.round(this.applyScale(TOP_TEXT_MARGIN));
+		int scaledCornerRadius = Math.round(this.applyScale(this.cornerRadius));
+		int scaledTextMarginTop = Math.round(this.applyScale(this.insets_top));
 		int scaledTextMarginLeft = Math
-				.round(this.applyScale(LEFT_TEXT_MARGIN));
+				.round(this.applyScale(this.insets_left));
 		int scaledTextMarginRight = Math.round(this
-				.applyScale(RIGHT_TEXT_MARGIN));
+				.applyScale(this.insets_right));
 		int scaledTextMarginBottom = Math.round(this
-				.applyScale(BOTTOM_TEXT_MARGIN));
+				.applyScale(this.insets_bottom));
 
 		// Draw border
 		paint.setColor(Color.BLACK);
@@ -184,11 +246,11 @@ public class BracketSlotButton extends View {
 
 		// Draw background
 		paint.setColor(fillColor);
-		canvas.drawRoundRect(
-				new RectF(BORDER_THICKNESS, BORDER_THICKNESS, this.getWidth()
-						- BORDER_THICKNESS, this.getHeight() - BORDER_THICKNESS),
-				scaledCornerRadius - BORDER_THICKNESS, scaledCornerRadius
-						- BORDER_THICKNESS, paint);
+		canvas.drawRoundRect(new RectF(this.borderThickness,
+				this.borderThickness, this.getWidth() - this.borderThickness,
+				this.getHeight() - this.borderThickness), scaledCornerRadius
+				- this.borderThickness, scaledCornerRadius
+				- this.borderThickness, paint);
 
 		// Draw label
 		if (this.text != null) {

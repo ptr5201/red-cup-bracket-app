@@ -328,7 +328,7 @@ public abstract class BracketViewSlot extends ViewGroup {
 	 *            the dimension to scale.
 	 * @return the given dimension adjusted by the scale factor.
 	 */
-	protected int applyScale(int dimension) {
+	protected int applyScale(float dimension) {
 		return Math.round(this.scale * dimension);
 	}
 
