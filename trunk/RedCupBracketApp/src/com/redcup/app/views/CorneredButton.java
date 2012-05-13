@@ -12,7 +12,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,7 +21,7 @@ public class CorneredButton extends View {
 
 	// Fill colors
 	private static final int FILL_DEFAULT = Color.WHITE;
-	private static final int FILL_CLICKED = Color.YELLOW;
+	private static final int FILL_PRESSED = Color.argb(255, 255, 192, 0);
 	private static final int FILL_DISABLED = Color.LTGRAY;
 
 	// Border colors
@@ -114,8 +113,6 @@ public class CorneredButton extends View {
 			}
 			this.setPressed(isPointerOver);
 			this.invalidate();
-		} else {
-			Log.v("onTouchEvent()", "MotionEvent = " + event.getActionMasked());
 		}
 
 		return result;
@@ -245,7 +242,7 @@ public class CorneredButton extends View {
 		// Set colors according to state
 		int fillColor = FILL_DEFAULT;
 		if (this.isPressed()) {
-			fillColor = FILL_CLICKED;
+			fillColor = FILL_PRESSED;
 		}
 		if (!this.isEnabled()) {
 			fillColor = FILL_DISABLED;

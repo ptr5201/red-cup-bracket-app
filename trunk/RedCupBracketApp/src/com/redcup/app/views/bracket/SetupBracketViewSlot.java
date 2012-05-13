@@ -20,13 +20,36 @@ import com.redcup.app.views.bracket.events.OnPromotedListener;
 
 public class SetupBracketViewSlot extends BracketViewSlot {
 
+	public class OnEditBracketClickedEvent {
+		private final SetupBracketViewSlot source;
+
+		public OnEditBracketClickedEvent(SetupBracketViewSlot source) {
+			this.source = source;
+		}
+
+		public SetupBracketViewSlot getSource() {
+			return this.source;
+		}
+	}
+
+	public interface OnEditBracketClickedListener {
+		public void onEditBracketClicked(OnEditBracketClickedEvent event);
+	}
+
 	// Listener Definitions
 	private OnClickListener slotButtonListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			SetupBracketViewSlot.this
-					.raiseOnExpansionEvent(new OnExpansionEvent(
-							SetupBracketViewSlot.this, ExpandedState.EXPANDED));
+			if (!SetupBracketViewSlot.this.isSelected()) {
+				SetupBracketViewSlot.this
+						.raiseOnExpansionEvent(new OnExpansionEvent(
+								SetupBracketViewSlot.this,
+								ExpandedState.EXPANDED));
+			} else {
+				SetupBracketViewSlot.this
+						.raiseOnEditBracketClickedEvent(new OnEditBracketClickedEvent(
+								SetupBracketViewSlot.this));
+			}
 		}
 	};
 
@@ -67,6 +90,7 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 	private final Collection<OnPromotedListener> onPromotedListenerList = new ArrayList<OnPromotedListener>();
 	private final Collection<OnDemotedListener> onDemotedListenerList = new ArrayList<OnDemotedListener>();
 	private final Collection<OnParticipantRemovedListener> onParticipantRemovedListenerList = new ArrayList<OnParticipantRemovedListener>();
+	private final Collection<OnEditBracketClickedListener> onEditBracketClickedListenerList = new ArrayList<OnEditBracketClickedListener>();
 
 	// Child components
 	private BracketSlotButton slotButton;
@@ -178,6 +202,46 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 	 */
 	public void reset() {
 		this.setSelected(false);
+	}
+
+	/**
+	 * Registers the given {@code OnEditBracketClickedListener} with this
+	 * {@code SetupBracketViewSlot}.
+	 * 
+	 * @param listener
+	 *            the {@code OnEditBracketClickedListener} to register.
+	 */
+	public void addOnEditBracketClickedListener(
+			OnEditBracketClickedListener listener) {
+		if (!this.onEditBracketClickedListenerList.contains(listener)) {
+			this.onEditBracketClickedListenerList.add(listener);
+		}
+	}
+
+	/**
+	 * Removes the given {@code OnEditBracketClickedListener} from this
+	 * {@code SetupBracketViewSlot}'s list of registered listeners.
+	 * 
+	 * @param listener
+	 *            the {@code OnEditBracketClickedListener} to remove.
+	 */
+	public void removeOnEditBracketClickedListener(
+			OnEditBracketClickedListener listener) {
+		this.onEditBracketClickedListenerList.remove(listener);
+	}
+
+	/**
+	 * Dispatches the given {@code OnEditBracketClickedEvent} to all registered
+	 * {@code OnEditBracketClickedListener}s.
+	 * 
+	 * @param event
+	 *            the {@code OnEditBracketClickedEvent} to raise.
+	 */
+	protected void raiseOnEditBracketClickedEvent(
+			OnEditBracketClickedEvent event) {
+		for (OnEditBracketClickedListener l : this.onEditBracketClickedListenerList) {
+			l.onEditBracketClicked(event);
+		}
 	}
 
 	/**

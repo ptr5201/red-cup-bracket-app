@@ -8,6 +8,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -17,25 +18,32 @@ import android.view.View;
  */
 public class BracketSlotButton extends View {
 
-	private static final int DEFAULT_FILL_COLOR = Color
-			.argb(255, 255, 255, 255);
-	private static final int SELECTED_FILL_COLOR = Color.argb(255, 255, 255, 0);
-	private static final int DISABLED_FILL_COLOR = Color.argb(255, 160, 160,
-			160);
+	// Fill colors
+	private static final int FILL_DEFAULT = Color.argb(255, 255, 255, 255);
+	private static final int FILL_SELECTED = Color.argb(255, 255, 255, 0);
+	private static final int FILL_PRESSED = Color.argb(255, 255, 192, 0);
+	private static final int FILL_DISABLED = Color.argb(255, 160, 160, 160);
 
+	// Refernce font size
 	private static final int DEFAULT_TEXT_SIZE = 32;
 
+	// Margins
 	private static final int TOP_TEXT_MARGIN = 20;
 	private static final int BOTTOM_TEXT_MARGIN = 15;
 	private static final int LEFT_TEXT_MARGIN = 10;
 	private static final int RIGHT_TEXT_MARGIN = 10;
 
+	// Border thickness and corner radius
 	private static final int BORDER_THICKNESS = 4;
 	private static final int CORNER_RADIUS = 20;
 
+	// Sample text used to compute text sizes
 	private static final String SIZING_SAMPLE_TEXT = "Ty";
 
+	// Diplayed text
 	private String text = null;
+	
+	// Scale factor
 	private float scale = 1.0f;
 
 	/**
@@ -85,6 +93,32 @@ public class BracketSlotButton extends View {
 		this.setClickable(true);
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		boolean result = super.onTouchEvent(event);
+
+		// Update pressed state
+		if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+			this.setPressed(true);
+			this.invalidate();
+		} else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+			this.setPressed(false);
+			this.invalidate();
+		} else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+			boolean isPointerOver = false;
+			for (int i = 0; i < event.getPointerCount(); i++) {
+				isPointerOver |= event.getX(i) >= 0
+						&& event.getX(i) <= this.getWidth()
+						&& event.getY(i) >= 0
+						&& event.getY(i) <= this.getHeight();
+			}
+			this.setPressed(isPointerOver);
+			this.invalidate();
+		}
+
+		return result;
+	}
+
 	/**
 	 * Assigns text to this button.
 	 * 
@@ -123,12 +157,15 @@ public class BracketSlotButton extends View {
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setStyle(Style.FILL);
-		int fillColor = DEFAULT_FILL_COLOR;
+		int fillColor = FILL_DEFAULT;
 		if (this.isSelected()) {
-			fillColor = SELECTED_FILL_COLOR;
+			fillColor = FILL_SELECTED;
+		}
+		if (this.isPressed()) {
+			fillColor = FILL_PRESSED;
 		}
 		if (!this.isEnabled()) {
-			fillColor = DISABLED_FILL_COLOR;
+			fillColor = FILL_DISABLED;
 		}
 		int scaledCornerRadius = Math.round(this.applyScale(CORNER_RADIUS));
 		int scaledTextMarginTop = Math.round(this.applyScale(TOP_TEXT_MARGIN));
