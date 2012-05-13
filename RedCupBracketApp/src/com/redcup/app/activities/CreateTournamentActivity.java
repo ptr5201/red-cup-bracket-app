@@ -2,7 +2,6 @@ package com.redcup.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.redcup.app.R;
-import com.redcup.app.data.Constants;
 import com.redcup.app.data.RedCupDB;
 import com.redcup.app.model.BracketTypeEnum;
 import com.redcup.app.model.SingleEliminationBracketStrategy;
@@ -95,6 +93,17 @@ public class CreateTournamentActivity extends Activity {
 		Tournament t = new Tournament();
 		t.setName(nameField.getText().toString());
 
+		// Prepare the initial participant list
+		if (participantCountField.getText() != null) {
+			String value = participantCountField.getText().toString();
+			if (value != null && value.trim().length() > 0) {
+				// TODO: set max participant capacity?
+				int participantLimit = Integer.parseInt(participantCountField
+						.getText().toString());
+				t.setParticipantLimit(participantLimit);
+			}
+		}
+
 		// TODO: determine how to set bracket strategy based on bracket type
 		switch (tournamentBracketType) {
 		case SINGLE_ELIMINATION:
@@ -115,11 +124,6 @@ public class CreateTournamentActivity extends Activity {
 
 		// TODO: do we want a bracket type?
 		// t.setBracketType(tournamentBracketType);
-		if (participantCountField.getText() != null
-				&& participantCountField.getText().toString() != null) {
-			// TODO: set max participant capacity?
-			// t.setParticipantCapacity(Integer.parseInt(participantCountField.getText().toString()));
-		}
 
 		// persist the tournament after it has been created
 		Log.v(TAG, "Inserting new tournament in table");

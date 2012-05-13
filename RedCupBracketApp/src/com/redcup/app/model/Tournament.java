@@ -1,6 +1,7 @@
 package com.redcup.app.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Tournament {
@@ -57,11 +58,27 @@ public class Tournament {
 	 * Negative numbers remove this restriction.
 	 * 
 	 * @param limit
-	 *            the number of participatns that are allowed in this
+	 *            the number of participants that are allowed in this
 	 *            tournament.
 	 */
 	public void setParticipantLimit(int limit) {
 		this.participantLimit = limit;
+		if (this.participantLimit >= 0) {
+			while (this.participants.size() < this.participantLimit) {
+				this.participants.add(null);
+			}
+			while (this.participants.size() > this.participantLimit) {
+				this.participants.remove(this.participants.size() - 1);
+			}
+		} else {
+			Iterator<Participant> iter = this.participants.iterator();
+			while (iter.hasNext()) {
+				Participant p = iter.next();
+				if (p == null) {
+					iter.remove();
+				}
+			}
+		}
 	}
 
 	/**
@@ -105,24 +122,72 @@ public class Tournament {
 
 	// Participant management
 	public boolean addParticipant(Participant p) {
-		boolean result = this.participants.add(p);
-		this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
-				this));
-		return result;
+		// Replace any null elements before appending anything
+		for (int i = 0; i < this.participants.size(); i++) {
+			if (this.participants.get(i) == null) {
+				this.participants.set(i, p);
+				this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+						this));
+				return true;
+			}
+		}
+
+		// Check if we are allowed to change the number of participants
+		if (this.participantLimit >= 0) {
+			// We aren't allowed to add a new participant
+			return false;
+		} else {
+			// Append the participant to the list
+			boolean result = this.participants.add(p);
+			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+					this));
+			return result;
+		}
 	}
 
 	public boolean removeParticipant(Participant p) {
-		boolean result = this.participants.remove(p);
-		this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
-				this));
-		return result;
+		// Check if we are allowed to change the number of participants
+		if (this.participantLimit >= 0) {
+			// Find the given participant and replace their slot with null
+			for (int i = 0; i < this.participants.size(); i++) {
+				// Replace with null if equal to p
+				if (this.participants.get(i).equals(p)) {
+					this.participants.set(i, null);
+					this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+							this));
+					return true;
+				}
+			}
+			return false;
+		} else {
+			// Remove the given participant outright
+			boolean result = this.participants.remove(p);
+			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+					this));
+			return result;
+		}
 	}
 
 	public Participant removeParticipant(int index) {
-		Participant p = this.participants.remove(index);
-		this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
-				this));
-		return p;
+		// Don't allow out-of-bounds indices
+		if (index >= this.participants.size() || index < 0) {
+			return null;
+		}
+
+		// Check if we are allowed to change the number of participants
+		if (this.participantLimit >= 0) {
+			// Find the given participant and replace their slot with null
+			Participant p = this.participants.set(index, null);
+			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+					this));
+			return p;
+		} else {
+			// Remove the given participant outright
+			Participant p = this.participants.remove(index);
+			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+					this));
+			return p;
+		}
 	}
 
 	public Participant getParticipant(int index) {
