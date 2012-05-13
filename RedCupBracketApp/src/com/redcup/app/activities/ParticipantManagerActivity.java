@@ -41,7 +41,7 @@ public class ParticipantManagerActivity extends Activity {
 		db = new RedCupDB(this);
 		db.open();
 
-		participantList = (ListView)findViewById(R.id.listView1);
+		participantList = (ListView)findViewById(R.id.participantManagerListId);
 		
 		participantAdapter = new ParticipantAdapter(this);
 		participantList.setAdapter(participantAdapter);

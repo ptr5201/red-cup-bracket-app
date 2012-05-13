@@ -31,22 +31,13 @@ public class BracketAppActivity extends Activity {
 			break;
 		case R.id.loadTournament:
 			Log.v(TAG, getString(R.string.loadTournament));
-			// TODO: the following code is commented until representation
-			// for ongoing tournaments is determined
-			
-			//Intent loadTournament = new Intent(this, LoadTournamentActivity.class);
-			//startActivity(loadTournament);
-			break;
-		case R.id.pastTournaments:
-			Log.v(TAG, getString(R.string.pastTournaments));
+			Intent loadTournament = new Intent(this, LoadTournamentActivity.class);
+			startActivity(loadTournament);
 			break;
 		case R.id.participants:
 			Log.v(TAG, getString(R.string.participants));
 			Intent participantManager = new Intent(this, ParticipantManagerActivity.class);
 			startActivity(participantManager);
-			break;
-		case R.id.help:
-			Log.v(TAG, getString(R.string.help));
 			break;
 		}
 	}

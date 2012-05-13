@@ -4,7 +4,7 @@
         android:layout_height="fill_parent" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/participantManagerTitleId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -14,18 +14,18 @@
             android:textColor="#ffffff00" />
 
         <ListView
-            android:id="@+id/listView1"
+            android:id="@+id/participantManagerListId"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_above="@+id/button1"
-            android:layout_below="@+id/textView1"
+            android:layout_above="@+id/participantManagerButtonId"
+            android:layout_below="@+id/participantManagerTitleId"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp" >
 
         </ListView>
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/participantManagerButtonId"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
