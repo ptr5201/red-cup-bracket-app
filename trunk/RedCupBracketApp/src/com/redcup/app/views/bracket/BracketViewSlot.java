@@ -28,7 +28,7 @@ public abstract class BracketViewSlot extends ViewGroup {
 	 * @author Jackson Lamp
 	 */
 	public enum ExpandedState {
-		COLLAPSED, EXPANDED_HORIZONTAL, EXPANDED_VERTICAL, EXPANDED_BOTH
+		COLLAPSED, EXPANDED
 	}
 
 	/**
@@ -37,20 +37,19 @@ public abstract class BracketViewSlot extends ViewGroup {
 	 * 
 	 * @author Jackson Lamp
 	 */
-	public class OnExpandedStateChangedEvent {
+	public class OnExpansionEvent {
 		private final BracketViewSlot view;
 		private final ExpandedState newState;
 
 		/**
-		 * Creates a new {@code OnExpandedStateChangedEvent}.
+		 * Creates a new {@code OnExpansionEvent}.
 		 * 
 		 * @param view
 		 *            the {@code BracketViewSlot} that generated this event.
 		 * @param newState
 		 *            the new state of the control.
 		 */
-		public OnExpandedStateChangedEvent(BracketViewSlot view,
-				ExpandedState newState) {
+		public OnExpansionEvent(BracketViewSlot view, ExpandedState newState) {
 			this.view = view;
 			this.newState = newState;
 		}
@@ -75,12 +74,12 @@ public abstract class BracketViewSlot extends ViewGroup {
 	}
 
 	/**
-	 * Interface used to receive {@code OnExpandedStateChangedEvent}s.
+	 * Interface used to receive {@code OnExpansionEvent}s.
 	 * 
 	 * @author Jackson Lamp
 	 */
-	public interface OnExpandedStateChangedListener {
-		public void onExpandedStateChanged(OnExpandedStateChangedEvent evt);
+	public interface OnExpansionListener {
+		public void onExpansion(OnExpansionEvent evt);
 	}
 
 	// The collapsed dimensions of this control
@@ -98,7 +97,7 @@ public abstract class BracketViewSlot extends ViewGroup {
 	private Bracket bracket = null;
 
 	// Used to dispatch expansion/contraction events to listening objects
-	private OnExpandedStateChangedListener onExpandedStateChangedListener = null;
+	private OnExpansionListener onExpansionListener = null;
 
 	/**
 	 * Creates a new {@code BracketViewSlot}.
@@ -147,37 +146,34 @@ public abstract class BracketViewSlot extends ViewGroup {
 	}
 
 	/**
-	 * Assigns a listener for {@code OnExpandedStateChangedEvent}s.
+	 * Assigns a listener for {@code OnExpansionEvent}s.
 	 * 
 	 * @param listener
 	 *            the listener to register.
 	 */
-	public void setOnExpandedStateChangedListener(
-			OnExpandedStateChangedListener listener) {
-		this.onExpandedStateChangedListener = listener;
+	public void setOnExpansionListener(OnExpansionListener listener) {
+		this.onExpansionListener = listener;
 	}
 
 	/**
-	 * Returns the currently registered {@code OnExpandedStateChangedListener}.
+	 * Returns the currently registered {@code OnExpansionListener}.
 	 * 
-	 * @return the currently registered {@code OnExpandedStateChangedListener}.
+	 * @return the currently registered {@code OnExpansionListener}.
 	 */
-	public OnExpandedStateChangedListener getOnExpandedStateChangedListener() {
-		return this.onExpandedStateChangedListener;
+	public OnExpansionListener getOnExpansionListener() {
+		return this.onExpansionListener;
 	}
 
 	/**
-	 * Helper method used to dispatch {@code OnExpandedStateChangedEvent}s
-	 * generated locally to the registered
-	 * {@code OnExpandedStateChangedListener}
+	 * Helper method used to dispatch {@code OnExpansionEvent}s generated
+	 * locally to the registered {@code OnExpansionListener}
 	 * 
 	 * @param evt
-	 *            the {@code OnExpandedStateChangedEvent} to dispatch.
+	 *            the {@code OnExpansionEvent} to dispatch.
 	 */
-	protected void raiseOnExpandedStateChangedEvent(
-			OnExpandedStateChangedEvent evt) {
-		if (this.onExpandedStateChangedListener != null) {
-			this.onExpandedStateChangedListener.onExpandedStateChanged(evt);
+	protected void raiseOnExpansionEvent(OnExpansionEvent evt) {
+		if (this.onExpansionListener != null) {
+			this.onExpansionListener.onExpansion(evt);
 		}
 	}
 
