@@ -12,13 +12,13 @@ public class LoadTournamentActivity extends Activity {
 
 	private static final String TAG = "LoadTournamentActivity";
 	
-	private ListView ongoingTournamentsList;
+	private ListView loadTournamentList;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.loadtournament);
 		
-		ongoingTournamentsList = (ListView) findViewById(R.id.listView1);
+		loadTournamentList = (ListView) findViewById(R.id.loadTournamentListId);
 	}
 
 	public void loadTournament(View v) {

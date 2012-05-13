@@ -18,7 +18,6 @@
     </string-array>
     <string name="createParticipant">Create Participant</string>
     <string name="participantManager">Participant Manager</string>
-    <string name="ongoingTournaments">Ongoing Tournaments</string>
     <string name="selectParticipant">Select a Participant</string>
     <string name="confirm">Confirm</string>
     <string name="participantNameHint">Participant name</string>
