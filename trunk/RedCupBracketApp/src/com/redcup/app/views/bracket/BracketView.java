@@ -15,7 +15,6 @@ import com.redcup.app.model.Tournament;
 import com.redcup.app.model.Tournament.ParticipantChangedEvent;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
-import com.redcup.app.views.bracket.layouts.SingleEliminationLayout;
 
 /**
  * The control used for viewing and editing a bracket.
@@ -133,8 +132,9 @@ public class BracketView extends ViewGroup {
 
 			// Create and configure the new layout instance
 			BracketViewLayout oldLayout = BracketView.this.getLayoutAlgorithm();
-			BracketViewLayout newLayout = new SingleEliminationLayout(
-					BracketView.this, bracket);
+			BracketViewLayout newLayout = BracketViewLayoutFactory
+					.createLayout(BracketView.this,
+							BracketView.this.getTournament());
 			newLayout.setScale(oldLayout.getScale());
 			BracketView.this.setLayoutAlgorithm(newLayout);
 
@@ -298,8 +298,7 @@ public class BracketView extends ViewGroup {
 		}
 		this.layout = layout;
 		this.layout.setBracketView(this);
-		this.removeAllViews();
-		this.updateLayout(true);
+		this.layout.setMode(this.mode);
 		this.invalidate();
 	}
 
