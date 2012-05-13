@@ -366,7 +366,6 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 
 		// Apply insets to CornerButtons
 		float padding = applyScale(20);
-		// TODO: Finish setting insets
 		this.removeButton.setInsets(collapsedCenterX + padding, padding,
 				padding, padding);
 		this.demoteButton.setInsets(padding, collapsedCenterY + padding,
