@@ -32,4 +32,13 @@
     
     <string name="EXTRA_TOURNAMENT_ID">EXTRA_TOURNAMENT_ID</string>
     <string name="TOURNAMENT_NAME">TOURNAMENT_NAME</string>
+    
+    <string name="wonTournamentDialogText">Congratulations</string>
+    <string name="wonTournamentDialogTitle">We have a winner!</string>
+    
+    <string name="tournamentWinnerNameDefault">Tebow</string>
+    <string name="tournamentHasWon"> has won </string>
+    <string name="tournamentNameDefault">The Superbowl</string>
+    <string name="tebowContentDescription">Kneeling in Victory</string>
+    <string name="mainMenu">Main Menu</string>
 </resources>

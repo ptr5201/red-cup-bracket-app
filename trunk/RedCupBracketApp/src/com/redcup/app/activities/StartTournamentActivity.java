@@ -11,6 +11,8 @@ import com.redcup.app.R;
 import com.redcup.app.data.RedCupDB;
 import com.redcup.app.model.Tournament;
 import com.redcup.app.model.TournamentManager;
+import com.redcup.app.model.events.OnTournamentCompletedEvent;
+import com.redcup.app.model.events.OnTournamentCompletedListener;
 import com.redcup.app.views.bracket.BracketMode;
 import com.redcup.app.views.bracket.BracketView;
 
@@ -33,6 +35,20 @@ public class StartTournamentActivity extends Activity {
 		Log.v(TAG, "Row ID retrieved from create tournament screen: " + tournamentID);
 		
 		this.tournament = TournamentManager.getTournament(tournamentID);
+		this.tournament.addOnTournamentCompletedListener(new OnTournamentCompletedListener() {
+			@Override
+			public void tournamentCompleted(OnTournamentCompletedEvent event) {
+				// Register completion in database
+				db.open();
+				db.completeTournament(tournament.getId());
+				db.close();
+				
+				// Go to win screen
+				Intent winTournament = new Intent(StartTournamentActivity.this, WinTournamentActivity.class);
+				winTournament.putExtra(getString(R.string.EXTRA_TOURNAMENT_ID), tournament.getId());
+				startActivity(winTournament);
+			}
+		});
 		Log.v(TAG, "Tournament name retrieved: " + tournament.getName());
 
 		// Assign tournament to BracketView
@@ -53,12 +69,8 @@ public class StartTournamentActivity extends Activity {
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	        Intent mainMenuIntent = new Intent(this, BracketAppActivity.class);
-	        mainMenuIntent.setAction(Intent.ACTION_MAIN);
-	        mainMenuIntent.addCategory(Intent.CATEGORY_HOME);
-            mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(mainMenuIntent);
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {	      
+			startActivity(BracketAppActivity.getMainMenuIntent(this));
 	        return true;
 	    }
 	    return super.onKeyDown(keyCode, event);
