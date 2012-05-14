@@ -19,6 +19,7 @@ import com.redcup.app.views.bracket.BracketView;
 public class StartTournamentActivity extends Activity {
 	
 	private static final String TAG = "StartTournamentActivity";
+	public static final int ACTIVITY_WIN = 1;
 	private Tournament tournament;
 	private RedCupDB db;
 
@@ -46,7 +47,7 @@ public class StartTournamentActivity extends Activity {
 				// Go to win screen
 				Intent winTournament = new Intent(StartTournamentActivity.this, WinTournamentActivity.class);
 				winTournament.putExtra(getString(R.string.EXTRA_TOURNAMENT_ID), tournament.getId());
-				startActivity(winTournament);
+				startActivityForResult(winTournament, ACTIVITY_WIN);
 			}
 		});
 		Log.v(TAG, "Tournament name retrieved: " + tournament.getName());
@@ -67,12 +68,4 @@ public class StartTournamentActivity extends Activity {
 		db.close();
 	}
 	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {	      
-			startActivity(BracketAppActivity.getMainMenuIntent(this));
-	        return true;
-	    }
-	    return super.onKeyDown(keyCode, event);
-	}
 }

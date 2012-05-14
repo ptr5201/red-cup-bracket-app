@@ -21,6 +21,7 @@ import com.redcup.app.views.bracket.BracketView;
 public class TournamentParticipantsActivity extends Activity {
 
 	private static final int ACTIVITY_ADD_PARTICIPANT = 1;
+	public static final int ACTIVITY_START_TOURNAMENT = 2;
 
 	private static final String TAG = "TournamentParticipantsActivity";
 
@@ -88,7 +89,7 @@ public class TournamentParticipantsActivity extends Activity {
 		startTournament.putExtra("TournamentName", tournament.getName());
 		startTournament.putExtra(getString(R.string.EXTRA_TOURNAMENT_ID),
 				tournament.getId());
-		startActivity(startTournament);
+		startActivityForResult(startTournament, ACTIVITY_START_TOURNAMENT);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -116,6 +117,9 @@ public class TournamentParticipantsActivity extends Activity {
 				}
 
 			}
+		}
+		if (requestCode == ACTIVITY_START_TOURNAMENT){
+			this.finish();
 		}
 	}
 }
