@@ -83,7 +83,7 @@ public abstract class BracketViewSlot extends ViewGroup {
 	}
 
 	// The collapsed dimensions of this control
-	private int collapsedHeight = 70;
+	private int collapsedHeight = 80;
 	private int collapsedWidth = 260;
 
 	// The expanded dimensions of this control

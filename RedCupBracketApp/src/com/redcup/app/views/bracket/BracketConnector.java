@@ -17,7 +17,7 @@ public class BracketConnector extends View {
 
 	private Collection<BracketViewSlot> leftBrackets = new ArrayList<BracketViewSlot>();
 	private Collection<BracketViewSlot> rightBrackets = new ArrayList<BracketViewSlot>();
-	
+
 	private float junctionOffsetLeft = 20.0f;
 
 	public BracketConnector(Context context, AttributeSet attrs, int defStyle) {
@@ -55,12 +55,12 @@ public class BracketConnector extends View {
 	public int getRightBracketCount() {
 		return this.rightBrackets.size();
 	}
-	
+
 	public void setJunctionOffsetRight(float offset) {
 		this.junctionOffsetLeft = offset;
 		this.invalidate();
 	}
-	
+
 	public float getJunctionOffsetRight() {
 		return this.junctionOffsetLeft;
 	}
@@ -124,7 +124,7 @@ public class BracketConnector extends View {
 		paint.setStyle(Style.STROKE);
 		paint.setStrokeWidth(4);
 		paint.setAntiAlias(true);
-		
+
 		// Create a reusable path
 		Path path = new Path();
 

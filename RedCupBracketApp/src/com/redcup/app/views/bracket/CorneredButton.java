@@ -37,10 +37,10 @@ public class CorneredButton extends View {
 	private float corner_bottomleft = 20;
 
 	// Insets
-	private float insets_top = 20;
-	private float insets_left = 20;
-	private float insets_bottom = 20;
-	private float insets_right = 20;
+	private float insets_top = 10;
+	private float insets_left = 10;
+	private float insets_bottom = 10;
+	private float insets_right = 10;
 
 	// Icon
 	private Drawable icon = null;
