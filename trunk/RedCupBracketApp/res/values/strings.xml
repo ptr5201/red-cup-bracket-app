@@ -29,4 +29,7 @@
     <string name="save">Save</string>
     <string name="tournamentSetup">Tournament Setup</string>
     <string name="selectParticipants">Select Participants</string>
+    
+    <string name="EXTRA_TOURNAMENT_ID">EXTRA_TOURNAMENT_ID</string>
+    <string name="TOURNAMENT_NAME">TOURNAMENT_NAME</string>
 </resources>
