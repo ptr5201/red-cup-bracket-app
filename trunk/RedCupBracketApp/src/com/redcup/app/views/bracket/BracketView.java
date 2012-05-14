@@ -375,11 +375,18 @@ public class BracketView extends ViewGroup {
 	protected void zoomOn(PointF center, float zoom) {
 		if (this.getLayoutAlgorithm() != null) {
 			float scale = this.getLayoutAlgorithm().getScale();
-			if(scale * zoom > MAX_SCALE) {
-				zoom = MAX_SCALE / scale;
+			float maxScale = MAX_SCALE;
+			float minScale = MIN_SCALE;
+			// float minScale = Math.min(
+			// this.getViewportWidth() / scale / this.getWidth(),
+			// this.getViewportHeight() / scale / this.getHeight());
+			// minScale = Math.max(MIN_SCALE, minScale);
+
+			if (scale * zoom < minScale) {
+				zoom = minScale / scale;
 			}
-			if(scale * zoom < MIN_SCALE) {
-				zoom = MIN_SCALE / scale;
+			if (scale * zoom > maxScale) {
+				zoom = maxScale / scale;
 			}
 
 			int x = Math.round((center.x + this.getScrollX()) * zoom)
@@ -395,12 +402,12 @@ public class BracketView extends ViewGroup {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		boolean handled = this.gestures.onTouchEvent(event);
-//		if (!handled) {
-//			handled = this.scaleGestureDetector.onTouchEvent(event);
-//		}
 		boolean handled = this.gestures.onTouchEvent(event);
-		handled = handled || this.scaleGestureDetector.onTouchEvent(event);
+		if (!handled) {
+			handled = this.scaleGestureDetector.onTouchEvent(event);
+		}
+		// boolean handled = this.gestures.onTouchEvent(event);
+		// handled = handled || this.scaleGestureDetector.onTouchEvent(event);
 		return handled;
 	}
 

@@ -54,9 +54,9 @@ public class BracketSlotButton extends View {
 	private float cornerRadius = 20;
 
 	// Insets
-	private float insets_top = 15;
+	private float insets_top = 20;
 	private float insets_left = 10;
-	private float insets_bottom = 15;
+	private float insets_bottom = 20;
 	private float insets_right = 10;
 	private float insets_topOffset = 5;
 	private float insets_iconTextSpacing = 5;
