@@ -39,15 +39,24 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 	private OnClickListener slotButtonListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			if (!SetupBracketViewSlot.this.isSelected()) {
-				SetupBracketViewSlot.this
-						.raiseOnExpansionEvent(new OnExpansionEvent(
-								SetupBracketViewSlot.this,
-								ExpandedState.EXPANDED));
-			} else {
+			if (SetupBracketViewSlot.this.slotButton.isEmpty()) {
+				// If the slot button is in empty mode, send event on all clicks
 				SetupBracketViewSlot.this
 						.raiseOnEditBracketClickedEvent(new OnEditBracketClickedEvent(
 								SetupBracketViewSlot.this));
+			} else {
+				// If slot button is not in empty mode, only send event if
+				// already selected
+				if (!SetupBracketViewSlot.this.isSelected()) {
+					SetupBracketViewSlot.this
+							.raiseOnExpansionEvent(new OnExpansionEvent(
+									SetupBracketViewSlot.this,
+									ExpandedState.EXPANDED));
+				} else {
+					SetupBracketViewSlot.this
+							.raiseOnEditBracketClickedEvent(new OnEditBracketClickedEvent(
+									SetupBracketViewSlot.this));
+				}
 			}
 		}
 	};
@@ -194,13 +203,6 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 			this.updateInternalComponents();
 			this.invalidate();
 		}
-	}
-
-	/**
-	 * Returns this control to its default state (collapsed, deselected).
-	 */
-	public void reset() {
-		this.setSelected(false);
 	}
 
 	/**
@@ -384,9 +386,11 @@ public class SetupBracketViewSlot extends BracketViewSlot {
 			this.slotButton.setText(this.getBracket().getParticipant()
 					.getName());
 			this.slotButton.setEnabled(true);
+			this.slotButton.setEmpty(false);
 		} else {
 			this.slotButton.setText(null);
-			this.slotButton.setEnabled(false);
+			this.slotButton.setEnabled(this.getMode() == BracketMode.SETUP);
+			this.slotButton.setEmpty(this.getMode() == BracketMode.SETUP);
 			this.setSelected(false);
 		}
 	}
