@@ -1,7 +1,5 @@
 package com.redcup.app.views.bracket;
 
-import com.redcup.app.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,13 +7,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.redcup.app.R;
 
 /**
  * Custom control that acts as a simple multi-state button.
@@ -304,14 +304,11 @@ public class BracketSlotButton extends View {
 			fillColor = FILL_DISABLED;
 			borderColor = BORDER_DISABLED;
 		}
-		int scaledCornerRadius = Math.round(this.applyScale(this.cornerRadius));
-		int scaledTextMarginTop = Math.round(this.applyScale(this.insets_top));
-		int scaledTextMarginLeft = Math
-				.round(this.applyScale(this.insets_left));
-		int scaledTextMarginRight = Math.round(this
-				.applyScale(this.insets_right));
-		int scaledTextMarginBottom = Math.round(this
-				.applyScale(this.insets_bottom));
+		float scaledCornerRadius = this.applyScale(this.cornerRadius);
+		float scaledTextMarginTop = this.applyScale(this.insets_top);
+		float scaledTextMarginLeft = this.applyScale(this.insets_left);
+		float scaledTextMarginRight = this.applyScale(this.insets_right);
+		float scaledTextMarginBottom = this.applyScale(this.insets_bottom);
 
 		// Draw border
 		paint.setColor(borderColor);
@@ -340,7 +337,8 @@ public class BracketSlotButton extends View {
 					/ (float) icon.getMinimumHeight();
 			float iconWidth = icon.getMinimumWidth() * iconScale;
 			float iconHeight = icon.getMinimumHeight() * iconScale;
-			icon.setBounds(scaledTextMarginLeft, scaledTextMarginTop,
+			icon.setBounds(Math.round(scaledTextMarginLeft),
+					Math.round(scaledTextMarginTop),
 					Math.round(scaledTextMarginLeft + iconWidth),
 					Math.round(scaledTextMarginTop + iconHeight));
 			icon.draw(canvas);
@@ -355,27 +353,28 @@ public class BracketSlotButton extends View {
 							+ this.applyScale(this.insets_topOffset),
 					this.getWidth() - scaledTextMarginRight, this.getHeight()
 							- scaledTextMarginBottom);
-			Paint textPaint = new Paint(paint);
 			canvas.clipRect(textAreaBounds);
+			Paint textPaint = new Paint(paint);
+			textPaint.setLinearText(true);
+			textPaint.setSubpixelText(true);
 			textPaint.setColor(Color.BLACK);
 			textPaint.setTextSize(DEFAULT_TEXT_SIZE);
 			textPaint.setUnderlineText(this.isSelected() || this.isEmpty());
 
 			// Size text to match height of button
-			Rect measuredBounds = new Rect();
+			Rect measuredTextBounds = new Rect();
 			textPaint.getTextBounds(SIZING_SAMPLE_TEXT, 0,
-					SIZING_SAMPLE_TEXT.length(), measuredBounds);
-			float textSize = textAreaBounds.height() / measuredBounds.height()
-					* DEFAULT_TEXT_SIZE;
-			textPaint.setTextSize(textSize);
-
-			// Update measurements
-			textPaint.getTextBounds(SIZING_SAMPLE_TEXT, 0,
-					SIZING_SAMPLE_TEXT.length(), measuredBounds);
+					SIZING_SAMPLE_TEXT.length(), measuredTextBounds);
+			float textScale = textAreaBounds.height()
+					/ measuredTextBounds.height();
 
 			// Draw text
-			canvas.drawText(text, textAreaBounds.left, textAreaBounds.bottom
-					- measuredBounds.bottom, textPaint);
+			canvas.translate(
+					textAreaBounds.left,
+					textAreaBounds.bottom
+							- this.applyScale(measuredTextBounds.bottom));
+			canvas.scale(textScale, textScale);
+			canvas.drawText(text, 0, 0, textPaint);
 			canvas.restore();
 		}
 	}
