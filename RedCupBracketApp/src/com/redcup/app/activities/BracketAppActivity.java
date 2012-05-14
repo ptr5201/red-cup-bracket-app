@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.redcup.app.R;
@@ -40,5 +41,20 @@ public class BracketAppActivity extends Activity {
 			startActivity(participantManager);
 			break;
 		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        this.finish();
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	public static Intent getMainMenuIntent(Activity activity) {
+        Intent mainMenuIntent = new Intent(activity, BracketAppActivity.class);
+        mainMenuIntent.setAction(Intent.ACTION_MAIN);
+        mainMenuIntent.addCategory(Intent.CATEGORY_HOME);
+        return mainMenuIntent;
 	}
 }
