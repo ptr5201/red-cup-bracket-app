@@ -17,6 +17,8 @@ public class BracketConnector extends View {
 
 	private Collection<BracketViewSlot> leftBrackets = new ArrayList<BracketViewSlot>();
 	private Collection<BracketViewSlot> rightBrackets = new ArrayList<BracketViewSlot>();
+	
+	private float junctionOffsetLeft = 20.0f;
 
 	public BracketConnector(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -52,6 +54,15 @@ public class BracketConnector extends View {
 
 	public int getRightBracketCount() {
 		return this.rightBrackets.size();
+	}
+	
+	public void setJunctionOffsetRight(float offset) {
+		this.junctionOffsetLeft = offset;
+		this.invalidate();
+	}
+	
+	public float getJunctionOffsetRight() {
+		return this.junctionOffsetLeft;
 	}
 
 	/**
@@ -121,7 +132,7 @@ public class BracketConnector extends View {
 		// Compute the center of the view
 		// int centerX = this.getWidth() / 2;
 		// int centerY = this.getHeight() / 2;
-		int centerX = this.getWidth() - 20;
+		int centerX = this.getWidth() - Math.round(this.junctionOffsetLeft);
 		int centerY = this.getHeight() / 2;
 
 		// Draw lines from each element on the left

@@ -299,6 +299,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		connector.addLeftBracket(leftSlot);
 		connector.addLeftBracket(rightSlot);
 		connector.addRightBracket(slot);
+		connector.setJunctionOffsetRight(this.applyScale(20));
 		this.getBracketView().addView(connector, 0);
 		Rect connectorBounds = connector.computeBounds();
 		connector.layout(connectorBounds.left, connectorBounds.top,
