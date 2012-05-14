@@ -160,7 +160,8 @@ public class Tournament {
 			// Find the given participant and replace their slot with null
 			for (int i = 0; i < this.participants.size(); i++) {
 				// Replace with null if equal to p
-				if (this.participants.get(i).equals(p)) {
+				Participant pIter = this.participants.get(i);
+				if (pIter != null && pIter.equals(p)) {
 					this.participants.set(i, null);
 					this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 							this));

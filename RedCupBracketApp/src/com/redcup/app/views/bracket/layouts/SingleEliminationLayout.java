@@ -14,6 +14,7 @@ import android.view.View;
 
 import com.redcup.app.activities.EditParticipantActivity;
 import com.redcup.app.activities.ParticipantManagerActivity;
+import com.redcup.app.activities.ParticipantSelectorActivity;
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.InvalidStateException;
 import com.redcup.app.model.Participant;
@@ -87,6 +88,11 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			// or the editor dialog
 			if (getMode() == BracketMode.SETUP) {
 				// TODO: Open single selector
+				// TODO: Figure out how to update participant in BracketView
+				Context context = getBracketView().getContext();
+				Intent participantSelectorIntent = new Intent(context,
+						ParticipantSelectorActivity.class);
+				context.startActivity(participantSelectorIntent);
 			} else {
 				// Open participant editor
 				// TODO: Figure out how to update participant in BracketView
