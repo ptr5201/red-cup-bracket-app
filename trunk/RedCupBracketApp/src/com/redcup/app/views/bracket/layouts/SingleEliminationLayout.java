@@ -433,6 +433,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			// Clean up unused resources
 			this.postLayoutCleanup(this.usedBrackets);
 			this.usedBrackets.clear();
+			this.usedConnectors.clear();
 		}
 	}
 }
