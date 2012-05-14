@@ -88,25 +88,25 @@ public class SingleEliminationLayout extends BracketViewLayout {
 			if (getMode() == BracketMode.SETUP) {
 				// TODO: Open single selector
 				// TODO: Figure out how to update participant in BracketView
-				Context context = getBracketView().getContext();
-				Intent participantSelectorIntent = new Intent(context,
-						ParticipantSelectorActivity.class);
-				context.startActivity(participantSelectorIntent);
+				// Context context = getBracketView().getContext();
+				// Intent participantSelectorIntent = new Intent(context,
+				// ParticipantSelectorActivity.class);
+				// context.startActivity(participantSelectorIntent);
 			} else {
 				// Open participant editor
 				// TODO: Figure out how to update participant in BracketView
-				Context context = getBracketView().getContext();
-				Intent participantEditorIntent = new Intent(context,
-						EditParticipantActivity.class);
-				participantEditorIntent.putExtra(
-						ParticipantManagerActivity.EXTRA_PARTICIPANT_OLD_NAME,
-						event.getSource().getBracket().getParticipant()
-								.getName());
-				participantEditorIntent.putExtra(
-						ParticipantManagerActivity.EXTRA_PARTICIPANT_ID, event
-								.getSource().getBracket().getParticipant()
-								.getId());
-				context.startActivity(participantEditorIntent);
+				// Context context = getBracketView().getContext();
+				// Intent participantEditorIntent = new Intent(context,
+				// EditParticipantActivity.class);
+				// participantEditorIntent.putExtra(
+				// ParticipantManagerActivity.EXTRA_PARTICIPANT_OLD_NAME,
+				// event.getSource().getBracket().getParticipant()
+				// .getName());
+				// participantEditorIntent.putExtra(
+				// ParticipantManagerActivity.EXTRA_PARTICIPANT_ID, event
+				// .getSource().getBracket().getParticipant()
+				// .getId());
+				// context.startActivity(participantEditorIntent);
 			}
 		}
 	};
