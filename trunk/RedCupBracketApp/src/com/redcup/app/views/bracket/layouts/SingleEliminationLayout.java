@@ -7,13 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Rect;
 
-import com.redcup.app.activities.EditParticipantActivity;
-import com.redcup.app.activities.ParticipantManagerActivity;
-import com.redcup.app.activities.ParticipantSelectorActivity;
 import com.redcup.app.model.Bracket;
 import com.redcup.app.model.InvalidStateException;
 import com.redcup.app.model.Participant;
@@ -102,7 +97,6 @@ public class SingleEliminationLayout extends BracketViewLayout {
 				// ParticipantManagerActivity.EXTRA_PARTICIPANT_OLD_NAME,
 				// event.getSource().getBracket().getParticipant()
 				// .getName());
-				// participantEditorIntent.putExtra(
 				// ParticipantManagerActivity.EXTRA_PARTICIPANT_ID, event
 				// .getSource().getBracket().getParticipant()
 				// .getId());
