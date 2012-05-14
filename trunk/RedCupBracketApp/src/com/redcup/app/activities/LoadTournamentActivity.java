@@ -31,7 +31,7 @@ public class LoadTournamentActivity extends ListActivity {
 //		setListAdapter(new ArrayAdapter<String>(this, R.id.tournamentListItemId, tournaments));
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1, tournaments);
-
+		tListView.setAdapter(adapter);
 	}
 
 	public void loadTournament(View v) {
