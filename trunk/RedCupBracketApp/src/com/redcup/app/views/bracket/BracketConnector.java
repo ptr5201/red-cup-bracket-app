@@ -98,8 +98,8 @@ public class BracketConnector extends View {
 			top = Math.min(top, b.getTop());
 			bottom = Math
 					.max(bottom, b.getTop() + b.getScaledCollapsedHeight());
-			left = Math.min(left, b.getLeft() + b.getScaledCollapsedWidth());
-			right = Math.max(right, b.getLeft() + b.getScaledCollapsedWidth());
+			left = Math.min(left, b.getLeft());
+			right = Math.max(right, b.getLeft());
 		}
 
 		for (BracketViewSlot b : this.rightBrackets) {
@@ -138,8 +138,7 @@ public class BracketConnector extends View {
 		// Draw lines from each element on the left
 		for (BracketViewSlot b : this.leftBrackets) {
 			// Compute the start of this line
-			int startX = b.getLeft() + b.getScaledCollapsedWidth()
-					- this.getLeft();
+			int startX = b.getLeft() - this.getLeft();
 			int startY = b.getTop() + b.getScaledCollapsedHeight() / 2
 					- this.getTop();
 
