@@ -54,8 +54,11 @@ public class StartTournamentActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	        Intent mainMenu = new Intent(this, BracketAppActivity.class);
-			startActivity(mainMenu);
+	        Intent mainMenuIntent = new Intent(this, BracketAppActivity.class);
+	        mainMenuIntent.setAction(Intent.ACTION_MAIN);
+	        mainMenuIntent.addCategory(Intent.CATEGORY_HOME);
+            mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(mainMenuIntent);
 	        return true;
 	    }
 	    return super.onKeyDown(keyCode, event);
