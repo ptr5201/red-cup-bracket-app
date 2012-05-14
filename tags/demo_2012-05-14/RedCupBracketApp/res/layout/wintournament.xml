@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/tournamentWinnerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/tournamentWinnerNameDefault"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff00" />
+    
+    <TextView
+        android:id="@+id/tournamentHasWon"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="@string/tournamentHasWon"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="#ffffff00" />
+
+    <TextView
+        android:id="@+id/tournamentName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/tournamentNameDefault"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff00" />
+
+    <ImageView
+        android:id="@+id/tebow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/tebowContentDescription"
+        android:src="@drawable/tebow" />
+    
+    <Button
+        android:id="@+id/mainMenuButton"
+        android:layout_width="145dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:onClick="mainMenu"
+        android:text="@string/mainMenu" />
+
+</LinearLayout>
