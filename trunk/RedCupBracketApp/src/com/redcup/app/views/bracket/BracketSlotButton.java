@@ -115,7 +115,7 @@ public class BracketSlotButton extends View {
 	private void initialize() {
 		this.setClickable(true);
 		this.addIcon = new BitmapDrawable(BitmapFactory.decodeResource(
-				this.getResources(), R.drawable.create_tournament));
+				this.getResources(), R.drawable.add_participant));
 	}
 
 	/**
