@@ -10,7 +10,6 @@ import java.util.Map;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.view.View;
 
 import com.redcup.app.activities.EditParticipantActivity;
 import com.redcup.app.activities.ParticipantManagerActivity;
@@ -115,6 +114,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	// Internal state
 	private final SingleEliminationBracketStrategy model;
 	private final Map<Bracket, BracketViewSlot> bracketViewSlots = new HashMap<Bracket, BracketViewSlot>();
+	private final Map<BracketViewSlot, BracketConnector> bracketViewConnectors = new HashMap<BracketViewSlot, BracketConnector>();
 
 	/**
 	 * Used to keep track of the bracket objects that have been used; after
@@ -122,6 +122,7 @@ public class SingleEliminationLayout extends BracketViewLayout {
 	 * on this list
 	 */
 	private final Collection<Bracket> usedBrackets = new HashSet<Bracket>();
+	private final Collection<BracketConnector> usedConnectors = new HashSet<BracketConnector>();
 
 	private final OnExpansionListener expandedStateChangedListener = new OnExpansionListener() {
 		@Override
@@ -197,6 +198,35 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		return slot;
 	}
 
+	private BracketConnector getBracketConnector(BracketViewSlot bracketSlot) {
+		BracketConnector connector = this.bracketViewConnectors
+				.get(bracketSlot);
+
+		if (connector == null) {
+			connector = new BracketConnector(this.getBracketView().getContext());
+			connector.addRightBracket(bracketSlot);
+
+			Bracket rightBracket = bracketSlot.getBracket().getRight();
+			if (rightBracket != null) {
+				BracketViewSlot rightSlot = this
+						.getBracketViewSlot(rightBracket);
+				connector.addLeftBracket(rightSlot);
+			}
+			Bracket leftBracket = bracketSlot.getBracket().getLeft();
+			if (leftBracket != null) {
+				BracketViewSlot leftSlot = this.getBracketViewSlot(leftBracket);
+				connector.addLeftBracket(leftSlot);
+			}
+
+			this.bracketViewConnectors.put(bracketSlot, connector);
+			this.getBracketView().addView(connector, 0);
+		}
+
+		this.usedConnectors.add(connector);
+
+		return connector;
+	}
+
 	/**
 	 * Removes any {@code BracketViewSlot}s from the map and managed
 	 * {@code BracketView} that do not correspond with {@code Brackets} found in
@@ -216,6 +246,17 @@ public class SingleEliminationLayout extends BracketViewLayout {
 					this.getBracketView().removeView(slot);
 				}
 				iter.remove();
+			}
+		}
+
+		// Remove excess connectors
+		Iterator<BracketConnector> connectorIter = this.bracketViewConnectors
+				.values().iterator();
+		while (connectorIter.hasNext()) {
+			BracketConnector connector = connectorIter.next();
+			if (!this.usedConnectors.contains(connector)) {
+				this.bracketViewConnectors.remove(connector);
+				this.getBracketView().removeView(connector);
 			}
 		}
 	}
@@ -294,13 +335,8 @@ public class SingleEliminationLayout extends BracketViewLayout {
 
 		// TODO: Replace kludgey connector code
 		// Create and add a BracketConnector
-		BracketConnector connector = new BracketConnector(this.getBracketView()
-				.getContext());
-		connector.addLeftBracket(leftSlot);
-		connector.addLeftBracket(rightSlot);
-		connector.addRightBracket(slot);
+		BracketConnector connector = this.getBracketConnector(slot);
 		connector.setJunctionOffsetRight(this.applyScale(20));
-		this.getBracketView().addView(connector, 0);
 		Rect connectorBounds = connector.computeBounds();
 		connector.layout(connectorBounds.left, connectorBounds.top,
 				connectorBounds.right, connectorBounds.bottom);
@@ -319,16 +355,6 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		if (this.isLayoutRequired(changed)) {
 			int requiredHeight = 0;
 			int requiredWidth = 0;
-
-			// TODO: Remove kludgey connector code
-			// Remove all connectors from BracketView
-			for (int i = 0; i < this.getBracketView().getChildCount(); i++) {
-				View child = this.getBracketView().getChildAt(i);
-				if (child instanceof BracketConnector) {
-					this.getBracketView().removeViewAt(i);
-					i--;
-				}
-			}
 
 			// Get the round structure, if possible
 			List<List<Bracket>> roundStructure = null;
