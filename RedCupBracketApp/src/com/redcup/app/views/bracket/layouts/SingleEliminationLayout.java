@@ -285,8 +285,8 @@ public class SingleEliminationLayout extends BracketViewLayout {
 		BracketViewSlot leftSlot = this.bracketViewSlots.get(left);
 		BracketViewSlot rightSlot = this.bracketViewSlots.get(right);
 		int cY = (leftSlot.getTop() + rightSlot.getTop() + leftSlot
-				.getCollapsedHeight()) / 2;
-		cY -= slot.getCollapsedHeight() / 2;
+				.getScaledCollapsedHeight()) / 2;
+		cY -= slot.getScaledCollapsedHeight() / 2;
 
 		// Update slot's positioning
 		slot.layout(hPos, cY, hPos + slot.getScaledExpandedWidth(),
