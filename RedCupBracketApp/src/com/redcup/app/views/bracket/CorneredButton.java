@@ -18,12 +18,14 @@ import android.view.View;
 public class CorneredButton extends View {
 
 	// Fill colors
-	private static final int FILL_DEFAULT = Color.WHITE;
-	private static final int FILL_PRESSED = Color.argb(255, 255, 192, 0);
-	private static final int FILL_DISABLED = Color.LTGRAY;
+	private int fillDefault = Color.WHITE;
+	private int fillPressed = Color.argb(255, 255, 192, 0);
+	private int fillDisabled = Color.LTGRAY;
 
 	// Border colors
-	private static final int BORDER_DEFAULT = Color.BLACK;
+	private int borderDefault = Color.BLACK;
+	private int borderPressed = Color.BLACK;
+	private int borderDisabled = Color.BLACK;
 
 	// Border thickness
 	private float borderThickness = 4;
@@ -113,7 +115,7 @@ public class CorneredButton extends View {
 		return result;
 	}
 
-	public void setDrawable(Drawable icon) {
+	public void setIcon(Drawable icon) {
 		this.icon = icon;
 		this.invalidate();
 	}
@@ -246,16 +248,19 @@ public class CorneredButton extends View {
 		paint.setStyle(Style.FILL);
 
 		// Set colors according to state
-		int fillColor = FILL_DEFAULT;
+		int fillColor = fillDefault;
+		int borderColor = borderDefault;
 		if (this.isPressed()) {
-			fillColor = FILL_PRESSED;
+			fillColor = fillPressed;
+			borderColor = borderPressed;
 		}
 		if (!this.isEnabled()) {
-			fillColor = FILL_DISABLED;
+			fillColor = fillDisabled;
+			borderColor = borderDisabled;
 		}
 
 		// Draw border
-		paint.setColor(BORDER_DEFAULT);
+		paint.setColor(borderColor);
 		drawRoundedRect(canvas, paint,
 				new RectF(0, 0, this.getWidth(), this.getHeight()),
 				this.corner_topleft, this.corner_topright,

@@ -9,6 +9,7 @@ import com.redcup.app.R;
 import com.redcup.app.data.RedCupDB;
 import com.redcup.app.model.Tournament;
 import com.redcup.app.model.TournamentManager;
+import com.redcup.app.views.bracket.BracketMode;
 import com.redcup.app.views.bracket.BracketView;
 
 public class StartTournamentActivity extends Activity {
@@ -36,6 +37,7 @@ public class StartTournamentActivity extends Activity {
 		BracketView bracketView = (BracketView) this.findViewById(R.id.bracketView);
 		if (bracketView != null) {
 			bracketView.setTournament(this.tournament);
+			bracketView.setMode(BracketMode.ADVANCEMENT);
 		}
 		
 		// Set text view to tournament name
