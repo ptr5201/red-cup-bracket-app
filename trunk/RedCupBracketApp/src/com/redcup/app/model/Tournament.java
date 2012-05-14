@@ -12,7 +12,7 @@ import com.redcup.app.model.events.OnParticipantChangedListener;
 
 public class Tournament {
 	private Collection<OnTournamentCompletedListener> tournamentCompletedListenerList = new ArrayList<OnTournamentCompletedListener>();
-	
+
 	private final OnTournamentCompletedListener tournamentCompletedListener = new OnTournamentCompletedListener() {
 		@Override
 		public void tournamentCompleted(OnTournamentCompletedEvent event) {
@@ -34,15 +34,17 @@ public class Tournament {
 
 	public void setStrategy(BracketStrategy strategy) {
 		// Remove listeners from old strategy
-		if(this.strategy != null) {
-			this.strategy.removeOnTournamentCompletedListener(this.tournamentCompletedListener);
+		if (this.strategy != null) {
+			this.strategy
+					.removeOnTournamentCompletedListener(this.tournamentCompletedListener);
 		}
-		
+
 		this.strategy = strategy;
-		
+
 		// Add listeners to new strategy
-		if(this.strategy != null) {
-			this.strategy.addOnTournamentCompletedListener(this.tournamentCompletedListener);
+		if (this.strategy != null) {
+			this.strategy
+					.addOnTournamentCompletedListener(this.tournamentCompletedListener);
 		}
 	}
 
@@ -207,19 +209,40 @@ public class Tournament {
 	public int getParticipantCount() {
 		return this.participants.size();
 	}
-	
-	public void addOnTournamentCompletedListener(OnTournamentCompletedListener listener) {
-		if(!this.tournamentCompletedListenerList.contains(listener)) {
+
+	public int getActualParticipantCount() {
+		int count = 0;
+		for (Participant p : this.participants) {
+			if (p != null) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public boolean canTournamentStart() {
+		boolean canStart = this.getParticipantCount() >= 2;
+		canStart = canStart
+				&& this.getActualParticipantCount() == this
+						.getParticipantCount();
+		return canStart;
+	}
+
+	public void addOnTournamentCompletedListener(
+			OnTournamentCompletedListener listener) {
+		if (!this.tournamentCompletedListenerList.contains(listener)) {
 			this.tournamentCompletedListenerList.add(listener);
 		}
 	}
-	
-	public void removeOnTournamentCompletedListener(OnTournamentCompletedListener listener) {
+
+	public void removeOnTournamentCompletedListener(
+			OnTournamentCompletedListener listener) {
 		this.tournamentCompletedListenerList.remove(listener);
 	}
-	
-	protected void raiseOnTournamentCompletedEvent(OnTournamentCompletedEvent event) {
-		for(OnTournamentCompletedListener l : this.tournamentCompletedListenerList) {
+
+	protected void raiseOnTournamentCompletedEvent(
+			OnTournamentCompletedEvent event) {
+		for (OnTournamentCompletedListener l : this.tournamentCompletedListenerList) {
 			l.tournamentCompleted(event);
 		}
 	}
