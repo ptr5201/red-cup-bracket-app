@@ -1,8 +1,10 @@
 package com.redcup.app.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.redcup.app.R;
@@ -47,5 +49,15 @@ public class StartTournamentActivity extends Activity {
 		db = new RedCupDB(this);
 		db.open();
 		db.close();
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        Intent mainMenu = new Intent(this, BracketAppActivity.class);
+			startActivity(mainMenu);
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 }
