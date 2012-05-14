@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import android.util.Log;
+
 public class SingleEliminationBracketStrategy implements BracketStrategy {
 	protected Bracket head;
 
@@ -133,7 +135,7 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 
 	@Override
 	public void relocateUp(Participant participant)	throws InvalidStateException {
-		System.out.println("relocateUp event occured!");
+		Log.v("Strategy", "RelocateUp event occured!");
 		Bracket start = lookup(participant);
 		if (start == null) throw new InvalidStateException();
 		Bracket parent = lookup(participant).getParent();
@@ -149,7 +151,7 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 
 	@Override
 	public void relocateDown(Participant participant) throws InvalidStateException {
-		System.out.println("relocateDown event occured!");
+		Log.v("Strategy", "RelocateDown event occured!");
 		Bracket start = lookup(participant);
 		if (start == null) throw new InvalidStateException();
 		Bracket parent = lookup(participant).getParent();
@@ -165,7 +167,7 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 
 	@Override
 	public void unWin(Participant participant) throws InvalidStateException {
-		System.out.println("unWin event occured!");
+		Log.v("Strategy", "unWin event occured!");
 		Bracket bracket = this.lookup(participant);
 		// Ensure participant is a player in the tournament & has played at least one game
 		if (bracket == null || bracket.getLeft() == null || bracket.getRight() == null) throw new InvalidStateException();		
@@ -180,7 +182,7 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 
 	@Override
 	public void win(Participant participant) throws InvalidStateException {
-		System.out.println("Win event occured!");
+		Log.v("Strategy", "Win event occured!");
 		//Bracket winBracket = parentLookupRecurse(this.head, participant);
 		Bracket winBracket = lookup(participant).getParent();
 		// Participant is at head or someone has already won the game 
