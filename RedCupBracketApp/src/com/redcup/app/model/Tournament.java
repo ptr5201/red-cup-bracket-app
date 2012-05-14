@@ -1,25 +1,24 @@
 package com.redcup.app.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.redcup.app.model.events.OnTournamentCompletedEvent;
+import com.redcup.app.model.events.OnTournamentCompletedListener;
+import com.redcup.app.model.events.OnParticipantChangedEvent;
+import com.redcup.app.model.events.OnParticipantChangedListener;
+
 public class Tournament {
-	public class ParticipantChangedEvent {
-		private final Tournament source;
-
-		public ParticipantChangedEvent(Tournament source) {
-			this.source = source;
+	private Collection<OnTournamentCompletedListener> tournamentCompletedListenerList = new ArrayList<OnTournamentCompletedListener>();
+	
+	private final OnTournamentCompletedListener tournamentCompletedListener = new OnTournamentCompletedListener() {
+		@Override
+		public void tournamentCompleted(OnTournamentCompletedEvent event) {
+			Tournament.this.raiseOnTournamentCompletedEvent(event);
 		}
-
-		public Tournament getSource() {
-			return this.source;
-		}
-	}
-
-	public interface ParticipantChangedListener {
-		public void onParticipantListChanged(ParticipantChangedEvent event);
-	}
+	};
 
 	private BracketStrategy strategy;
 	private String name;
@@ -27,14 +26,24 @@ public class Tournament {
 	private List<Participant> participants = new ArrayList<Participant>();
 	private int participantLimit = -1;
 
-	private List<ParticipantChangedListener> participantChangedListeners = new ArrayList<Tournament.ParticipantChangedListener>();
+	private List<OnParticipantChangedListener> participantChangedListeners = new ArrayList<OnParticipantChangedListener>();
 
 	public BracketStrategy getStrategy() {
 		return strategy;
 	}
 
 	public void setStrategy(BracketStrategy strategy) {
+		// Remove listeners from old strategy
+		if(this.strategy != null) {
+			this.strategy.removeOnTournamentCompletedListener(this.tournamentCompletedListener);
+		}
+		
 		this.strategy = strategy;
+		
+		// Add listeners to new strategy
+		if(this.strategy != null) {
+			this.strategy.addOnTournamentCompletedListener(this.tournamentCompletedListener);
+		}
 	}
 
 	public String getName() {
@@ -94,18 +103,18 @@ public class Tournament {
 
 	// Event listener management
 	public void addOnParticipantListChangedListener(
-			ParticipantChangedListener listener) {
+			OnParticipantChangedListener listener) {
 		this.participantChangedListeners.add(listener);
 	}
 
 	public void removeOnParticipantListChangedListener(
-			ParticipantChangedListener listener) {
+			OnParticipantChangedListener listener) {
 		this.participantChangedListeners.remove(listener);
 	}
 
 	private void raiseOnParticipantListChangedEvent(
-			ParticipantChangedEvent event) {
-		for (ParticipantChangedListener l : this.participantChangedListeners) {
+			OnParticipantChangedEvent event) {
+		for (OnParticipantChangedListener l : this.participantChangedListeners) {
 			l.onParticipantListChanged(event);
 		}
 	}
@@ -126,7 +135,7 @@ public class Tournament {
 		for (int i = 0; i < this.participants.size(); i++) {
 			if (this.participants.get(i) == null) {
 				this.participants.set(i, p);
-				this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+				this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 						this));
 				return true;
 			}
@@ -139,7 +148,7 @@ public class Tournament {
 		} else {
 			// Append the participant to the list
 			boolean result = this.participants.add(p);
-			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+			this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 					this));
 			return result;
 		}
@@ -153,7 +162,7 @@ public class Tournament {
 				// Replace with null if equal to p
 				if (this.participants.get(i).equals(p)) {
 					this.participants.set(i, null);
-					this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+					this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 							this));
 					return true;
 				}
@@ -162,7 +171,7 @@ public class Tournament {
 		} else {
 			// Remove the given participant outright
 			boolean result = this.participants.remove(p);
-			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+			this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 					this));
 			return result;
 		}
@@ -178,13 +187,13 @@ public class Tournament {
 		if (this.participantLimit >= 0) {
 			// Find the given participant and replace their slot with null
 			Participant p = this.participants.set(index, null);
-			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+			this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 					this));
 			return p;
 		} else {
 			// Remove the given participant outright
 			Participant p = this.participants.remove(index);
-			this.raiseOnParticipantListChangedEvent(new ParticipantChangedEvent(
+			this.raiseOnParticipantListChangedEvent(new OnParticipantChangedEvent(
 					this));
 			return p;
 		}
@@ -196,6 +205,22 @@ public class Tournament {
 
 	public int getParticipantCount() {
 		return this.participants.size();
+	}
+	
+	public void addOnTournamentCompletedListener(OnTournamentCompletedListener listener) {
+		if(!this.tournamentCompletedListenerList.contains(listener)) {
+			this.tournamentCompletedListenerList.add(listener);
+		}
+	}
+	
+	public void removeOnTournamentCompletedListener(OnTournamentCompletedListener listener) {
+		this.tournamentCompletedListenerList.remove(listener);
+	}
+	
+	protected void raiseOnTournamentCompletedEvent(OnTournamentCompletedEvent event) {
+		for(OnTournamentCompletedListener l : this.tournamentCompletedListenerList) {
+			l.tournamentCompleted(event);
+		}
 	}
 
 	// TODO
