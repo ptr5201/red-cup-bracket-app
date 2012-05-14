@@ -12,7 +12,8 @@ import android.view.ViewGroup;
 
 import com.redcup.app.model.SingleEliminationBracketStrategy;
 import com.redcup.app.model.Tournament;
-import com.redcup.app.model.Tournament.ParticipantChangedEvent;
+import com.redcup.app.model.events.OnParticipantChangedEvent;
+import com.redcup.app.model.events.OnParticipantChangedListener;
 import com.redcup.app.views.bracket.layouts.BracketViewLayout;
 import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
 
@@ -121,9 +122,9 @@ public class BracketView extends ViewGroup {
 	/**
 	 * Used to handle changes in the list of participants in the Tournament.
 	 */
-	private Tournament.ParticipantChangedListener tournamentParticipantChangedListener = new Tournament.ParticipantChangedListener() {
+	private OnParticipantChangedListener tournamentParticipantChangedListener = new OnParticipantChangedListener() {
 		@Override
-		public void onParticipantListChanged(ParticipantChangedEvent event) {
+		public void onParticipantListChanged(OnParticipantChangedEvent event) {
 			// TODO: Remove once better system is in place
 			Tournament source = event.getSource();
 			SingleEliminationBracketStrategy bracket = new SingleEliminationBracketStrategy(
@@ -132,9 +133,11 @@ public class BracketView extends ViewGroup {
 
 			// Create and configure the new layout instance
 			BracketViewLayout oldLayout = BracketView.this.getLayoutAlgorithm();
-			BracketViewLayout newLayout = BracketViewLayoutFactory
-					.createLayout(BracketView.this,
-							BracketView.this.getTournament());
+			BracketViewLayout newLayout = null;
+			if (tournament != null) {
+				newLayout = BracketViewLayoutFactory.createLayout(
+						BracketView.this, BracketView.this.getTournament());
+			}
 			newLayout.setScale(oldLayout.getScale());
 			BracketView.this.setLayoutAlgorithm(newLayout);
 
@@ -269,9 +272,12 @@ public class BracketView extends ViewGroup {
 					.addOnParticipantListChangedListener(this.tournamentParticipantChangedListener);
 		}
 
-		// Create and set the corresponding layout manaager
-		BracketViewLayout layout = BracketViewLayoutFactory.createLayout(this,
-				this.tournament);
+		// Create and set the corresponding layout manager
+		BracketViewLayout layout = null;
+		if (this.tournament != null) {
+			layout = BracketViewLayoutFactory.createLayout(this,
+					this.tournament);
+		}
 		this.setLayoutAlgorithm(layout);
 	}
 

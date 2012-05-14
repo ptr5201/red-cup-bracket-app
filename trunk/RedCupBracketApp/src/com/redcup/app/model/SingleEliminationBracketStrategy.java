@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.redcup.app.model.events.OnTournamentCompletedEvent;
+
 import android.util.Log;
 
-public class SingleEliminationBracketStrategy implements BracketStrategy {
+public class SingleEliminationBracketStrategy extends BracketStrategy {
 	protected Bracket head;
 
 	public SingleEliminationBracketStrategy(Bracket head) {
@@ -188,6 +190,11 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 		// Participant is at head or someone has already won the game 
 		if (winBracket == null || winBracket.getParticipant() != null) throw new InvalidStateException();
 		winBracket.setParticipant(participant);
+		
+		// Raise OnTournamentCompletedEvent if tournament is over
+		if(this.head.getParticipant() != null) {
+			this.raiseOnTournamentCompletedEvent(new OnTournamentCompletedEvent());
+		}
 	}
 	
 	@Override
@@ -201,6 +208,11 @@ public class SingleEliminationBracketStrategy implements BracketStrategy {
 
 		// Advance participant in given slot
 		bracket.getParent().setParticipant(bracket.getParticipant());
+		
+		// Raise OnTournamentCompletedEvent if tournament is over
+		if(this.head.getParticipant() != null) {
+			this.raiseOnTournamentCompletedEvent(new OnTournamentCompletedEvent());
+		}
 	}
 
 	@Override
