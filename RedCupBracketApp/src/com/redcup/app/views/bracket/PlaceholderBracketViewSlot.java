@@ -61,10 +61,13 @@ public class PlaceholderBracketViewSlot extends BracketViewSlot {
 				paint.setAntiAlias(true);
 				paint.setColor(Color.BLACK);
 				canvas.drawOval(new RectF(0, 0, width, height), paint);
-				paint.setColor(Color.WHITE);
-				canvas.drawOval(new RectF(BORDER_THICKNESS, BORDER_THICKNESS,
-						width - BORDER_THICKNESS, height - BORDER_THICKNESS),
-						paint);
+				if (width > BORDER_THICKNESS * 2
+						&& height > BORDER_THICKNESS * 2) {
+					paint.setColor(Color.WHITE);
+					canvas.drawOval(new RectF(BORDER_THICKNESS,
+							BORDER_THICKNESS, width - BORDER_THICKNESS, height
+									- BORDER_THICKNESS), paint);
+				}
 			}
 		});
 	}
