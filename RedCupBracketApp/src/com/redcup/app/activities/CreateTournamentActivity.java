@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.redcup.app.R;
 import com.redcup.app.data.RedCupDB;
@@ -23,6 +25,9 @@ import com.redcup.app.model.TournamentManager;
 public class CreateTournamentActivity extends Activity {
 
 	private static final String TAG = "CreateTournamentActivity";
+	
+	public static final int MAX_PARTICIPANTS = 128;
+	public static final int MIN_PARTICIPANTS = 2;
 	
 	RedCupDB db;
 
@@ -43,12 +48,7 @@ public class CreateTournamentActivity extends Activity {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				Button createTournamentButton = (Button) findViewById(R.id.createTournamentButton);
-				if (s == null || s.length() == 0) {
-					createTournamentButton.setEnabled(false);
-				} else {
-					createTournamentButton.setEnabled(true);
-				}
+				CreateTournamentActivity.this.updateStartButtonState();
 			}
 
 			@Override
@@ -60,12 +60,56 @@ public class CreateTournamentActivity extends Activity {
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 			}
-
+		});
+		
+		EditText participantCountField = (EditText) findViewById(R.id.participantCountEditField);
+		participantCountField.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				CreateTournamentActivity.this.updateStartButtonState();
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
 		});
 		
 		db = new RedCupDB(this);
 		db.open();
 		db.close();
+	}
+	
+	private void updateStartButtonState() {
+		Button createTournamentButton = (Button) findViewById(R.id.createTournamentButton);
+		if (createTournamentButton != null) {
+			boolean nameValid = true;
+			boolean limitValid = true;
+			EditText nameField = (EditText) findViewById(R.id.tournamentNameEditField);
+			EditText limitField = (EditText) findViewById(R.id.participantCountEditField);
+
+			if (nameField != null) {
+				String name = nameField.getText().toString();
+				nameValid = name.trim().length() > 0;
+			}
+
+			if (limitField != null) {
+				String limit = limitField.getText().toString().trim();
+				if(limit.length() > 0) {
+					int l = Integer.parseInt(limit);
+					limitValid = l >= MIN_PARTICIPANTS && l <= MAX_PARTICIPANTS;
+				} else {
+					limitValid = true;
+				}
+			}
+			
+			createTournamentButton.setEnabled(nameValid && limitValid);
+		}
 	}
 
 	public void createTournament(View v) {
