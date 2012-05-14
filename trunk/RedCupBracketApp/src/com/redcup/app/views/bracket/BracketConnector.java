@@ -112,6 +112,7 @@ public class BracketConnector extends View {
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Style.STROKE);
 		paint.setStrokeWidth(4);
+		paint.setAntiAlias(true);
 		
 		// Create a reusable path
 		Path path = new Path();

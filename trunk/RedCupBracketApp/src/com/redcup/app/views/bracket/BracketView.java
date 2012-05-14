@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,12 +26,15 @@ import com.redcup.app.views.bracket.layouts.BracketViewLayoutFactory;
  */
 public class BracketView extends ViewGroup {
 
+	public static final float MAX_SCALE = 2.0f;
+	public static final float MIN_SCALE = 0.25f;
+
 	/**
 	 * Used to handle gesture events that are received by this {@code View}.
 	 * 
 	 * @author Jackson Lamp
 	 */
-	private class GestureListener extends SimpleOnGestureListener {
+	private final SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
 		@Override
 		public boolean onSingleTapConfirmed(MotionEvent e) {
 			// Reset selection
@@ -54,39 +59,11 @@ public class BracketView extends ViewGroup {
 
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
-			// TODO: Implement zooming using pinch mechanism
-			// Temporary testing code
-			// if (layout != null) {
-			// // Update zoom factor and update the layout
-			// if (layout.getScale() > 0.9f) {
-			// layout.setScale(0.9f);
-			// } else if (layout.getScale() < 0.9f) {
-			// layout.setScale(1.0f);
-			// } else {
-			// layout.setScale(0.75f);
-			// }
-			// updateLayout(true);
-			//
-			// // Update scroll position
-			// int x = BracketView.this.getScrollX();
-			// int y = BracketView.this.getScrollY();
-			// BracketView.this.scrollTo(x, y);
-			// }
-
 			if (layout != null) {
 				float x = e.getX();
 				float y = e.getY();
 				float scale = layout.getScale();
-				float zoom = 0.9f;
-
-				if (scale > 0.9f) {
-					zoom = 0.9f;
-				} else if (scale > 0.75f) {
-					zoom = 0.75f / scale;
-				} else {
-					zoom = 1.0f / scale;
-				}
-
+				float zoom = 1.0f / scale;
 				zoomOn(new PointF(x, y), zoom);
 			}
 			return true;
@@ -97,12 +74,23 @@ public class BracketView extends ViewGroup {
 			// We have to return 'true' or advanced gestures won't work
 			return true;
 		}
-	}
+	};
+
+	private SimpleOnScaleGestureListener scaleListener = new SimpleOnScaleGestureListener() {
+		@Override
+		public boolean onScale(ScaleGestureDetector detector) {
+			float scale = detector.getScaleFactor();
+			BracketView.this.zoomOn(
+					new PointF(getWidth() / 2, getHeight() / 2), scale);
+			return true;
+		}
+	};
 
 	/**
 	 * Detector for gesture events.
 	 */
 	private GestureDetector gestures;
+	private ScaleGestureDetector scaleGestureDetector;
 
 	/**
 	 * The layout algorithm to use
@@ -205,7 +193,10 @@ public class BracketView extends ViewGroup {
 		// this.setHorizontalScrollBarEnabled(true);
 
 		// Configure gesture listener
-		gestures = new GestureDetector(this.getContext(), new GestureListener());
+		gestures = new GestureDetector(this.getContext(), this.gestureListener,
+				this.getHandler(), true);
+		this.scaleGestureDetector = new ScaleGestureDetector(this.getContext(),
+				this.scaleListener);
 	}
 
 	/**
@@ -382,21 +373,35 @@ public class BracketView extends ViewGroup {
 	}
 
 	protected void zoomOn(PointF center, float zoom) {
-		int x = Math.round((center.x + this.getScrollX()) * zoom)
-				- this.getWidth() / 2;
-		int y = Math.round((center.y + this.getScrollY()) * zoom)
-				- this.getHeight() / 2;
 		if (this.getLayoutAlgorithm() != null) {
+			float scale = this.getLayoutAlgorithm().getScale();
+			if(scale * zoom > MAX_SCALE) {
+				zoom = MAX_SCALE / scale;
+			}
+			if(scale * zoom < MIN_SCALE) {
+				zoom = MIN_SCALE / scale;
+			}
+
+			int x = Math.round((center.x + this.getScrollX()) * zoom)
+					- this.getWidth() / 2;
+			int y = Math.round((center.y + this.getScrollY()) * zoom)
+					- this.getHeight() / 2;
 			this.getLayoutAlgorithm().setScale(
 					this.getLayoutAlgorithm().getScale() * zoom);
+			this.updateLayout(true);
+			this.scrollTo(x, y);
 		}
-		this.updateLayout(true);
-		this.scrollTo(x, y);
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		return this.gestures.onTouchEvent(event);
+//		boolean handled = this.gestures.onTouchEvent(event);
+//		if (!handled) {
+//			handled = this.scaleGestureDetector.onTouchEvent(event);
+//		}
+		boolean handled = this.gestures.onTouchEvent(event);
+		handled = handled || this.scaleGestureDetector.onTouchEvent(event);
+		return handled;
 	}
 
 	@Override
