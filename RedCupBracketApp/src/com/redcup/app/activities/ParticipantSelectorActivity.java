@@ -1,8 +1,9 @@
 package com.redcup.app.activities;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 import android.app.Activity;
 import android.content.Context;
@@ -79,47 +80,47 @@ public class ParticipantSelectorActivity extends Activity {
 	}
 		
 	
-	private class ParticipantAdapter extends BaseAdapter{
+	private class ParticipantAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
-		private ArrayList<Participant> participants;
+		private TreeMap<Participant, Boolean> participants;
 		
-		public ParticipantAdapter(Context context){
+		public ParticipantAdapter(Context context) {
 			inflater = LayoutInflater.from(context);
-			participants = new ArrayList<Participant>();
-			getdata();
-		}
-		
-		public void getdata(){
-			participants.clear();
-			Cursor c = db.getTableCursor(Constants.Participant.TABLE_NAME);
-			startManagingCursor(c);
-			if (c.moveToFirst()) {
-				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
-			
-				if(c.getLong(c.getColumnIndex(com.redcup.app.data.Constants.Participant.DATE_ENDED)) == 0){
-					Participant temp = new Participant(name);
-					temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
-					participants.add(0, temp);
-				}
-			}
-			while (c.moveToNext()) {
-				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
-				
-				if(c.getLong(c.getColumnIndex(com.redcup.app.data.Constants.Participant.DATE_ENDED)) == 0){
-					Participant temp = new Participant(name);
-					temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
-					participants.add(0, temp);
-				}
-			}
-			db.close();
-			
-			Collections.sort(participants, new Comparator<Participant>() {
-
+			participants = new TreeMap<Participant, Boolean>(new Comparator<Participant>() {
 				@Override
 				public int compare(Participant lhs, Participant rhs) {
 					return lhs.getName().compareToIgnoreCase(rhs.getName());
 				}
 			});
+			getdata();
+		}
+		
+		public void getdata() {
+			Cursor c = db.getTableCursor(Constants.Participant.TABLE_NAME);
+			startManagingCursor(c);
+			if (c.moveToFirst()) {
+				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
+			
+				if (c.getLong(c.getColumnIndex(com.redcup.app.data.Constants.Participant.DATE_ENDED)) == 0) {
+					Participant temp = new Participant(name);
+					temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
+					if (participants.containsKey(temp) == false) {
+						participants.put(temp, Boolean.FALSE);
+					}
+				}
+			}
+			while (c.moveToNext()) {
+				String name = c.getString(c.getColumnIndex(com.redcup.app.data.Constants.Participant.PARTICIPANT_NAME));
+				
+				if (c.getLong(c.getColumnIndex(com.redcup.app.data.Constants.Participant.DATE_ENDED)) == 0) {
+					Participant temp = new Participant(name);
+					temp.setId(c.getInt(c.getColumnIndex(com.redcup.app.data.Constants.Participant.KEY_ID)));
+					if (participants.containsKey(temp) == false) {
+						participants.put(temp, Boolean.FALSE);
+					}
+				}
+			}
+			db.close();
 		}
 		
 		@Override
@@ -129,7 +130,11 @@ public class ParticipantSelectorActivity extends Activity {
 
 		@Override
 		public Object getItem(int arg0) {
-			return participants.get(arg0);
+			Iterator<Participant> it = participants.keySet().iterator();
+			for (int participantIndex = 0; participantIndex < arg0; participantIndex++) {
+				it.next();
+			}
+			return it.next();
 		}
 
 		@Override
@@ -142,15 +147,14 @@ public class ParticipantSelectorActivity extends Activity {
 			final ViewHolder holder;
 			View v = convertView;
 			
-			if((v == null) || (v.getTag() == null)){
+			if ((v == null) || (v.getTag() == null)) {
 				v = inflater.inflate(R.layout.participantselectoritem, null);
 				holder = new ViewHolder();				
 				holder.name = (TextView)v.findViewById(R.id.selectorParticipantNameId);
 				holder.check = (CheckBox)v.findViewById(R.id.selectorParticipantCheckboxId);
 				
 				v.setTag(holder);
-			}
-			else{
+			} else {
 				holder = (ViewHolder) v.getTag();
 			}
 			
@@ -162,22 +166,28 @@ public class ParticipantSelectorActivity extends Activity {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
-					if (buttonView.isChecked()) { 
-						participantList.add(holder.participant);
-				    } 
-				    else 
-				    { 
-				    	participantList.remove(holder.participant); 
+					if (buttonView.isChecked()) {
+						if (participantList.contains(holder.participant) == false) {
+							participantList.add(holder.participant);
+						}
+						participants.put(holder.participant, Boolean.TRUE);
+				    } else {
+				    	if (participantList.contains(holder.participant) == true) {
+							participantList.remove(holder.participant);
+				    	}
+						participants.put(holder.participant, Boolean.FALSE);
 				    }
-				} 
-			  });
+				}
+			});
+			
+			holder.check.setChecked(participants.get(holder.participant));
 			
 			return v;
 		}
 		
 	}
 	
-	public class ViewHolder{
+	public class ViewHolder {
 		Participant participant;
 		TextView name;
 		CheckBox check;

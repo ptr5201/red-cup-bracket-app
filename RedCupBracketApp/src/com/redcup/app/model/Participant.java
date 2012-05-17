@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Participant implements Serializable {
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
+public class Participant implements Serializable, 
+	Comparable<Participant> {
 	private static final long serialVersionUID = 1L;
 
 	public class OnNameChangedEvent {
@@ -51,6 +55,31 @@ public class Participant implements Serializable {
 
 	public String toString() {
 		return name;
+	}
+
+	@Override
+	public int compareTo(Participant another) {
+		return new CompareToBuilder()
+			.append(this.name, another.name)
+			.toComparison();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+		if (o == this) {
+			return true;
+		}
+		if (o.getClass() != getClass()) {
+			return false;
+		}
+		Participant rhs = (Participant) o;
+		return new EqualsBuilder()
+			.append(this.id, rhs.id)
+			.append(this.name, rhs.name)
+			.isEquals();
 	}
 
 	public void addOnNameChangedListener(OnNameChangedListener listener) {
