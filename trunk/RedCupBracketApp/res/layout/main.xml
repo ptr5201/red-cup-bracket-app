@@ -18,7 +18,8 @@
             android:background="@android:drawable/list_selector_background"
             android:onClick="switchActivityScreen"
             android:weightSum="1.0" >
-
+
+
             <ImageView
                 android:id="@+id/createTournamentImage"
                 android:layout_width="0dip"
@@ -26,7 +27,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.35"
                 android:src="@drawable/create_tournament" />
-
+
+
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -51,7 +53,9 @@
             android:background="@android:drawable/list_selector_background"
             android:onClick="switchActivityScreen"
             android:weightSum="1.0" >
-
+
+
+
             <ImageView
                 android:id="@+id/loadTournamentImage"
                 android:layout_width="0dip"
@@ -59,7 +63,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.35"
                 android:src="@drawable/load_tournament" />
-
+
+
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
@@ -84,7 +89,8 @@
             android:background="@android:drawable/list_selector_background"
             android:onClick="switchActivityScreen"
             android:weightSum="1.0" >
-
+
+
             <ImageView
                 android:id="@+id/participantManagerImage"
                 android:layout_width="0dip"
@@ -92,7 +98,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.35"
                 android:src="@drawable/participant_manager" />
-
+
+
             <TextView
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
